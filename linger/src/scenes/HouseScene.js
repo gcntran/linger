@@ -17,8 +17,12 @@ class HouseScene extends Phaser.Scene {
         // Load the house layout
         this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
 
-        // ✅ Correct key
+        // Add player
         this.player = this.physics.add.sprite(400, 300, 'player');
+
+        // Scale player and camera
+        this.player.setScale(2);
+        this.cameras.main.setZoom(1.5);
 
         // WASD movement
         this.wasd = this.input.keyboard.addKeys({
@@ -30,10 +34,10 @@ class HouseScene extends Phaser.Scene {
 
         // Camera
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setBounds(0, 0, 2306, 1500);
+        this.cameras.main.setBounds(0, 0, 1022, 1052);
 
         // World bounds
-        this.physics.world.setBounds(0, 0, 2306, 1500);
+        this.physics.world.setBounds(0, 0, 1022, 1052);
         this.player.setCollideWorldBounds(true);
     }
 

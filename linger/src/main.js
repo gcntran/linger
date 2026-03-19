@@ -14,6 +14,8 @@ const config = {
             debug: false
         }
     },
+    pixelArt: true,
+    
     scene: [
         AssetLoader,
         HouseScene
