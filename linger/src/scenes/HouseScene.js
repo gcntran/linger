@@ -1,105 +1,58 @@
-import { Scene } from 'phaser';
+import Phaser from 'phaser';
 
-export class ClickerGame extends Scene
-{
-    constructor ()
-    {
-        super('ClickerGame');
+class HouseScene extends Phaser.Scene {
+    constructor() {
+        super('HouseScene');
     }
 
-    create ()
-    {
-        this.score = 0;
+    create() {
 
-        this.coins = [];
+        console.log("HouseScene loaded");
 
-        const textStyle = { fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff', stroke: '#000000', strokeThickness: 8 };
+        this.add.text(100, 100, "Hello", { fontSize: '32px', color: '#ffffff' });
 
-        this.add.image(512, 384, 'background');
+        // Debug background (optional)
+        this.add.rectangle(0, 0, 1024, 768, 0x222222).setOrigin(0, 0);
 
-        this.scoreText = this.add.text(32, 32, 'Coins: 0', textStyle).setDepth(1);
-        this.timeText = this.add.text(1024 - 32, 32, 'Time: 10', textStyle).setOrigin(1, 0).setDepth(1);
+        // Load the house layout
+        this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
 
-        //  Our 10 second timer. It starts automatically when the scene is created.
-        this.timer = this.time.addEvent({ delay: 10000, callback: () => this.gameOver() });
+        // ✅ Correct key
+        this.player = this.physics.add.sprite(400, 300, 'player');
 
-        this.physics.world.setBounds(0, -400, 1024, 768 + 310);
-
-        for (let i = 0; i < 32; i++)
-        {
-            this.dropCoin();
-        }
-
-        this.input.on('gameobjectdown', (pointer, gameObject) => this.clickCoin(gameObject));
-    }
-
-    dropCoin ()
-    {
-        const x = Phaser.Math.Between(128, 896);
-        const y = Phaser.Math.Between(0, -400);
-
-        const coin = this.physics.add.sprite(x, y, 'coin').play('rotate');
-
-        coin.setVelocityX(Phaser.Math.Between(-400, 400));
-        coin.setCollideWorldBounds(true);
-        coin.setBounce(0.9);
-        coin.setInteractive();
-
-        this.coins.push(coin);
-    }
-
-    clickCoin (coin)
-    {
-        //  Disable the coin from being clicked
-        coin.disableInteractive();
-
-        //  Stop it from moving
-        coin.setVelocity(0, 0);
-
-        //  Play the 'vanish' animation
-        coin.play('vanish');
-
-        coin.once('animationcomplete-vanish', () => coin.destroy());
-
-        //  Add 1 to the score
-        this.score++;
-
-        //  Update the score text
-        this.scoreText.setText('Coins: ' + this.score);
-
-        //  Drop a new coin
-        this.dropCoin();
-    }
-
-    update ()
-    {
-        this.timeText.setText('Time: ' + Math.ceil(this.timer.getRemainingSeconds()));
-    }
-
-    gameOver ()
-    {
-        this.coins.forEach((coin) => {
-
-            if (coin.active)
-            {
-                coin.setVelocity(0, 0);
-
-                coin.play('vanish');
-            }
-
+        // WASD movement
+        this.wasd = this.input.keyboard.addKeys({
+            up: Phaser.Input.Keyboard.KeyCodes.W,
+            left: Phaser.Input.Keyboard.KeyCodes.A,
+            down: Phaser.Input.Keyboard.KeyCodes.S,
+            right: Phaser.Input.Keyboard.KeyCodes.D,
         });
 
-        this.input.off('gameobjectdown');
+        // Camera
+        this.cameras.main.startFollow(this.player);
+        this.cameras.main.setBounds(0, 0, 2306, 1500);
 
-        //  Save our highscore to the registry
-        const highscore = this.registry.get('highscore');
+        // World bounds
+        this.physics.world.setBounds(0, 0, 2306, 1500);
+        this.player.setCollideWorldBounds(true);
+    }
 
-        if (this.score > highscore)
-        {
-            this.registry.set('highscore', this.score);
+    update() {
+        const speed = 150;
+        this.player.setVelocity(0, 0);
+
+        if (this.wasd.up.isDown) {
+            this.player.setVelocityY(-speed);
+        } else if (this.wasd.down.isDown) {
+            this.player.setVelocityY(speed);
         }
 
-        //  Swap to the GameOver scene after a 2 second delay
-        this.time.delayedCall(2000, () => this.scene.start('GameOver'));
+        if (this.wasd.left.isDown) {
+            this.player.setVelocityX(-speed);
+        } else if (this.wasd.right.isDown) {
+            this.player.setVelocityX(speed);
+        }
     }
 }
+
+export default HouseScene;
