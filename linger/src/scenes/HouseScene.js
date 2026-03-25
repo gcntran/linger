@@ -37,7 +37,7 @@ class HouseScene extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 1022, 1052);
 
         // World bounds
-        this.physics.world.setBounds(0, 0, 1022, 1052);
+        this.physics.world.setBounds(0, 0, 1920, 1080);
         this.player.setCollideWorldBounds(true);
     }
 
