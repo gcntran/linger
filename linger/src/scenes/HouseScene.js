@@ -34,7 +34,7 @@ class HouseScene extends Phaser.Scene {
 
         // Camera
         this.cameras.main.startFollow(this.player);
-        this.cameras.main.setBounds(0, 0, 1022, 1052);
+        this.cameras.main.setBounds(0, 0, 1920, 1080);
 
         // World bounds
         this.physics.world.setBounds(0, 0, 1920, 1080);
