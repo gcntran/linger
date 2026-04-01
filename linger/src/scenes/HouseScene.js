@@ -17,12 +17,38 @@ class HouseScene extends Phaser.Scene {
         // Load the house layout
         this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
 
-        // Add player
-        this.player = this.physics.add.sprite(400, 300, 'player');
+        // Add click to get coordinates (for collision debugging)
+        this.input.on('pointerdown', (pointer) => {
+            console.log(pointer.worldX, pointer.worldY);
+        });
 
-        // Scale player and camera
+        // Add static group for walls (for collision)
+        const walls = this.physics.add.staticGroup();
+
+        // KITCHEN AREA
+        // COUNTERS
+        // Create the first part of the kitchen counter, stove, fridge, plant pot
+        // Left corner wall with kitchen counter (horizontal)
+        const counterPart1 = this.add.zone(540, 220, 430, 40);
+        this.physics.add.existing(counterPart1, true);
+        // Create the second part (vertical)
+        const counterPart2 = this.add.zone(360, 280, 40, 120);
+        this.physics.add.existing(counterPart2, true);
+
+        // Add both parts to the walls group
+        walls.add(counterPart1);
+        walls.add(counterPart2);
+
+
+        
+
+        // Add player with start point (bed)
+        this.player = this.physics.add.sprite(500, 300, 'player');
+        // Scale player
         this.player.setScale(2);
-        this.cameras.main.setZoom(1.5);
+        
+        // Add the collider
+        this.physics.add.collider(this.player, walls);
 
         // WASD movement
         this.wasd = this.input.keyboard.addKeys({
@@ -32,6 +58,9 @@ class HouseScene extends Phaser.Scene {
             right: Phaser.Input.Keyboard.KeyCodes.D,
         });
 
+
+        // Add camera zoom for better visibility
+        this.cameras.main.setZoom(1.5);  
         // Camera
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setBounds(0, 0, 1920, 1080);
