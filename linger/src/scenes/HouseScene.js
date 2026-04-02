@@ -26,7 +26,7 @@ class HouseScene extends Phaser.Scene {
         const walls = this.physics.add.staticGroup();
 
         // KITCHEN AREA
-        // COUNTERS
+        // 1. COUNTERS
         // Create the first part of the kitchen counter, stove, fridge, plant pot
         // Left corner wall with kitchen counter (horizontal)
         const counterPart1 = this.add.zone(540, 220, 430, 40);
@@ -40,7 +40,8 @@ class HouseScene extends Phaser.Scene {
         walls.add(counterPart2);
 
 
-        
+        // 2. DINING TABLE, 
+
 
         // Add player with start point (bed)
         this.player = this.physics.add.sprite(500, 300, 'player');
