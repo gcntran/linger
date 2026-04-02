@@ -29,34 +29,36 @@ class HouseScene extends Phaser.Scene {
         // KITCHEN AREA
         // 1. COUNTERS
         // Create the first part of the kitchen counter, stove, fridge, plant pot
-        // Left corner wall with kitchen counter (horizontal)
-        const counterPart1 = this.add.zone(540, 220, 430, 40);
+        // Left corner kitchen counter (horizontal)
+        const counterPart1 = this.add.zone(540, 230, 430, 40);
         this.physics.add.existing(counterPart1, true);
         // Create the second part (vertical)
-        const counterPart2 = this.add.zone(360, 280, 40, 120);
+        const counterPart2 = this.add.zone(360, 280, 45, 120);
         this.physics.add.existing(counterPart2, true);
 
-        // Add both parts to the walls group
-        walls.add(counterPart1);
-        walls.add(counterPart2);
-
-
         // 2. DINING TABLE, DINING CHAIRS LEFT AND RIGHT
-        const diningTable = this.add.zone(592, 363, 150, 50);
+        const diningTable = this.add.zone(592, 370, 195, 60);
         this.physics.add.existing(diningTable, true);
 
-        // 3. DING CHAIRS BOTTOM
-
+        // 3. DINING CHAIRS BOTTOM
+        const diningChairs = this.add.zone(592, 403, 100, 50);
+        this.physics.add.existing(diningChairs, true);
 
 
         // Add player with start point (bed)
         this.player = this.physics.add.sprite(500, 300, 'player');
         // Scale player
         this.player.setScale(2);
+        // Scale the player hitbox smaller
+        this.player.body.setSize(16, 20);
+        this.player.body.setOffset(8, 12);
 
         // Add the collider
         this.physics.add.collider(this.player, walls);
+        this.physics.add.collider(this.player, counterPart1);
+        this.physics.add.collider(this.player, counterPart2);
         this.physics.add.collider(this.player, diningTable);
+        this.physics.add.collider(this.player, diningChairs);
 
         // WASD movement
         this.wasd = this.input.keyboard.addKeys({
@@ -109,7 +111,7 @@ class HouseScene extends Phaser.Scene {
             this.scale.startFullscreen();
         }
     });
-    
+
     }
 }
 
