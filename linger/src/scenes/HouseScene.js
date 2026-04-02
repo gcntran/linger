@@ -46,14 +46,14 @@ class HouseScene extends Phaser.Scene {
         this.physics.add.existing(diningTable, true);
 
         // 3. DING CHAIRS BOTTOM
-        
+
 
 
         // Add player with start point (bed)
         this.player = this.physics.add.sprite(500, 300, 'player');
         // Scale player
         this.player.setScale(2);
-        
+
         // Add the collider
         this.physics.add.collider(this.player, walls);
         this.physics.add.collider(this.player, diningTable);
@@ -68,7 +68,7 @@ class HouseScene extends Phaser.Scene {
 
 
         // Add camera zoom for better visibility
-        this.cameras.main.setZoom(1.5);  
+        this.cameras.main.setZoom(1.5);
         // Camera
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setBounds(0, 0, 1920, 1080);
@@ -93,6 +93,23 @@ class HouseScene extends Phaser.Scene {
         } else if (this.wasd.right.isDown) {
             this.player.setVelocityX(speed);
         }
+
+        // Full screen button (temporary, for testing purposes)
+    const button = this.add.text(20, 20, 'Fullscreen', {
+        fontSize: '32px',
+        color: '#ffffff',
+        backgroundColor: '#333'
+    })
+    .setPadding(10)
+    .setInteractive({ useHandCursor: true });
+    button.on('pointerup', () => {
+        if (this.scale.isFullscreen) {
+            this.scale.stopFullscreen();
+        } else {
+            this.scale.startFullscreen();
+        }
+    });
+    
     }
 }
 
