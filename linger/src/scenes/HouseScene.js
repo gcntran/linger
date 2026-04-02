@@ -25,6 +25,7 @@ class HouseScene extends Phaser.Scene {
         // Add static group for walls (for collision)
         const walls = this.physics.add.staticGroup();
 
+        // COLLISION ZONES
         // KITCHEN AREA
         // 1. COUNTERS
         // Create the first part of the kitchen counter, stove, fridge, plant pot
@@ -40,7 +41,12 @@ class HouseScene extends Phaser.Scene {
         walls.add(counterPart2);
 
 
-        // 2. DINING TABLE, 
+        // 2. DINING TABLE, DINING CHAIRS LEFT AND RIGHT
+        const diningTable = this.add.zone(592, 363, 150, 50);
+        this.physics.add.existing(diningTable, true);
+
+        // 3. DING CHAIRS BOTTOM
+        
 
 
         // Add player with start point (bed)
@@ -50,6 +56,7 @@ class HouseScene extends Phaser.Scene {
         
         // Add the collider
         this.physics.add.collider(this.player, walls);
+        this.physics.add.collider(this.player, diningTable);
 
         // WASD movement
         this.wasd = this.input.keyboard.addKeys({
