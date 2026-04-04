@@ -6,120 +6,73 @@ class HouseScene extends Phaser.Scene {
     }
 
     create() {
-
         console.log("HouseScene loaded");
 
-        this.add.text(100, 100, "Hello", { fontSize: '32px', color: '#ffffff' });
+        // 1. BACKGROUND & LAYOUT
+        
+        const layout = this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
 
-        // Debug background (optional)
-        this.add.rectangle(0, 0, 1024, 768, 0x222222).setOrigin(0, 0);
+        // 2. PHYSICS GROUPS
+        this.walls = this.physics.add.staticGroup();
 
-        // Load the house layout
-        this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
+        // 3. KITCHEN AREA COLLISIONS
+         // Using a helper array to define zones quickly
+        const kitchenZones = [
+            { x: 540, y: 230, w: 430, h: 40 },  // Counter Part 1
+            { x: 360, y: 280, w: 45, h: 120 },  // Counter Part 2
+            { x: 592, y: 370, w: 195, h: 60 },  // Dining Table
+            { x: 592, y: 403, w: 100, h: 50 },  // Dining Chairs
+            { x: 340, y: 380, w: 25, h: 100 },   // Kitchen Cabinet
+            { x: 360, y: 360, w: 20, h: 20 },    // Trash Can
+            { x: 758, y: 290, w: 30, h: 370 },   // Wall Kitchen/Living
+            { x: 315, y: 519, w: 30, h: 770 }    // Left Wall
+        ];
 
-        // Add click to get coordinates (for collision debugging)
-        this.input.on('pointerdown', (pointer) => {
-            console.log(pointer.worldX, pointer.worldY);
+        kitchenZones.forEach(z => {
+            let zone = this.add.zone(z.x, z.y, z.w, z.h);
+            this.physics.add.existing(zone, true);
+            this.walls.add(zone);
+        });
+        // 4. BATHROOM & DOOR LOGIC
+        const bathroomWalls = [
+            { x: 415, y: 575, w: 165, h: 30 },
+            { x: 612, y: 575, w: 60, h: 30 },
+            { x: 654, y: 740, w: 25, h: 300 }
+        ];
+
+        bathroomWalls.forEach(z => {
+            let zone = this.add.zone(z.x, z.y, z.w, z.h);
+            this.physics.add.existing(zone, true);
+            this.walls.add(zone);
         });
 
-        // Add static group for walls (for collision)
-        const walls = this.physics.add.staticGroup();
+        this.doorWall = this.add.zone(540, 575, 80, 30);
+        this.physics.add.existing(this.doorWall, true);
+        this.walls.add(this.doorWall);
 
-        // COLLISION ZONES
-        // KITCHEN AREA
-        // 1. COUNTERS
-        // Create the first part of the kitchen counter, stove, fridge, plant pot
-        // Left corner kitchen counter (horizontal)
-        const counterPart1 = this.add.zone(540, 230, 430, 40);
-        this.physics.add.existing(counterPart1, true);
-        // Create the second part (vertical)
-        const counterPart2 = this.add.zone(360, 280, 45, 120);
-        this.physics.add.existing(counterPart2, true);
+        this.doorTrigger = this.add.zone(540, 575, 100, 80);
+        this.physics.add.existing(this.doorTrigger, true);
 
-        // 2. DINING TABLE, DINING CHAIRS LEFT AND RIGHT
-        const diningTable = this.add.zone(592, 370, 195, 60);
-        this.physics.add.existing(diningTable, true);
+        // 5. PLAYER SETUP
+        this.player = this.physics.add.sprite(500, 300, 'player');
+        this.player.setScale(2);
+        this.player.body.setSize(16, 20);
+        this.player.body.setOffset(8, 12);
+        this.player.setCollideWorldBounds(true);
+        this.player.setDepth(10); // Keeps player above the floor
 
-        // 3. DINING CHAIRS BOTTOM
-        const diningChairs = this.add.zone(592, 403, 100, 50);
-        this.physics.add.existing(diningChairs, true);
+        // 6. COLLISIONS & INTERACTIONS
+        this.physics.add.collider(this.player, this.walls);
+        this.playerNearDoor = false;
 
-        // 4. KITCHEN CABINET
-        const kitchenCabinet = this.add.zone(340, 380, 25, 100);
-        this.physics.add.existing(kitchenCabinet, true);
-
-        // 5. TRASH CAN
-        const trashCan = this.add.zone(360, 360, 20, 20);
-        this.physics.add.existing(trashCan, true);
-
-        // 6. WALL BETWEEN KITCHEN AND LIVING ROOM
-        const wallKitchen = this.add.zone(758, 290, 30, 370);
-        walls.add(wallKitchen);
-
-        // 7. LEFT WALL FROM KITCHEN TO BATHROOM
-        const wallLeft = this.add.zone(315, 519, 30, 770);
-        walls.add(wallLeft);
-
-        // BATHROOM AREA
-        // 1. HALF WALL BETWEEN BATHROOM AND DOOR
-        const wallBathroom1 = this.add.zone(415, 575, 165, 30);
-        walls.add(wallBathroom1);
-
-        // 2. HALF WALL BETWEEN BATHROOM AND DOOR
-        const wallBathroom2 = this.add.zone(612, 575, 60, 30);
-        walls.add(wallBathroom2);
-
-        // Door save for later reference in openDoor function
-        this.wallBathroom1 = wallBathroom1;
-        this.wallBathroom2 = wallBathroom2;
-
-        // Door interaction zone (for future use)
-        const doorZone = this.add.zone(540, 575, 80, 30);
-        this.physics.add.existing(doorZone, true);
-
-        // Click cursor to open the door
-        this.input.on('pointerdown', () => {
+        this.input.on('pointerdown', (pointer) => {
+            console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
             if (this.playerNearDoor) {
                 this.openDoor();
             }
         });
 
-        // 3. WALL BETWEEN BATHROOM AND LAUNDRY
-        const wallBathroom3 = this.add.zone(654, 740, 25, 300);
-        walls.add(wallBathroom3);
-
-
-        // Add player with start point (bed)
-        this.player = this.physics.add.sprite(500, 300, 'player');
-        // Scale player
-        this.player.setScale(2);
-        // Scale the player hitbox smaller
-        this.player.body.setSize(16, 20);
-        this.player.body.setOffset(8, 12);
-
-        // Door overlap detection
-        this.physics.add.overlap(this.player, doorZone, () => {
-            this.playerNearDoor = true;
-        });
-
-        this.physics.add.overlap(this.player, doorZone, () => {}, (player, zone) => {
-            this.playerNearDoor = false;
-        });
-        
-
-        // Add the collider
-        // KITCHEN AREA
-        this.physics.add.collider(this.player, walls);
-        this.physics.add.collider(this.player, counterPart1);
-        this.physics.add.collider(this.player, counterPart2);
-        this.physics.add.collider(this.player, diningTable);
-        this.physics.add.collider(this.player, diningChairs);
-        this.physics.add.collider(this.player, kitchenCabinet);
-        this.physics.add.collider(this.player, trashCan);
-        // LIVING ROOM AREA
-
-
-        // WASD movement
+        // 7. CONTROLS & MAIN CAMERA
         this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -127,38 +80,58 @@ class HouseScene extends Phaser.Scene {
             right: Phaser.Input.Keyboard.KeyCodes.D,
         });
 
-
-        // Add camera zoom for better visibility
-        this.cameras.main.setZoom(1.5);
-        // Camera
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setBounds(0, 0, 1920, 1080);
-
-        // World bounds
+        this.cameras.main.setZoom(1.5);
+        this.cameras.main.setBackgroundColor('#222222');
         this.physics.world.setBounds(0, 0, 1920, 1080);
-        this.player.setCollideWorldBounds(true);
-    }
 
-    // Open door function to remove the wall colliders blocking the door
+        // 8. UI CAMERA & FULLSCREEN BUTTON (The Fix)
+        // Create a new camera specifically for UI that doesn't zoom
+        const uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
+        uiCam.renderGL = false; // This prevents the debug overlay from double-rendering on this camera
+        uiCam.ignore(this.physics.world.debugGraphic);
+    
+        const fsButton = this.add.text(20, 20, 'Fullscreen', {
+            fontSize: '20px',
+            color: '#ffffff',
+            backgroundColor: '#333'
+        })
+        .setPadding(10)
+        .setInteractive({ useHandCursor: true })
+        .setDepth(100); // Forces the button to render on top of everything
+
+        // Instruct the main camera to ignore the UI button, 
+        // and the UI camera to ignore the game world
+        this.cameras.main.ignore(fsButton);
+        uiCam.ignore([layout, this.player, this.walls]);
+
+        fsButton.on('pointerup', () => {
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            } else {
+                this.scale.startFullscreen();
+            }
+        });
+    }
 
     openDoor() {
-        console.log("Door opened!");
-    
-        // Remove the wall collider blocking the door
-        const wallBathroom1 = this.add.zone(415, 575, 165, 30);
-        this.physics.add.existing(wallBathroom1, true);  // ← REQUIRED
-        walls.add(wallBathroom1);
-
-        const wallBathroom2 = this.add.zone(612, 575, 60, 30);
-        this.physics.add.existing(wallBathroom2, true);  // ← REQUIRED
-        walls.add(wallBathroom2);
-    
-        // Optionally play animation or sound
+        if (this.doorWall) {
+            console.log("Door opened! Removing collision...");
+            this.doorWall.destroy(); 
+            this.doorWall = null;    
+        }
     }
-    
+
     update() {
         const speed = 150;
         this.player.setVelocity(0, 0);
+
+        if (this.physics.overlap(this.player, this.doorTrigger)) {
+            this.playerNearDoor = true;
+        } else {
+            this.playerNearDoor = false;
+        }
 
         if (this.wasd.up.isDown) {
             this.player.setVelocityY(-speed);
@@ -172,22 +145,9 @@ class HouseScene extends Phaser.Scene {
             this.player.setVelocityX(speed);
         }
 
-        // Full screen button (temporary, for testing purposes)
-    const button = this.add.text(20, 20, 'Fullscreen', {
-        fontSize: '32px',
-        color: '#ffffff',
-        backgroundColor: '#333'
-    })
-    .setPadding(10)
-    .setInteractive({ useHandCursor: true });
-    button.on('pointerup', () => {
-        if (this.scale.isFullscreen) {
-            this.scale.stopFullscreen();
-        } else {
-            this.scale.startFullscreen();
+        if (this.player.body.velocity.x !== 0 && this.player.body.velocity.y !== 0) {
+            this.player.body.velocity.normalize().scale(speed);
         }
-    });
-
     }
 }
 
