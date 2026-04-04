@@ -78,7 +78,7 @@ class HouseScene extends Phaser.Scene {
         this.physics.add.existing(doorZone, true);
 
         // Click cursor to open the door
-        this.input.keyboard.on('keydown-E', () => {
+        this.input.on('pointerdown', () => {
             if (this.playerNearDoor) {
                 this.openDoor();
             }
