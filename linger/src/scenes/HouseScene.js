@@ -9,7 +9,6 @@ class HouseScene extends Phaser.Scene {
         console.log("HouseScene loaded");
 
         // 1. BACKGROUND & LAYOUT
-        
         const layout = this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
 
         // 2. PHYSICS GROUPS
@@ -30,26 +29,39 @@ class HouseScene extends Phaser.Scene {
 
         kitchenZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
+            // Adding physics to the zone and making it immovable (static) so it acts as a solid object for collisions.
             this.physics.add.existing(zone, true);
+            // Adding the zone to the walls group so that it will be included in collision checks with the player. 
+            // This allows the player to collide with these zones as if they were solid objects in the game world.
             this.walls.add(zone);
         });
         // 4. BATHROOM & DOOR LOGIC
-        const bathroomWalls = [
-            { x: 415, y: 575, w: 165, h: 30 },
-            { x: 612, y: 575, w: 60, h: 30 },
-            { x: 654, y: 740, w: 25, h: 300 }
+        const bathroomZones = [
+            { x: 415, y: 575, w: 165, h: 30 }, // Bathroom wall
+            { x: 612, y: 575, w: 60, h: 30 }, // Door wall (will be removed when door opens)
+            { x: 654, y: 740, w: 25, h: 300 }, // Wall Bathroom/Laundry
+            { x: 415, y: 670, w: 170, h: 30 }, // Left Wall/Floor
+            { x: 615, y: 670, w: 70, h: 30 }, // Right Wall/Floor
+            { x: 410, y: 700, w: 93, h: 30 }, // Cabinet
+            { x: 613, y: 700, w: 26, h: 30 }, // Plant pot
+            { x: 613, y: 700, w: 26, h: 30 }, // Plant pot
         ];
-
-        bathroomWalls.forEach(z => {
-            let zone = this.add.zone(z.x, z.y, z.w, z.h);
+         // Using the same helper array approach for bathroom zones
+        bathroomZones.forEach(z => {
+            // Create a zone for each bathroom collision area. 
+            // Why z is used? It's zone, and it contains the properties x, y, w, h that define the position and size of the collision area.
+            // z.x and z.y are the center coordinates, while z.w and z.h are the width and height of the zone.
+            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
             this.physics.add.existing(zone, true);
             this.walls.add(zone);
         });
 
-        this.doorWall = this.add.zone(540, 575, 80, 30);
+        // Door setup: Create a separate zone for the door's collision and a larger one for the trigger area
+        this.doorWall = this.add.zone(540, 635, 80, 150);
         this.physics.add.existing(this.doorWall, true);
         this.walls.add(this.doorWall);
 
+        // This trigger zone is larger than the door itself to allow for easier interaction
         this.doorTrigger = this.add.zone(540, 575, 100, 80);
         this.physics.add.existing(this.doorTrigger, true);
 
@@ -65,6 +77,8 @@ class HouseScene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.walls);
         this.playerNearDoor = false;
 
+        // Adding a pointerdown event listener to the entire game canvas. 
+        // When the player clicks anywhere, it checks if they are near the door and opens it if they are.
         this.input.on('pointerdown', (pointer) => {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
             if (this.playerNearDoor) {
@@ -80,10 +94,15 @@ class HouseScene extends Phaser.Scene {
             right: Phaser.Input.Keyboard.KeyCodes.D,
         });
 
+
+        // The main camera is set to follow the player
         this.cameras.main.startFollow(this.player);
+        // The camera bounds are set to the size of the layout image, ensuring that the camera doesn't show areas outside of the intended game world.
         this.cameras.main.setBounds(0, 0, 1920, 1080);
+        // The zoom level of the camera is set to 1.5, which means the camera will zoom in by 50%
         this.cameras.main.setZoom(1.5);
         this.cameras.main.setBackgroundColor('#222222');
+        // The physics world bounds are also set to match the layout size, ensuring that the player cannot move outside of the intended game area.
         this.physics.world.setBounds(0, 0, 1920, 1080);
 
         // 8. UI CAMERA & FULLSCREEN BUTTON (The Fix)
@@ -92,6 +111,7 @@ class HouseScene extends Phaser.Scene {
         uiCam.renderGL = false; // This prevents the debug overlay from double-rendering on this camera
         uiCam.ignore(this.physics.world.debugGraphic);
     
+        // Create a fullscreen toggle button in the top-left corner of the screen.
         const fsButton = this.add.text(20, 20, 'Fullscreen', {
             fontSize: '20px',
             color: '#ffffff',
@@ -106,6 +126,7 @@ class HouseScene extends Phaser.Scene {
         this.cameras.main.ignore(fsButton);
         uiCam.ignore([layout, this.player, this.walls]);
 
+        // Add a click event listener to the fullscreen button that toggles fullscreen mode when clicked.
         fsButton.on('pointerup', () => {
             if (this.scale.isFullscreen) {
                 this.scale.stopFullscreen();
@@ -115,6 +136,7 @@ class HouseScene extends Phaser.Scene {
         });
     }
 
+    // The openDoor method is responsible for "opening" the door by destroying the doorWall zone, which removes the collision and allows the player to pass through where the door was located.
     openDoor() {
         if (this.doorWall) {
             console.log("Door opened! Removing collision...");
@@ -127,12 +149,14 @@ class HouseScene extends Phaser.Scene {
         const speed = 150;
         this.player.setVelocity(0, 0);
 
+        // Check if the player is overlapping with the door trigger zone. If they are, set playerNearDoor to true, allowing them to interact with the door. If they are not overlapping, set it to false.
         if (this.physics.overlap(this.player, this.doorTrigger)) {
             this.playerNearDoor = true;
         } else {
             this.playerNearDoor = false;
         }
 
+        // The player's velocity is set based on the WASD input
         if (this.wasd.up.isDown) {
             this.player.setVelocityY(-speed);
         } else if (this.wasd.down.isDown) {
