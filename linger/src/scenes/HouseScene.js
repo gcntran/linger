@@ -44,6 +44,50 @@ class HouseScene extends Phaser.Scene {
         const diningChairs = this.add.zone(592, 403, 100, 50);
         this.physics.add.existing(diningChairs, true);
 
+        // 4. KITCHEN CABINET
+        const kitchenCabinet = this.add.zone(340, 380, 25, 100);
+        this.physics.add.existing(kitchenCabinet, true);
+
+        // 5. TRASH CAN
+        const trashCan = this.add.zone(360, 360, 20, 20);
+        this.physics.add.existing(trashCan, true);
+
+        // 6. WALL BETWEEN KITCHEN AND LIVING ROOM
+        const wallKitchen = this.add.zone(758, 290, 30, 370);
+        walls.add(wallKitchen);
+
+        // 7. LEFT WALL FROM KITCHEN TO BATHROOM
+        const wallLeft = this.add.zone(315, 519, 30, 770);
+        walls.add(wallLeft);
+
+        // BATHROOM AREA
+        // 1. HALF WALL BETWEEN BATHROOM AND DOOR
+        const wallBathroom1 = this.add.zone(415, 575, 165, 30);
+        walls.add(wallBathroom1);
+
+        // 2. HALF WALL BETWEEN BATHROOM AND DOOR
+        const wallBathroom2 = this.add.zone(612, 575, 60, 30);
+        walls.add(wallBathroom2);
+
+        // Door save for later reference in openDoor function
+        this.wallBathroom1 = wallBathroom1;
+        this.wallBathroom2 = wallBathroom2;
+
+        // Door interaction zone (for future use)
+        const doorZone = this.add.zone(540, 575, 80, 30);
+        this.physics.add.existing(doorZone, true);
+
+        // Click cursor to open the door
+        this.input.keyboard.on('keydown-E', () => {
+            if (this.playerNearDoor) {
+                this.openDoor();
+            }
+        });
+
+        // 3. WALL BETWEEN BATHROOM AND LAUNDRY
+        const wallBathroom3 = this.add.zone(654, 740, 25, 300);
+        walls.add(wallBathroom3);
+
 
         // Add player with start point (bed)
         this.player = this.physics.add.sprite(500, 300, 'player');
@@ -53,12 +97,27 @@ class HouseScene extends Phaser.Scene {
         this.player.body.setSize(16, 20);
         this.player.body.setOffset(8, 12);
 
+        // Door overlap detection
+        this.physics.add.overlap(this.player, doorZone, () => {
+            this.playerNearDoor = true;
+        });
+
+        this.physics.add.overlap(this.player, doorZone, () => {}, (player, zone) => {
+            this.playerNearDoor = false;
+        });
+        
+
         // Add the collider
+        // KITCHEN AREA
         this.physics.add.collider(this.player, walls);
         this.physics.add.collider(this.player, counterPart1);
         this.physics.add.collider(this.player, counterPart2);
         this.physics.add.collider(this.player, diningTable);
         this.physics.add.collider(this.player, diningChairs);
+        this.physics.add.collider(this.player, kitchenCabinet);
+        this.physics.add.collider(this.player, trashCan);
+        // LIVING ROOM AREA
+
 
         // WASD movement
         this.wasd = this.input.keyboard.addKeys({
@@ -80,6 +139,23 @@ class HouseScene extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
     }
 
+    // Open door function to remove the wall colliders blocking the door
+
+    openDoor() {
+        console.log("Door opened!");
+    
+        // Remove the wall collider blocking the door
+        const wallBathroom1 = this.add.zone(415, 575, 165, 30);
+        this.physics.add.existing(wallBathroom1, true);  // ← REQUIRED
+        walls.add(wallBathroom1);
+
+        const wallBathroom2 = this.add.zone(612, 575, 60, 30);
+        this.physics.add.existing(wallBathroom2, true);  // ← REQUIRED
+        walls.add(wallBathroom2);
+    
+        // Optionally play animation or sound
+    }
+    
     update() {
         const speed = 150;
         this.player.setVelocity(0, 0);
