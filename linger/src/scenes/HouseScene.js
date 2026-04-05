@@ -97,8 +97,13 @@ class HouseScene extends Phaser.Scene {
             { x: 928, y: 422, w: 77, h: 32 },    // Sofa bottom      
             { x: 930, y: 345, w: 100, h: 40 },   // Coffee table
             { x: 1000, y: 400, w: 35, h: 60 },   // Floor lamp
-            { x: 776, y: 850, w: 25, h: 25 },    // CD player
-            { x: 776, y: 850, w: 25, h: 25 },    // Bookshelf    
+            { x: 1053, y: 220, w: 75, h: 20 },    // CD player
+            { x: 1165, y: 225, w: 130, h: 22 },    // Bookshelf    
+            { x: 1165, y: 225, w: 130, h: 22 },    // Shoe rack
+            { x: 1165, y: 225, w: 130, h: 22 },    // Clothes rack
+            { x: 1165, y: 225, w: 130, h: 22 },    // Outerwear cabinet
+
+
         ];
 
         livingZones.forEach(z => {
@@ -109,8 +114,15 @@ class HouseScene extends Phaser.Scene {
 
 
         // 8. BEDROOM AREA COLLISIONS
+        const bedroomZones = [
 
+        ];
 
+        bedroomZones.forEach(z => {
+            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
+            this.physics.add.existing(zone, true);
+            this.walls.add(zone);
+        });
 
         // 9. STORAGE AREA COLLISIONS
 
