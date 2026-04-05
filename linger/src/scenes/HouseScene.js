@@ -209,6 +209,14 @@ class HouseScene extends Phaser.Scene {
                 if (door.isNear && door.isOpen === false) {
                     this.openDoor(door);
                 }
+            
+                // Check if we are near any interactable object when clicking
+            this.interactableList.forEach(item => {
+                if (item.isNear) {
+                console.log("INTERACTED:", item.message);
+                // This is where the UI Textbox code will go next
+        }
+    });
             });
         });
 
@@ -359,16 +367,16 @@ class HouseScene extends Phaser.Scene {
         const speed = 150;
         this.player.setVelocity(0, 0);
 
-       // Check proximity for every door in the house
+        // Check proximity for every door in the house
         this.doorList.forEach(door => {
         if (this.physics.overlap(this.player, door.trigger)) {
             door.isNear = true;
         } else {
             door.isNear = false;
         }
-});
+    });
 
-    // Interaction check for each item
+        // Interaction check for each item
         // Check if player is near any interactable object
         this.interactableList.forEach(item => {
             if (this.physics.overlap(this.player, item.trigger)) {
