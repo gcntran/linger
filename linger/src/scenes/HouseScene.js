@@ -354,6 +354,8 @@ class HouseScene extends Phaser.Scene {
 
     // UPDATE FUNCTION
     update() {
+
+        // Player movement speed
         const speed = 150;
         this.player.setVelocity(0, 0);
 
@@ -364,17 +366,18 @@ class HouseScene extends Phaser.Scene {
         } else {
             door.isNear = false;
         }
+});
 
+    // Interaction check for each item
         // Check if player is near any interactable object
         this.interactableList.forEach(item => {
-        if (this.physics.overlap(this.player, item.trigger)) {
-        item.isNear = true;
-        } else {
-        item.isNear = false;
-        }
-
-});
-});
+            if (this.physics.overlap(this.player, item.trigger)) {
+            item.isNear = true;
+            } else {
+            item.isNear = false;
+            }
+    
+    });
 
         // The player's velocity is set based on the WASD input
         if (this.wasd.up.isDown) {
