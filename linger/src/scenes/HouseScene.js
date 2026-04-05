@@ -112,7 +112,16 @@ class HouseScene extends Phaser.Scene {
         });
 
         // 9. STORAGE AREA COLLISIONS
-
+        const storageZones = [
+            { x: 1132, y: 760, w: 20, h: 160 },   // Laundry cabinet
+            { x: 1223, y: 750, w: 40, h: 10 },   // Box
+        ];
+        
+        storageZones.forEach(z => {
+            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
+            this.physics.add.existing(zone, true);
+            this.walls.add(zone);
+        });
 
         // 3. MAIN WALLS
         const mainWalls = [
@@ -124,12 +133,14 @@ class HouseScene extends Phaser.Scene {
             { x: 663, y: 575, w: 35, h: 30 },  // Laundry wall left
             { x: 793, y: 575, w: 35, h: 30 },  // Laundry wall right
             { x: 654, y: 740, w: 25, h: 300 },  // Wall Bathroom/Laundry
-            { x: 800, y: 740, w: 20, h: 300 },  // Wall Laundry/Living
+            { x: 800, y: 740, w: 20, h: 310 },  // Wall Laundry/Living
             { x: 1645, y: 320, w: 25, h: 340 },  // Right wall
             { x: 1252, y: 220, w: 20, h: 150 },  // Wall Living/Bedroom part 1
             { x: 1252, y: 665, w: 20, h: 500 },  // Wall Living/Bedroom part 2
             { x: 1445, y: 500, w: 365, h: 20 },  // Bottom bedroom wall
-
+            { x: 1104, y: 740, w: 20, h: 310 },  // Wall Storage/Living
+            { x: 1113, y: 575, w: 38, h: 30 },  // Storage wall left
+            { x: 1238, y: 575, w: 35, h: 30 },  // Storage wall right
         ];
 
         mainWalls.forEach(z => {
@@ -154,6 +165,8 @@ class HouseScene extends Phaser.Scene {
         this.addDoor(727, 635, 80, 150, 'laundry');
         // Bedroom door
         this.addDoor(1252, 355, 20, 110, 'bedroom');
+        // Storage door
+        this.addDoor(1178, 635, 80, 150, 'storage');
         
 
 
