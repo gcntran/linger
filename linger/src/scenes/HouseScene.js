@@ -172,10 +172,17 @@ class HouseScene extends Phaser.Scene {
 
         // Added the 'speaker' property to each item
         const interactables = [
-            { x: 1367, y: 422, w: 95, h: 22, speaker: 'Rem', message: "Really, Dot, how did you tuck a card in here?" },
-            { x: 1303, y: 230, w: 60, h: 30, speaker: 'Narrator', message: "The pages flutter softly, as if caught in a turning wind." },
-            { x: 1285, y: 452, w: 40, h: 30, speaker: 'Dot', message: "Meow...meow..." }
+            { 
+                x: 1367, y: 422, w: 95, h: 22, 
+                speaker: 'Rem', 
+                message: [
+                    "Really, Dot, how did you tuck a card in here?",
+                    "I remember those days… pushing myself forward just to avoid standing still.",
+                    "Maybe I wasn’t lost, maybe I was learning."
+            ] 
+            },
         ];
+
 
         // Pass the speaker to the helper function
         interactables.forEach(item => {
