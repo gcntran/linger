@@ -94,7 +94,6 @@ class HouseScene extends Phaser.Scene {
 
         // 8. BEDROOM AREA COLLISIONS
         const bedroomZones = [
-            { x: 1252, y: 355, w: 20, h: 110 },   // Door wall 
             { x: 1303, y: 230, w: 60, h: 30 },    // Bookshelf
             { x: 1392, y: 220, w: 105, h: 70 },   // Desk
             { x: 1394, y: 255, w: 45, h: 55 },  // Chair 
