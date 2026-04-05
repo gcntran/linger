@@ -172,9 +172,9 @@ class HouseScene extends Phaser.Scene {
 
         // Added the 'speaker' property to each item
         const interactables = [
-            { x: 1367, y: 422, w: 95, h: 22, speaker: 'Rem', message: "A mechanical keyboard with clacky switches." },
-            { x: 1303, y: 230, w: 60, h: 30, speaker: 'Narrator', message: "A shelf full of design books and thick coding manuals." },
-            { x: 1285, y: 452, w: 40, h: 30, speaker: 'Dot', message: "A happy, well-watered houseplant." }
+            { x: 1367, y: 422, w: 95, h: 22, speaker: 'Rem', message: "Really, Dot, how did you tuck a card in here?" },
+            { x: 1303, y: 230, w: 60, h: 30, speaker: 'Narrator', message: "The pages flutter softly, as if caught in a turning wind." },
+            { x: 1285, y: 452, w: 40, h: 30, speaker: 'Dot', message: "Meow...meow..." }
         ];
 
         // Pass the speaker to the helper function
@@ -222,11 +222,20 @@ class HouseScene extends Phaser.Scene {
                 if (item.isNear) {
                     this.speakerText.setText(item.speaker.toUpperCase());
                     this.dialogText.setText(item.message);
-
-                    // Color code the speakers
-                    if (item.speaker === 'Rem') this.speakerText.setColor('#3498db');
-                    else if (item.speaker === 'Dot') this.speakerText.setColor('#f1c40f');
-                    else this.speakerText.setColor('#ffffff');
+                    
+                    // DIALOGUE COLOR LOGIC:
+                    if (item.speaker === 'Rem') {
+                        this.speakerText.setColor('#3498db');
+                        this.dialogBg.setTexture('dialogue-rem'); // Rem's box
+                    } 
+                    else if (item.speaker === 'Dot') {
+                        this.speakerText.setColor('#f1c40f');
+                        this.dialogBg.setTexture('dialogue-dot'); // Dot's box
+                    } 
+                    else { // Narrator or default
+                        this.speakerText.setColor('#ffffff');
+                        this.dialogBg.setTexture('dialogue-box'); // Main box
+                    }
 
                     this.dialogBg.setVisible(true);
                     this.dialogText.setVisible(true);
@@ -292,7 +301,7 @@ class HouseScene extends Phaser.Scene {
         });
 
         // DIALOGUE BOX UI
-        this.dialogBg = this.add.image(1920 / 2, 850, 'dialog-box')
+        this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
             .setScrollFactor(0).setDepth(200).setVisible(false);
 
         this.dialogText = this.add.text(1920 / 2, 850, '', {
