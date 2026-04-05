@@ -285,6 +285,9 @@ class HouseScene extends Phaser.Scene {
             console.log("Door opened!");
             door.isOpen = true;
             
+            // Play door sound effect
+            this.sound.play('door-sound', { volume: 0.5 });
+
             // Disable the wall instead of fully destroying it 
             // This makes it much easier to "reset" later
             door.wall.body.enable = false; 
@@ -304,6 +307,9 @@ class HouseScene extends Phaser.Scene {
             console.log("Door automatically closing...");
             door.isOpen = false; // Reset the door state so it can be opened again
 
+            // Play door sound effect
+            this.sound.play('door-sound', { volume: 0.5 });
+
             door.wall.body.enable = true;
             // this.doorWall.setVisible(true);
     
@@ -320,13 +326,13 @@ class HouseScene extends Phaser.Scene {
         this.player.setVelocity(0, 0);
 
        // Check proximity for every door in the house
-    this.doorList.forEach(door => {
+        this.doorList.forEach(door => {
         if (this.physics.overlap(this.player, door.trigger)) {
             door.isNear = true;
         } else {
             door.isNear = false;
         }
-    });
+});
 
         // The player's velocity is set based on the WASD input
         if (this.wasd.up.isDown) {
@@ -341,10 +347,24 @@ class HouseScene extends Phaser.Scene {
             this.player.setVelocityX(speed);
         }
 
+        // Check if the player has any velocity
         if (this.player.body.velocity.x !== 0 && this.player.body.velocity.y !== 0) {
             this.player.body.velocity.normalize().scale(speed);
         }
-    }
+
+        // Walking sound logic
+        if (this.player.body.velocity.x !== 0 || this.player.body.velocity.y !== 0) {
+            // If moving and the sound isn't already playing, start it
+            if (this.walkSound && !this.walkSound.isPlaying) {
+                this.walkSound.play();
+            }
+        } else {
+            // If the player stops, stop the sound immediately
+            if (this.walkSound && this.walkSound.isPlaying) {
+                this.walkSound.stop();
+            }  
+        }
+    }   
 }
 
 export default HouseScene;
