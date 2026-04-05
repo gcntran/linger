@@ -15,9 +15,9 @@ class HouseScene extends Phaser.Scene {
         this.walls = this.physics.add.staticGroup();
 
 
-        
+
         // 3. KITCHEN AREA COLLISIONS
-         // Using a helper array to define zones quickly
+        // Using a helper array to define zones quickly
         const kitchenZones = [
             { x: 540, y: 230, w: 430, h: 40 },  // Counter Part 1
             { x: 360, y: 280, w: 45, h: 120 },  // Counter Part 2
@@ -48,11 +48,11 @@ class HouseScene extends Phaser.Scene {
         ];
 
         bathroomZones.forEach(z => {
-            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
+            let zone = this.add.zone(z.x, z.y, z.w, z.h);
             this.physics.add.existing(zone, true);
             this.walls.add(zone);
         });
-        
+
 
         // 5. LAUNDRY AREA COLLISIONS
         const laundryZones = [
@@ -61,9 +61,9 @@ class HouseScene extends Phaser.Scene {
             { x: 727, y: 850, w: 70, h: 70 },   // Washer/Dryer
             { x: 776, y: 752, w: 25, h: 25 },   // Box
         ];
-        
+
         laundryZones.forEach(z => {
-            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
+            let zone = this.add.zone(z.x, z.y, z.w, z.h);
             this.physics.add.existing(zone, true);
             this.walls.add(zone);
         });
@@ -84,7 +84,7 @@ class HouseScene extends Phaser.Scene {
         ];
 
         livingZones.forEach(z => {
-            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
+            let zone = this.add.zone(z.x, z.y, z.w, z.h);
             this.physics.add.existing(zone, true);
             this.walls.add(zone);
         });
@@ -104,7 +104,7 @@ class HouseScene extends Phaser.Scene {
         ];
 
         bedroomZones.forEach(z => {
-            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
+            let zone = this.add.zone(z.x, z.y, z.w, z.h);
             this.physics.add.existing(zone, true);
             this.walls.add(zone);
         });
@@ -114,9 +114,9 @@ class HouseScene extends Phaser.Scene {
             { x: 1132, y: 760, w: 20, h: 160 },   // Laundry cabinet
             { x: 1223, y: 750, w: 40, h: 10 },   // Box
         ];
-        
+
         storageZones.forEach(z => {
-            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
+            let zone = this.add.zone(z.x, z.y, z.w, z.h);
             this.physics.add.existing(zone, true);
             this.walls.add(zone);
         });
@@ -165,21 +165,21 @@ class HouseScene extends Phaser.Scene {
         this.addDoor(1252, 355, 20, 110, 'bedroom');
         // Storage door
         this.addDoor(1178, 635, 80, 150, 'storage');
-        
+
 
         // 10. INTERACTION OBJECTS
         this.interactableList = [];
 
-        // Interactable objects
+        // Added the 'speaker' property to each item
         const interactables = [
-            { x: 1367, y: 422, w: 95, h: 22, message: "A mechanical keyboard with clacky switches." },
-            { x: 1303, y: 230, w: 60, h: 30, message: "A shelf full of design books and thick coding manuals." },
-            { x: 1285, y: 452, w: 40, h: 30, message: "A happy, well-watered houseplant." }
+            { x: 1367, y: 422, w: 95, h: 22, speaker: 'Rem', message: "A mechanical keyboard with clacky switches." },
+            { x: 1303, y: 230, w: 60, h: 30, speaker: 'Narrator', message: "A shelf full of design books and thick coding manuals." },
+            { x: 1285, y: 452, w: 40, h: 30, speaker: 'Dot', message: "A happy, well-watered houseplant." }
         ];
 
-        // Loop through the array and pass the data to your helper function
+        // Pass the speaker to the helper function
         interactables.forEach(item => {
-            this.addInteractable(item.x, item.y, item.w, item.h, item.message);
+            this.addInteractable(item.x, item.y, item.w, item.h, item.message, item.speaker);
         });
 
         // 11. PLAYER SETUP
@@ -190,8 +190,8 @@ class HouseScene extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(10); // Keeps player above the floor
 
-        
-         // 12. Footstep sound effect
+
+        // 12. Footstep sound effect
         this.walkSound = this.sound.add('walk', { volume: 1.2, loop: true });
 
 
@@ -202,24 +202,38 @@ class HouseScene extends Phaser.Scene {
         // When the player clicks anywhere, it checks if they are near the door and opens it if they are.
         this.input.on('pointerdown', (pointer) => {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
-            // If player is in the zone AND the door is currently solid/enabled
-            // Check both proximity AND if the door is currently closed
-            // Check every door in the list
+            // A. Close dialog if it is open
+            if (this.dialogBg.visible) {
+                this.dialogBg.setVisible(false);
+                this.dialogText.setVisible(false);
+                this.speakerText.setVisible(false);
+                return; // Stop here so we don't accidentally click a door beneath the UI
+            }
+
+            // B. Door Logic
             this.doorList.forEach(door => {
                 if (door.isNear && door.isOpen === false) {
                     this.openDoor(door);
                 }
-            
-            // Check if we are near any interactable object when clicking
+            });
+
+            // C. Interactable Logic
             this.interactableList.forEach(item => {
                 if (item.isNear) {
-                console.log("INTERACTED:", item.message);
-                // This is where the UI Textbox code will go next
-        }
-    });
+                    this.speakerText.setText(item.speaker.toUpperCase());
+                    this.dialogText.setText(item.message);
+
+                    // Color code the speakers
+                    if (item.speaker === 'Rem') this.speakerText.setColor('#3498db');
+                    else if (item.speaker === 'Dot') this.speakerText.setColor('#f1c40f');
+                    else this.speakerText.setColor('#ffffff');
+
+                    this.dialogBg.setVisible(true);
+                    this.dialogText.setVisible(true);
+                    this.speakerText.setVisible(true);
+                }
             });
         });
-
 
         // 14. CONTROLS & MAIN CAMERA
         this.wasd = this.input.keyboard.addKeys({
@@ -246,16 +260,16 @@ class HouseScene extends Phaser.Scene {
         const uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
         uiCam.renderGL = false; // This prevents the debug overlay from double-rendering on this camera
         uiCam.ignore(this.physics.world.debugGraphic);
-    
+
         // Create a fullscreen toggle button in the top-left corner of the screen.
         const fsButton = this.add.text(20, 20, 'Fullscreen', {
             fontSize: '20px',
             color: '#ffffff',
             backgroundColor: '#333'
         })
-        .setPadding(10)
-        .setInteractive({ useHandCursor: true })
-        .setDepth(100); // Forces the button to render on top of everything
+            .setPadding(10)
+            .setInteractive({ useHandCursor: true })
+            .setDepth(100); // Forces the button to render on top of everything
 
         // Instruct the main camera to ignore the UI button, 
         // and the UI camera to ignore the game world
@@ -263,7 +277,7 @@ class HouseScene extends Phaser.Scene {
 
         // CAMERA FIX: The UI camera MUST ignore the game world and door triggers
         uiCam.ignore([layout, this.player, this.walls]);
-        
+
         this.doorList.forEach(door => {
             uiCam.ignore(door.trigger);
         });
@@ -276,6 +290,22 @@ class HouseScene extends Phaser.Scene {
                 this.scale.startFullscreen();
             }
         });
+
+        // DIALOGUE BOX UI
+        this.dialogBg = this.add.image(1920 / 2, 850, 'dialog-box')
+            .setScrollFactor(0).setDepth(200).setVisible(false);
+
+        this.dialogText = this.add.text(1920 / 2, 850, '', {
+            fontSize: '28px', color: '#ffffff', align: 'center', wordWrap: { width: 1100 }
+        }).setOrigin(0.5).setScrollFactor(0).setDepth(201).setVisible(false);
+
+        this.speakerText = this.add.text(1920 / 2, 810, '', {
+            fontSize: '24px', fontWeight: 'bold'
+        }).setOrigin(0.5).setScrollFactor(0).setDepth(202).setVisible(false);
+
+        // Tell the cameras how to handle the UI
+        this.cameras.main.ignore([this.dialogBg, this.dialogText, this.speakerText]);
+        uiCam.ignore([layout, this.player, this.walls]);
     }
 
 
@@ -288,7 +318,7 @@ class HouseScene extends Phaser.Scene {
 
         // Create the trigger zone
         // Door trigger when the doors are in horizontal position
-        let triggerW = (h > w) ? w + 60 : w + 40; 
+        let triggerW = (h > w) ? w + 60 : w + 40;
         // Door trigger when the doors are in vertical position
         let triggerH = (h > w) ? h + 20 : h + 30;
 
@@ -312,15 +342,15 @@ class HouseScene extends Phaser.Scene {
         if (door.wall && door.wall.active) {
             console.log("Door opened!");
             door.isOpen = true;
-            
+
             // Play door sound effect
             this.sound.play('door-opening', { volume: 0.1 });
 
             // Disable the wall instead of fully destroying it 
             // This makes it much easier to "reset" later
-            door.wall.body.enable = false; 
+            door.wall.body.enable = false;
             // this.doorWall.setVisible(false); // Hide it (if it's a sprite)
-    
+
             // 2. Set a timer to close it again in 3 seconds
             this.time.delayedCall(3000, () => {
                 this.closeDoor(door);
@@ -340,22 +370,24 @@ class HouseScene extends Phaser.Scene {
 
             door.wall.body.enable = true;
             // this.doorWall.setVisible(true);
-    
+
             // PHYSICS FIX: Calling refresh() on the static group ensures 
             // the physics engine realizes the door is solid again.
             this.walls.refresh();
         }
     }
-    
-    // 17. INTERACTABLE HELPER FUNCTION
-    addInteractable(x, y, w, h, message) {
-        // Create a zone slightly larger than the visual object
+
+    // 18. INTERACTION HELPER FUNCTION
+    addInteractable(x, y, w, h, message, speaker) {
+        // Create the trigger zone
         let trigger = this.add.zone(x, y, w + 24, h + 24);
         this.physics.add.existing(trigger, true);
-    
+
+        // Save this item's data
         this.interactableList.push({
             trigger: trigger,
             message: message,
+            speaker: speaker || 'Narrator',
             isNear: false
         });
     }
@@ -369,23 +401,23 @@ class HouseScene extends Phaser.Scene {
 
         // Check proximity for every door in the house
         this.doorList.forEach(door => {
-        if (this.physics.overlap(this.player, door.trigger)) {
-            door.isNear = true;
-        } else {
-            door.isNear = false;
-        }
-    });
+            if (this.physics.overlap(this.player, door.trigger)) {
+                door.isNear = true;
+            } else {
+                door.isNear = false;
+            }
+        });
 
         // Interaction check for each item
         // Check if player is near any interactable object
         this.interactableList.forEach(item => {
             if (this.physics.overlap(this.player, item.trigger)) {
-            item.isNear = true;
+                item.isNear = true;
             } else {
-            item.isNear = false;
+                item.isNear = false;
             }
-    
-    });
+
+        });
 
         // The player's velocity is set based on the WASD input
         if (this.wasd.up.isDown) {
@@ -405,8 +437,16 @@ class HouseScene extends Phaser.Scene {
             this.player.body.velocity.normalize().scale(speed);
         }
 
-        // Walking sound logic
+        // Walking sound & Auto-close logic
         if (this.player.body.velocity.x !== 0 || this.player.body.velocity.y !== 0) {
+
+            // Hide the dialog if the player walks away
+            if (this.dialogBg.visible) {
+                this.dialogBg.setVisible(false);
+                this.dialogText.setVisible(false);
+                this.speakerText.setVisible(false);
+            }
+
             // If moving and the sound isn't already playing, start it
             if (this.walkSound && !this.walkSound.isPlaying) {
                 this.walkSound.play();
@@ -415,9 +455,9 @@ class HouseScene extends Phaser.Scene {
             // If the player stops, stop the sound immediately
             if (this.walkSound && this.walkSound.isPlaying) {
                 this.walkSound.stop();
-            }  
+            }
         }
-    }   
+    }
 }
 
 export default HouseScene;
