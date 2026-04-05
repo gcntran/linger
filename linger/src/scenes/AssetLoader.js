@@ -13,6 +13,7 @@ class AssetLoader extends Phaser.Scene {
         this.load.image('dialogue-box', '/assets/ui/dialogues/dialogue.png'); // main dialogue box
         this.load.image('dialogue-rem', '/assets/ui/dialogues/dialogue-rem.png'); // Rem's dialogue box
         this.load.image('dialogue-dot', '/assets/ui/dialogues/dialogue-dot.png'); // Dot's dialogue box
+        this.load.image('dialogue-arrow', '/assets/ui/dialogues/dialogue-arrow.png'); // arrow for multiple dialogues
 
         // Background music
         this.load.audio('bgm', '/assets/sounds/cozy-piano.mp3'); // src: https://pixabay.com/music/modern-classical-cozy-piano-130875/
