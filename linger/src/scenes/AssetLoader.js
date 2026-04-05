@@ -10,11 +10,12 @@ class AssetLoader extends Phaser.Scene {
         this.load.image('player', '/assets/characters/playerplaceholder.png');
 
         // Background music
-        this.load.audio('bgm', '/assets/sounds/cozy-piano.mp3');
+        this.load.audio('bgm', '/assets/sounds/cozy-piano.mp3'); // src: https://pixabay.com/music/modern-classical-cozy-piano-130875/
         // Footstep sound effect
-        this.load.audio('walk', '/assets/sounds/footstep-sfx.mp3');
+        this.load.audio('walk', '/assets/sounds/footstep-sfx.m4a');
         // Door sound effect
-        this.load.audio('door-sound', '/assets/sounds/door-sfx.mp3');
+        this.load.audio('door-opening', '/assets/sounds/door-opening.mp3'); // src: https://pixabay.com/sound-effects/household-dorm-door-opening-6038/
+        this.load.audio('door-closing', '/assets/sounds/door-closing.mp3'); // src: https://pixabay.com/sound-effects/household-door-closed-382707/
     }
 
     create() {
@@ -25,11 +26,8 @@ class AssetLoader extends Phaser.Scene {
         const music = this.sound.add('bgm');
         music.play({
             loop: true,
-            volume: 0.2
+            volume: 0.1
         });
-
-        // Footstep sound effect
-        this.walkSound = this.sound.add('walk', { volume: 1, loop: true });
     }
 }
 

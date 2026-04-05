@@ -176,6 +176,9 @@ class HouseScene extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(10); // Keeps player above the floor
 
+         // Footstep sound effect
+        this.walkSound = this.sound.add('walk', { volume: 1.2, loop: true });
+
         // 12. COLLISIONS & INTERACTIONS
         this.physics.add.collider(this.player, this.walls);
 
@@ -286,7 +289,7 @@ class HouseScene extends Phaser.Scene {
             door.isOpen = true;
             
             // Play door sound effect
-            this.sound.play('door-sound', { volume: 0.5 });
+            this.sound.play('door-opening', { volume: 0.1 });
 
             // Disable the wall instead of fully destroying it 
             // This makes it much easier to "reset" later
@@ -308,7 +311,7 @@ class HouseScene extends Phaser.Scene {
             door.isOpen = false; // Reset the door state so it can be opened again
 
             // Play door sound effect
-            this.sound.play('door-sound', { volume: 0.5 });
+            this.sound.play('door-closing', { volume: 0.1 });
 
             door.wall.body.enable = true;
             // this.doorWall.setVisible(true);
