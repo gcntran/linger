@@ -339,6 +339,18 @@ class HouseScene extends Phaser.Scene {
         }
     }
     
+    // 17. INTERACTABLE HELPER FUNCTION
+    addInteractable(x, y, w, h, message) {
+        // Create a zone slightly larger than the visual object
+        let trigger = this.add.zone(x, y, w + 24, h + 24);
+        this.physics.add.existing(trigger, true);
+    
+        this.interactableList.push({
+            trigger: trigger,
+            message: message,
+            isNear: false
+        });
+    }
 
     // UPDATE FUNCTION
     update() {
