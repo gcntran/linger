@@ -23,6 +23,10 @@ class HouseScene extends Phaser.Scene {
             { x: 415, y: 575, w: 165, h: 30 },  // Bathroom wall
             { x: 654, y: 740, w: 25, h: 300 },  // Wall Bathroom/Laundry
             { x: 800, y: 740, w: 20, h: 300 },  // Wall Laundry/Living
+            { x: 1645, y: 320, w: 25, h: 340 },  // Right wall
+            { x: 1250, y: 520, w: 20, h: 770 },  // Wall Living/Bedroom
+            { x: 1445, y: 500, w: 365, h: 20 },  // Bottom bedroom wall
+
         ];
 
         mainWalls.forEach(z => {
@@ -115,7 +119,15 @@ class HouseScene extends Phaser.Scene {
 
         // 8. BEDROOM AREA COLLISIONS
         const bedroomZones = [
-
+            { x: 1303, y: 230, w: 60, h: 30 },    // Bookshelf
+            { x: 1392, y: 220, w: 105, h: 70 },   // Desk
+            { x: 1394, y: 255, w: 45, h: 55 },  // Chair 
+            { x: 1478, y: 245, w: 47, h: 25 },    // End table   
+            { x: 1555, y: 295, w: 100, h: 100 },   // Bed
+            { x: 1473, y: 380, w: 50, h: 30 },   // Cat Bed
+            { x: 1480, y: 422, w: 100, h: 20 },    // Cabinet
+            { x: 1367, y: 422, w: 95, h: 22 },    // Keyboard
+            { x: 1285, y: 452, w: 40, h: 30 },    // Plant pot
         ];
 
         bedroomZones.forEach(z => {
@@ -136,11 +148,13 @@ class HouseScene extends Phaser.Scene {
         this.addDoor(540, 635, 80, 150, 'bathroom');
         // Laundry door
         this.addDoor(727, 635, 80, 150, 'laundry');
+        // Bedroom door
+        this.addDoor(1250, 520, 20, 770, 'bedroom');
         
 
 
         // 11. PLAYER SETUP
-        this.player = this.physics.add.sprite(1000, 500, 'player');
+        this.player = this.physics.add.sprite(1400, 350, 'player');
         this.player.setScale(2);
         this.player.body.setSize(16, 20);
         this.player.body.setOffset(8, 12);
