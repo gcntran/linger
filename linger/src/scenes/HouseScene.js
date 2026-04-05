@@ -14,32 +14,6 @@ class HouseScene extends Phaser.Scene {
         // 2. PHYSICS GROUPS
         this.walls = this.physics.add.staticGroup();
 
-        // 3. MAIN WALLS
-        const mainWalls = [
-            { x: 970, y: 119, w: 1330, h: 30 },  // Top wall
-            { x: 315, y: 519, w: 30, h: 770 },  // Left wall
-            { x: 800, y: 910, w: 935, h: 30 },  // Bottom wall
-            { x: 758, y: 290, w: 30, h: 370 },  // Wall Kitchen/Living
-            { x: 415, y: 575, w: 165, h: 30 },  // Bathroom wall
-            { x: 654, y: 740, w: 25, h: 300 },  // Wall Bathroom/Laundry
-            { x: 800, y: 740, w: 20, h: 300 },  // Wall Laundry/Living
-            { x: 1645, y: 320, w: 25, h: 340 },  // Right wall
-            { x: 1250, y: 520, w: 20, h: 770 },  // Wall Living/Bedroom
-            { x: 1445, y: 500, w: 365, h: 20 },  // Bottom bedroom wall
-
-        ];
-
-        mainWalls.forEach(z => {
-            // Create a zone for each bathroom collision area. 
-            // Why z is used? It's zone, and it contains the properties x, y, w, h that define the position and size of the collision area.
-            // z.x and z.y are the center coordinates, while z.w and z.h are the width and height of the zone.
-            let zone = this.add.zone(z.x, z.y, z.w, z.h);
-            // Adding physics to the zone and making it immovable (static) so it acts as a solid object for collisions.
-            this.physics.add.existing(zone, true);
-            // Adding the zone to the walls group so that it will be included in collision checks with the player. 
-            // This allows the player to collide with these zones as if they were solid objects in the game world.
-            this.walls.add(zone);
-        });
 
         
         // 4. KITCHEN AREA COLLISIONS
@@ -62,8 +36,8 @@ class HouseScene extends Phaser.Scene {
         // 5. BATHROOM AREA COLLISIONS
         const bathroomZones = [
             { x: 612, y: 575, w: 60, h: 30 },   // Door wall 
-            { x: 415, y: 670, w: 170, h: 30 },  // Left Wall/Floor
-            { x: 615, y: 670, w: 70, h: 30 },   // Right Wall/Floor
+            { x: 415, y: 670, w: 170, h: 30 },  // Left wall/floor
+            { x: 615, y: 670, w: 70, h: 30 },   // Right wall/floor 
             { x: 410, y: 700, w: 93, h: 30 },   // Cabinet
             { x: 613, y: 700, w: 26, h: 30 },   // Plant pot
             { x: 345, y: 760, w: 20, h: 20 },   // Trash can
@@ -82,6 +56,7 @@ class HouseScene extends Phaser.Scene {
 
         // 6. LAUNDRY AREA COLLISIONS
         const laundryZones = [
+            { x: 683, y: 770, w: 20, h: 120 },  // Right wall/floor
             { x: 683, y: 770, w: 20, h: 120 },   // Laundry cabinet
             { x: 727, y: 850, w: 70, h: 70 },   // Washer/Dryer
             { x: 776, y: 752, w: 25, h: 25 },   // Box
@@ -119,6 +94,7 @@ class HouseScene extends Phaser.Scene {
 
         // 8. BEDROOM AREA COLLISIONS
         const bedroomZones = [
+            { x: 1252, y: 355, w: 20, h: 110 },   // Door wall 
             { x: 1303, y: 230, w: 60, h: 30 },    // Bookshelf
             { x: 1392, y: 220, w: 105, h: 70 },   // Desk
             { x: 1394, y: 255, w: 45, h: 55 },  // Chair 
@@ -139,6 +115,35 @@ class HouseScene extends Phaser.Scene {
         // 9. STORAGE AREA COLLISIONS
 
 
+        // 3. MAIN WALLS
+        const mainWalls = [
+            { x: 970, y: 119, w: 1330, h: 30 },  // Top wall
+            { x: 315, y: 519, w: 30, h: 770 },  // Left wall
+            { x: 800, y: 910, w: 935, h: 30 },  // Bottom wall
+            { x: 758, y: 290, w: 30, h: 370 },  // Wall Kitchen/Living
+            { x: 415, y: 575, w: 165, h: 30 },  // Bathroom wall left
+            { x: 663, y: 575, w: 35, h: 30 },  // Laundry wall left
+            { x: 793, y: 575, w: 35, h: 30 },  // Laundry wall right
+            { x: 654, y: 740, w: 25, h: 300 },  // Wall Bathroom/Laundry
+            { x: 800, y: 740, w: 20, h: 300 },  // Wall Laundry/Living
+            { x: 1645, y: 320, w: 25, h: 340 },  // Right wall
+            { x: 1252, y: 220, w: 20, h: 150 },  // Wall Living/Bedroom part 1
+            { x: 1252, y: 665, w: 20, h: 500 },  // Wall Living/Bedroom part 2
+            { x: 1445, y: 500, w: 365, h: 20 },  // Bottom bedroom wall
+
+        ];
+
+        mainWalls.forEach(z => {
+            // Create a zone for each bathroom collision area. 
+            // Why z is used? It's zone, and it contains the properties x, y, w, h that define the position and size of the collision area.
+            // z.x and z.y are the center coordinates, while z.w and z.h are the width and height of the zone.
+            let zone = this.add.zone(z.x, z.y, z.w, z.h);
+            // Adding physics to the zone and making it immovable (static) so it acts as a solid object for collisions.
+            this.physics.add.existing(zone, true);
+            // Adding the zone to the walls group so that it will be included in collision checks with the player. 
+            // This allows the player to collide with these zones as if they were solid objects in the game world.
+            this.walls.add(zone);
+        });
 
 
         // 10. ALL DOORS LOGIC
@@ -146,15 +151,15 @@ class HouseScene extends Phaser.Scene {
 
         // Bathroom door
         this.addDoor(540, 635, 80, 150, 'bathroom');
-        // Laundry door
+        // Laundry doors
         this.addDoor(727, 635, 80, 150, 'laundry');
         // Bedroom door
-        this.addDoor(1250, 520, 20, 770, 'bedroom');
+        this.addDoor(1252, 355, 20, 110, 'bedroom');
         
 
 
         // 11. PLAYER SETUP
-        this.player = this.physics.add.sprite(1400, 350, 'player');
+        this.player = this.physics.add.sprite(920, 550, 'player');
         this.player.setScale(2);
         this.player.body.setSize(16, 20);
         this.player.body.setOffset(8, 12);
@@ -244,7 +249,12 @@ class HouseScene extends Phaser.Scene {
         this.walls.add(wall);
 
         // Create the trigger zone
-        let trigger = this.add.zone(x, y, w + 40, h + 30);
+        // Door trigger when the doors are in horizontal position
+        let triggerW = (h > w) ? w + 60 : w + 40; 
+        // Door trigger when the doors are in vertical position
+        let triggerH = (h > w) ? h + 20 : h + 30;
+
+        let trigger = this.add.zone(x, y, triggerW, triggerH);
         this.physics.add.existing(trigger, true);
 
         // Save this door's data
