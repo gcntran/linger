@@ -16,7 +16,7 @@ class HouseScene extends Phaser.Scene {
 
 
         
-        // 4. KITCHEN AREA COLLISIONS
+        // 3. KITCHEN AREA COLLISIONS
          // Using a helper array to define zones quickly
         const kitchenZones = [
             { x: 540, y: 230, w: 430, h: 40 },  // Counter Part 1
@@ -33,7 +33,7 @@ class HouseScene extends Phaser.Scene {
             this.walls.add(zone);
         });
 
-        // 5. BATHROOM AREA COLLISIONS
+        // 4. BATHROOM AREA COLLISIONS
         const bathroomZones = [
             { x: 612, y: 575, w: 60, h: 30 },   // Door wall 
             { x: 415, y: 670, w: 170, h: 30 },  // Left wall/floor
@@ -54,7 +54,7 @@ class HouseScene extends Phaser.Scene {
         });
         
 
-        // 6. LAUNDRY AREA COLLISIONS
+        // 5. LAUNDRY AREA COLLISIONS
         const laundryZones = [
             { x: 683, y: 770, w: 20, h: 120 },  // Right wall/floor
             { x: 683, y: 770, w: 20, h: 120 },   // Laundry cabinet
@@ -90,7 +90,7 @@ class HouseScene extends Phaser.Scene {
         });
 
 
-        // 8. BEDROOM AREA COLLISIONS
+        // 6. BEDROOM AREA COLLISIONS
         const bedroomZones = [
             { x: 1303, y: 230, w: 60, h: 30 },    // Bookshelf
             { x: 1392, y: 220, w: 105, h: 70 },   // Desk
@@ -109,7 +109,7 @@ class HouseScene extends Phaser.Scene {
             this.walls.add(zone);
         });
 
-        // 9. STORAGE AREA COLLISIONS
+        // 7. STORAGE AREA COLLISIONS
         const storageZones = [
             { x: 1132, y: 760, w: 20, h: 160 },   // Laundry cabinet
             { x: 1223, y: 750, w: 40, h: 10 },   // Box
@@ -121,7 +121,7 @@ class HouseScene extends Phaser.Scene {
             this.walls.add(zone);
         });
 
-        // 3. MAIN WALLS
+        // 8. MAIN WALLS
         const mainWalls = [
             { x: 970, y: 119, w: 1330, h: 30 },  // Top wall
             { x: 315, y: 519, w: 30, h: 770 },  // Left wall
@@ -154,7 +154,7 @@ class HouseScene extends Phaser.Scene {
         });
 
 
-        // 10. ALL DOORS LOGIC
+        // 9. ALL DOORS LOGIC
         this.doorList = []
 
         // Bathroom door
@@ -167,6 +167,20 @@ class HouseScene extends Phaser.Scene {
         this.addDoor(1178, 635, 80, 150, 'storage');
         
 
+        // 10. INTERACTION OBJECTS
+        this.interactableList = [];
+
+        // Interactable objects
+        const interactables = [
+            { x: 1367, y: 422, w: 95, h: 22, message: "A mechanical keyboard with clacky switches." },
+            { x: 1303, y: 230, w: 60, h: 30, message: "A shelf full of design books and thick coding manuals." },
+            { x: 1285, y: 452, w: 40, h: 30, message: "A happy, well-watered houseplant." }
+        ];
+
+        // Loop through the array and pass the data to your helper function
+        interactables.forEach(item => {
+            this.addInteractable(item.x, item.y, item.w, item.h, item.message);
+        });
 
         // 11. PLAYER SETUP
         this.player = this.physics.add.sprite(920, 550, 'player');
@@ -176,10 +190,12 @@ class HouseScene extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(10); // Keeps player above the floor
 
-         // Footstep sound effect
+        
+         // 12. Footstep sound effect
         this.walkSound = this.sound.add('walk', { volume: 1.2, loop: true });
 
-        // 12. COLLISIONS & INTERACTIONS
+
+        // 13. COLLISIONS & INTERACTIONS
         this.physics.add.collider(this.player, this.walls);
 
         // Adding a pointerdown event listener to the entire game canvas. 
@@ -196,7 +212,8 @@ class HouseScene extends Phaser.Scene {
             });
         });
 
-        // 13. CONTROLS & MAIN CAMERA
+
+        // 14. CONTROLS & MAIN CAMERA
         this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -216,7 +233,7 @@ class HouseScene extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 1920, 1080);
 
 
-        // 14. UI CAMERA & FULLSCREEN BUTTON (The Fix)
+        // 15. UI CAMERA & FULLSCREEN BUTTON (The Fix)
         // Create a new camera specifically for UI that doesn't zoom
         const uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
         uiCam.renderGL = false; // This prevents the debug overlay from double-rendering on this camera
@@ -254,7 +271,7 @@ class HouseScene extends Phaser.Scene {
     }
 
 
-    // 15. DOOR HELPER FUNCTION
+    // 16. DOOR HELPER FUNCTION
     addDoor(x, y, w, h) {
         // Create the physical wall
         let wall = this.add.zone(x, y, w, h);
