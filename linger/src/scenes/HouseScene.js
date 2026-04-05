@@ -78,11 +78,9 @@ class HouseScene extends Phaser.Scene {
             { x: 1000, y: 400, w: 35, h: 60 },   // Floor lamp
             { x: 1053, y: 220, w: 75, h: 20 },    // CD player
             { x: 1165, y: 225, w: 130, h: 22 },    // Bookshelf    
-            { x: 1165, y: 225, w: 130, h: 22 },    // Shoe rack
-            { x: 1165, y: 225, w: 130, h: 22 },    // Clothes rack
-            { x: 1165, y: 225, w: 130, h: 22 },    // Outerwear cabinet
-
-
+            { x: 830, y: 735, w: 50, h: 75 },    // Shoe cabinet
+            { x: 852, y: 770, w: 40, h: 85 },    // Clothes rack
+            { x: 1065, y: 722, w: 50, h: 170 },    // Outerwear closet
         ];
 
         livingZones.forEach(z => {
