@@ -364,6 +364,16 @@ class HouseScene extends Phaser.Scene {
         } else {
             door.isNear = false;
         }
+
+        // Check if player is near any interactable object
+        this.interactableList.forEach(item => {
+        if (this.physics.overlap(this.player, item.trigger)) {
+        item.isNear = true;
+        } else {
+        item.isNear = false;
+        }
+
+});
 });
 
         // The player's velocity is set based on the WASD input
