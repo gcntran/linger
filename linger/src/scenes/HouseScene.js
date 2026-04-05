@@ -14,20 +14,21 @@ class HouseScene extends Phaser.Scene {
         // 2. PHYSICS GROUPS
         this.walls = this.physics.add.staticGroup();
 
-        // 3. KITCHEN AREA COLLISIONS
-         // Using a helper array to define zones quickly
-        const kitchenZones = [
-            { x: 540, y: 230, w: 430, h: 40 },  // Counter Part 1
-            { x: 360, y: 280, w: 45, h: 120 },  // Counter Part 2
-            { x: 592, y: 370, w: 195, h: 60 },  // Dining Table
-            { x: 592, y: 403, w: 100, h: 50 },  // Dining Chairs
-            { x: 340, y: 380, w: 25, h: 100 },   // Kitchen Cabinet
-            { x: 360, y: 360, w: 20, h: 20 },    // Trash Can
-            { x: 758, y: 290, w: 30, h: 370 },   // Wall Kitchen/Living
-            { x: 315, y: 519, w: 30, h: 770 }    // Left Wall
+        // 3. MAIN WALLS
+        const mainWalls = [
+            { x: 970, y: 119, w: 1330, h: 30 },  // Top wall
+            { x: 315, y: 519, w: 30, h: 770 },  // Left wall
+            { x: 800, y: 910, w: 935, h: 30 },  // Bottom wall
+            { x: 758, y: 290, w: 30, h: 370 },  // Wall Kitchen/Living
+            { x: 415, y: 575, w: 165, h: 30 },  // Bathroom wall
+            { x: 654, y: 740, w: 25, h: 300 },  // Wall Bathroom/Laundry
+            { x: 800, y: 740, w: 20, h: 300 },  // Wall Laundry/Living
         ];
 
-        kitchenZones.forEach(z => {
+        mainWalls.forEach(z => {
+            // Create a zone for each bathroom collision area. 
+            // Why z is used? It's zone, and it contains the properties x, y, w, h that define the position and size of the collision area.
+            // z.x and z.y are the center coordinates, while z.w and z.h are the width and height of the zone.
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
             // Adding physics to the zone and making it immovable (static) so it acts as a solid object for collisions.
             this.physics.add.existing(zone, true);
@@ -35,58 +36,123 @@ class HouseScene extends Phaser.Scene {
             // This allows the player to collide with these zones as if they were solid objects in the game world.
             this.walls.add(zone);
         });
-        // 4. BATHROOM & DOOR LOGIC
-        const bathroomZones = [
-            { x: 415, y: 575, w: 165, h: 30 }, // Bathroom wall
-            { x: 612, y: 575, w: 60, h: 30 }, // Door wall (will be removed when door opens)
-            { x: 654, y: 740, w: 25, h: 300 }, // Wall Bathroom/Laundry
-            { x: 415, y: 670, w: 170, h: 30 }, // Left Wall/Floor
-            { x: 615, y: 670, w: 70, h: 30 }, // Right Wall/Floor
-            { x: 410, y: 700, w: 93, h: 30 }, // Cabinet
-            { x: 613, y: 700, w: 26, h: 30 }, // Plant pot
-            { x: 613, y: 700, w: 26, h: 30 }, // Plant pot
+
+        
+        // 4. KITCHEN AREA COLLISIONS
+         // Using a helper array to define zones quickly
+        const kitchenZones = [
+            { x: 540, y: 230, w: 430, h: 40 },  // Counter Part 1
+            { x: 360, y: 280, w: 45, h: 120 },  // Counter Part 2
+            { x: 592, y: 370, w: 195, h: 60 },  // Dining Table
+            { x: 592, y: 403, w: 100, h: 50 },  // Dining Chairs
+            { x: 340, y: 380, w: 25, h: 100 },  // Kitchen Cabinet
+            { x: 360, y: 360, w: 20, h: 20 },   // Trash Can
         ];
-         // Using the same helper array approach for bathroom zones
+
+        kitchenZones.forEach(z => {
+            let zone = this.add.zone(z.x, z.y, z.w, z.h);
+            this.physics.add.existing(zone, true);
+            this.walls.add(zone);
+        });
+
+        // 5. BATHROOM AREA COLLISIONS
+        const bathroomZones = [
+            { x: 612, y: 575, w: 60, h: 30 },   // Door wall 
+            { x: 415, y: 670, w: 170, h: 30 },  // Left Wall/Floor
+            { x: 615, y: 670, w: 70, h: 30 },   // Right Wall/Floor
+            { x: 410, y: 700, w: 93, h: 30 },   // Cabinet
+            { x: 613, y: 700, w: 26, h: 30 },   // Plant pot
+            { x: 345, y: 760, w: 20, h: 20 },   // Trash can
+            { x: 360, y: 800, w: 50, h: 30 },   // Toilet
+            { x: 405, y: 855, w: 150, h: 50 },  // Bath
+            { x: 570, y: 850, w: 70, h: 50 },   // Sink
+            { x: 620, y: 780, w: 40, h: 20 },   // Cat litter box
+        ];
+
         bathroomZones.forEach(z => {
-            // Create a zone for each bathroom collision area. 
-            // Why z is used? It's zone, and it contains the properties x, y, w, h that define the position and size of the collision area.
-            // z.x and z.y are the center coordinates, while z.w and z.h are the width and height of the zone.
+            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
+            this.physics.add.existing(zone, true);
+            this.walls.add(zone);
+        });
+        
+
+        // 6. LAUNDRY AREA COLLISIONS
+        const laundryZones = [
+            { x: 683, y: 770, w: 20, h: 120 },   // Laundry cabinet
+            { x: 727, y: 850, w: 70, h: 70 },   // Washer/Dryer
+            { x: 776, y: 752, w: 25, h: 25 },   // Box
+        ];
+        
+        laundryZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h); 
             this.physics.add.existing(zone, true);
             this.walls.add(zone);
         });
 
-        // Door setup: Create a separate zone for the door's collision and a larger one for the trigger area
-        this.doorWall = this.add.zone(540, 635, 80, 150);
-        this.physics.add.existing(this.doorWall, true);
-        this.walls.add(this.doorWall);
+        // 7. LIVING ROOM AREA COLLISIONS
+        const livingZones = [
+            { x: 820, y: 240, w: 50, h: 40 },    // End table
+            { x: 930, y: 220, w: 150, h: 70 },   // Sofa top
+            { x: 1057, y: 335, w: 68, h: 115 },  // Sofa right  
+            { x: 928, y: 422, w: 77, h: 32 },    // Sofa bottom      
+            { x: 930, y: 345, w: 100, h: 40 },   // Coffee table
+            { x: 1000, y: 400, w: 35, h: 60 },   // Floor lamp
+            { x: 776, y: 850, w: 25, h: 25 },    // CD player
+            { x: 776, y: 850, w: 25, h: 25 },    // Bookshelf    
+        ];
 
-        // This trigger zone is larger than the door itself to allow for easier interaction
-        this.doorTrigger = this.add.zone(540, 575, 100, 80);
-        this.physics.add.existing(this.doorTrigger, true);
+        livingZones.forEach(z => {
+            let zone = this.add.zone(z.x, z.y, z.w, z.h); 
+            this.physics.add.existing(zone, true);
+            this.walls.add(zone);
+        });
 
-        // 5. PLAYER SETUP
-        this.player = this.physics.add.sprite(500, 300, 'player');
+
+        // 8. BEDROOM AREA COLLISIONS
+
+
+
+        // 9. STORAGE AREA COLLISIONS
+
+
+
+
+        // 10. ALL DOORS LOGIC
+        this.doorList = []
+
+        // Bathroom door
+        this.addDoor(540, 635, 80, 150, 'bathroom');
+        // Laundry door
+        this.addDoor(727, 635, 80, 150, 'laundry');
+        
+
+
+        // 11. PLAYER SETUP
+        this.player = this.physics.add.sprite(1000, 500, 'player');
         this.player.setScale(2);
         this.player.body.setSize(16, 20);
         this.player.body.setOffset(8, 12);
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(10); // Keeps player above the floor
 
-        // 6. COLLISIONS & INTERACTIONS
+        // 12. COLLISIONS & INTERACTIONS
         this.physics.add.collider(this.player, this.walls);
-        this.playerNearDoor = false;
 
         // Adding a pointerdown event listener to the entire game canvas. 
         // When the player clicks anywhere, it checks if they are near the door and opens it if they are.
         this.input.on('pointerdown', (pointer) => {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
-            if (this.playerNearDoor) {
-                this.openDoor();
-            }
+            // If player is in the zone AND the door is currently solid/enabled
+            // Check both proximity AND if the door is currently closed
+            // Check every door in the list
+            this.doorList.forEach(door => {
+                if (door.isNear && door.isOpen === false) {
+                    this.openDoor(door);
+                }
+            });
         });
 
-        // 7. CONTROLS & MAIN CAMERA
+        // 13. CONTROLS & MAIN CAMERA
         this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -105,7 +171,8 @@ class HouseScene extends Phaser.Scene {
         // The physics world bounds are also set to match the layout size, ensuring that the player cannot move outside of the intended game area.
         this.physics.world.setBounds(0, 0, 1920, 1080);
 
-        // 8. UI CAMERA & FULLSCREEN BUTTON (The Fix)
+
+        // 14. UI CAMERA & FULLSCREEN BUTTON (The Fix)
         // Create a new camera specifically for UI that doesn't zoom
         const uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
         uiCam.renderGL = false; // This prevents the debug overlay from double-rendering on this camera
@@ -124,7 +191,13 @@ class HouseScene extends Phaser.Scene {
         // Instruct the main camera to ignore the UI button, 
         // and the UI camera to ignore the game world
         this.cameras.main.ignore(fsButton);
+
+        // CAMERA FIX: The UI camera MUST ignore the game world and door triggers
         uiCam.ignore([layout, this.player, this.walls]);
+        
+        this.doorList.forEach(door => {
+            uiCam.ignore(door.trigger);
+        });
 
         // Add a click event listener to the fullscreen button that toggles fullscreen mode when clicked.
         fsButton.on('pointerup', () => {
@@ -136,25 +209,78 @@ class HouseScene extends Phaser.Scene {
         });
     }
 
-    // The openDoor method is responsible for "opening" the door by destroying the doorWall zone, which removes the collision and allows the player to pass through where the door was located.
-    openDoor() {
-        if (this.doorWall) {
-            console.log("Door opened! Removing collision...");
-            this.doorWall.destroy(); 
-            this.doorWall = null;    
+
+    // 15. DOOR HELPER FUNCTION
+    addDoor(x, y, w, h) {
+        // Create the physical wall
+        let wall = this.add.zone(x, y, w, h);
+        this.physics.add.existing(wall, true);
+        this.walls.add(wall);
+
+        // Create the trigger zone
+        let trigger = this.add.zone(x, y, w + 40, h + 30);
+        this.physics.add.existing(trigger, true);
+
+        // Save this door's data
+        this.doorList.push({
+            wall: wall,
+            trigger: trigger,
+            isOpen: false,
+            isNear: false
+        });
+    }
+
+    // Door open and close function
+    // Click to open the door, then it will automatically close after 3 seconds. 
+    // The door can only be opened if it's currently closed, and it can only be closed if it's currently open.
+    openDoor(door) {
+        // Only open if it's currently closed (this.doorWall exists)
+        if (door.wall && door.wall.active) {
+            console.log("Door opened!");
+            door.isOpen = true;
+            
+            // Disable the wall instead of fully destroying it 
+            // This makes it much easier to "reset" later
+            door.wall.body.enable = false; 
+            // this.doorWall.setVisible(false); // Hide it (if it's a sprite)
+    
+            // 2. Set a timer to close it again in 3 seconds
+            this.time.delayedCall(3000, () => {
+                this.closeDoor(door);
+            });
         }
     }
 
+    // The closeDoor function checks if the door is currently open (i.e., this.doorWall is null). 
+    // If it is open, it creates a new physics zone at the same location as the original door wall, effectively "closing" the door again.
+    closeDoor(door) {
+        if (door.wall) {
+            console.log("Door automatically closing...");
+            door.isOpen = false; // Reset the door state so it can be opened again
+
+            door.wall.body.enable = true;
+            // this.doorWall.setVisible(true);
+    
+            // PHYSICS FIX: Calling refresh() on the static group ensures 
+            // the physics engine realizes the door is solid again.
+            this.walls.refresh();
+        }
+    }
+    
+
+    // UPDATE FUNCTION
     update() {
         const speed = 150;
         this.player.setVelocity(0, 0);
 
-        // Check if the player is overlapping with the door trigger zone. If they are, set playerNearDoor to true, allowing them to interact with the door. If they are not overlapping, set it to false.
-        if (this.physics.overlap(this.player, this.doorTrigger)) {
-            this.playerNearDoor = true;
+       // Check proximity for every door in the house
+    this.doorList.forEach(door => {
+        if (this.physics.overlap(this.player, door.trigger)) {
+            door.isNear = true;
         } else {
-            this.playerNearDoor = false;
+            door.isNear = false;
         }
+    });
 
         // The player's velocity is set based on the WASD input
         if (this.wasd.up.isDown) {
