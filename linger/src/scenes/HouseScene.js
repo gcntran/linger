@@ -206,7 +206,6 @@ class HouseScene extends Phaser.Scene {
             if (this.dialogBg.visible) {
                 this.dialogBg.setVisible(false);
                 this.dialogText.setVisible(false);
-                this.speakerText.setVisible(false);
                 return; // Stop here so we don't accidentally click a door beneath the UI
             }
 
@@ -220,26 +219,21 @@ class HouseScene extends Phaser.Scene {
             // C. Interactable Logic
             this.interactableList.forEach(item => {
                 if (item.isNear) {
-                    this.speakerText.setText(item.speaker.toUpperCase());
                     this.dialogText.setText(item.message);
                     
                     // DIALOGUE COLOR LOGIC:
                     if (item.speaker === 'Rem') {
-                        this.speakerText.setColor('#3498db');
                         this.dialogBg.setTexture('dialogue-rem'); // Rem's box
                     } 
                     else if (item.speaker === 'Dot') {
-                        this.speakerText.setColor('#f1c40f');
                         this.dialogBg.setTexture('dialogue-dot'); // Dot's box
                     } 
                     else { // Narrator or default
-                        this.speakerText.setColor('#ffffff');
                         this.dialogBg.setTexture('dialogue-box'); // Main box
                     }
 
                     this.dialogBg.setVisible(true);
                     this.dialogText.setVisible(true);
-                    this.speakerText.setVisible(true);
                 }
             });
         });
@@ -301,19 +295,28 @@ class HouseScene extends Phaser.Scene {
         });
 
         // DIALOGUE BOX UI
+        // The dialogue background image
         this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
-            .setScrollFactor(0).setDepth(200).setVisible(false);
+            .setScrollFactor(0)
+            .setDepth(200)
+            .setScale(1.5)
+            .setVisible(false);
 
+        // The dialogue text
         this.dialogText = this.add.text(1920 / 2, 850, '', {
-            fontSize: '28px', color: '#ffffff', align: 'center', wordWrap: { width: 1100 }
-        }).setOrigin(0.5).setScrollFactor(0).setDepth(201).setVisible(false);
+            fontSize: '30px', 
+            color: '#2F3A56', 
+            align: 'start', 
+            wordWrap: { width: 1300 }
+        })
+        .setOrigin(0.5)
+        .setScrollFactor(0)
+        .setDepth(201)
+        .setVisible(false);
 
-        this.speakerText = this.add.text(1920 / 2, 810, '', {
-            fontSize: '24px', fontWeight: 'bold'
-        }).setOrigin(0.5).setScrollFactor(0).setDepth(202).setVisible(false);
 
         // Tell the cameras how to handle the UI
-        this.cameras.main.ignore([this.dialogBg, this.dialogText, this.speakerText]);
+        this.cameras.main.ignore([this.dialogBg, this.dialogText]);
         uiCam.ignore([layout, this.player, this.walls]);
     }
 
@@ -453,7 +456,6 @@ class HouseScene extends Phaser.Scene {
             if (this.dialogBg.visible) {
                 this.dialogBg.setVisible(false);
                 this.dialogText.setVisible(false);
-                this.speakerText.setVisible(false);
             }
 
             // If moving and the sound isn't already playing, start it
