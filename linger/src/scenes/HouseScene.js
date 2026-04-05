@@ -210,7 +210,7 @@ class HouseScene extends Phaser.Scene {
                     this.openDoor(door);
                 }
             
-                // Check if we are near any interactable object when clicking
+            // Check if we are near any interactable object when clicking
             this.interactableList.forEach(item => {
                 if (item.isNear) {
                 console.log("INTERACTED:", item.message);
