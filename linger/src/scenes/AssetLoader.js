@@ -15,6 +15,9 @@ class AssetLoader extends Phaser.Scene {
         this.load.image('dialogue-dot', '/assets/ui/dialogues/dialogue-dot.png'); // Dot's dialogue box
         this.load.image('dialogue-arrow', '/assets/ui/dialogues/dialogue-arrow.png'); // arrow for multiple dialogues
 
+        // Dialogue sound effects
+        this.load.audio('click', '/assets/sounds/click-sfx.mp3'); // src: https://pixabay.com/sound-effects/film-special-effects-pen-click-411629/
+
         // Background music
         this.load.audio('bgm', '/assets/sounds/cozy-piano.mp3'); // src: https://pixabay.com/music/modern-classical-cozy-piano-130875/
         

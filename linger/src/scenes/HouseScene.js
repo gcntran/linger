@@ -189,6 +189,7 @@ class HouseScene extends Phaser.Scene {
             this.addInteractable(item.x, item.y, item.w, item.h, item.message, item.speaker);
         });
 
+
         // 11. PLAYER SETUP
         this.player = this.physics.add.sprite(920, 550, 'player');
         this.player.setScale(2);
@@ -198,9 +199,12 @@ class HouseScene extends Phaser.Scene {
         this.player.setDepth(10); // Keeps player above the floor
 
 
-        // 12. Footstep sound effect
+        // 12. SFX
+        // Walking sound
         this.walkSound = this.sound.add('walk', { volume: 1.2, loop: true });
 
+        // Clicking sound (for the dialogue)
+        this.clickSound = this.sound.add('click', {volume: 0.5 });
 
         // 13. COLLISIONS & INTERACTIONS
         this.physics.add.collider(this.player, this.walls);
@@ -211,25 +215,28 @@ class HouseScene extends Phaser.Scene {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
             // A. IF DIALOGUE IS ALREADY OPEN
             if (this.dialogBg.visible) {
-            this.currentDialogueIndex++;
+                // Play the clicking sound effect (at the arrow)
+                if (this.clickSound) this.clickSound.play();
 
-            // Check if there are more lines left in the message array
-            if (this.currentDialogueIndex < this.activeInteractable.message.length) {
-            this.dialogText.setText(this.activeInteractable.message[this.currentDialogueIndex]);
+                this.currentDialogueIndex++;
+
+                // Check if there are more lines left in the message array
+                if (this.currentDialogueIndex < this.activeInteractable.message.length) {
+                this.dialogText.setText(this.activeInteractable.message[this.currentDialogueIndex]);
             
-            // Hide arrow if it's the very last line
-            if (this.currentDialogueIndex === this.activeInteractable.message.length - 1) {
+                // Hide arrow if it's the very last line
+                if (this.currentDialogueIndex === this.activeInteractable.message.length - 1) {
                 this.dialogArrow.setVisible(false);
-            }
-            return;
+                }
+                return;
             } else {
 
-            // No more lines? Close everything
-            this.dialogBg.setVisible(false);
-            this.dialogText.setVisible(false);
-            this.dialogArrow.setVisible(false);
-            this.activeInteractable = null;
-            return;
+                // No more lines? Close everything
+                this.dialogBg.setVisible(false);
+                this.dialogText.setVisible(false);
+                this.dialogArrow.setVisible(false);
+                this.activeInteractable = null;
+                return;
         }
     }
 
@@ -243,6 +250,9 @@ class HouseScene extends Phaser.Scene {
             // C. Interactable Logic
             this.interactableList.forEach(item => {
                 if (item.isNear) {
+                    // Play the clicking sound when opening the dialogue
+                    if (this.clickSound) this.clickSound.play(); 
+                    
                     this.activeInteractable = item;
                     this.currentDialogueIndex = 0;
 
