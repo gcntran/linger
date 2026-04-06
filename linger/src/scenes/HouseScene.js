@@ -246,7 +246,8 @@ class HouseScene extends Phaser.Scene {
                     this.activeInteractable = item;
                     this.currentDialogueIndex = 0;
 
-                    this.dialogText.setText(item.message);
+                    // Add [0] so it only shows the first line, not the whole array
+                    this.dialogText.setText(item.message[0]);
                     
                     // DIALOGUE SWAPPING LOGIC
                     if (item.speaker === 'Rem') {
