@@ -167,8 +167,8 @@ class HouseScene extends Phaser.Scene {
         this.addDoor(1178, 635, 80, 150, 'storage');
 
 
-        // 10. LOST TAROT DATA % INTERACTIONS
-        this.questIndex = 0; // Tracks which card we are on (0-11)
+        // 10. LOST TAROT DATA & INTERACTIONS
+        this.questIndex = 0; // Tracks which card is on (0-11)
         this.questState = 'PRE_SEARCH'; // Current phase: PRE_SEARCH, OBJECT, CARD, POST_REACTION
 
         this.questData = [
@@ -285,7 +285,7 @@ class HouseScene extends Phaser.Scene {
             }
         });
 
-        
+
         // 14. CONTROLS & MAIN CAMERA
         this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -392,7 +392,6 @@ class HouseScene extends Phaser.Scene {
 
         // Tell the cameras how to handle the UI
         this.cameras.main.ignore([this.dialogBg, this.dialogText, this.dialogArrow, this.tarotCard]);
-        uiCam.ignore([layout, this.player, this.walls]);
     }
 
 
@@ -555,12 +554,13 @@ class HouseScene extends Phaser.Scene {
         this.currentDialogueIndex = 0; // Reset text pager for the new phase
     
         if (this.questState === 'PRE_SEARCH') {
-            // This state ends when you click the object. 
+            // This state ends when the player clicks the object. 
             // Logic handled in pointerdown.
         } 
         else if (this.questState === 'OBJECT') {
             // Transition: Object lines finished -> Show Tarot Card
             this.questState = 'CARD';
+            console.log("Showing card:", currentQuest.tarotKey);
             this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
             this.dialogBg.setTexture('dialogue-box'); // Narrator/Default box
             this.dialogText.setText(currentQuest.narratorLine[0]);
