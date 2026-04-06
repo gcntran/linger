@@ -209,6 +209,9 @@ class HouseScene extends Phaser.Scene {
         // Clicking sound (for the dialogue)
         this.clickSound = this.sound.add('click', {volume: 0.5 });
 
+        // Card flipping sound (when the tarot card reveals)
+        this.cardSound = this.sound.add('card-flip', {volume: 0.5};)
+
         // 13. COLLISIONS & INTERACTIONS
         this.physics.add.collider(this.player, this.walls);
 
