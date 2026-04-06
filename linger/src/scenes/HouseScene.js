@@ -544,9 +544,50 @@ class HouseScene extends Phaser.Scene {
             // If the player stops, stop the sound immediately
             if (this.walkSound && this.walkSound.isPlaying) {
                 this.walkSound.stop();
+                
+            }
+        }
+    }
+
+    handleQuestTransition() {
+        let currentQuest = this.questData[this.questIndex];
+        this.currentDialogueIndex = 0; // Reset text pager for the new phase
+    
+        if (this.questState === 'PRE_SEARCH') {
+            // This state ends when you click the object. 
+            // Logic handled in pointerdown.
+        } 
+        else if (this.questState === 'OBJECT') {
+            // Transition: Object lines finished -> Show Tarot Card
+            this.questState = 'CARD';
+            this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
+            this.dialogBg.setTexture('dialogue-box'); // Narrator/Default box
+            this.dialogText.setText(currentQuest.narratorLine[0]);
+        } 
+        else if (this.questState === 'CARD') {
+            // Transition: Narrator finished -> Show Rem's reaction
+            this.questState = 'POST_REACTION';
+            this.tarotCard.setVisible(false);
+            this.dialogBg.setTexture('dialogue-rem');
+            this.dialogText.setText(currentQuest.postLine[0]);
+        } 
+        else if (this.questState === 'POST_REACTION') {
+            // Transition: Quest step complete!
+            this.dialogBg.setVisible(false);
+            this.dialogText.setVisible(false);
+            this.questIndex++; 
+            
+            if (this.questIndex < this.questData.length) {
+                this.questState = 'PRE_SEARCH';
+                // Optional: Automatically trigger Rem's next thought
+                this.dialogBg.setTexture('dialogue-rem');
+                this.dialogText.setText(this.questData[this.questIndex].preLine[0]);
+                this.dialogBg.setVisible(true);
+                this.dialogText.setVisible(true);
             }
         }
     }
 }
+
 
 export default HouseScene;
