@@ -216,32 +216,35 @@ class HouseScene extends Phaser.Scene {
         // When the player clicks anywhere, it checks if they are near the door and opens it if they are.
         this.input.on('pointerdown', (pointer) => {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
-            // A. IF DIALOGUE IS ALREADY OPEN
-            if (this.dialogBg.visible) {
-                // Play the clicking sound effect (at the arrow)
-                if (this.clickSound) this.clickSound.play();
+            let currentQuest = this.questData[this.questIndex];
 
+            // A. IF DIALOGUE IS ALREADY OPEN: Handle Paging or State Transitions
+            if (this.dialogBg.visible) {
+                if (this.clickSound) this.clickSound.play();
                 this.currentDialogueIndex++;
 
-                // Check if there are more lines left in the message array
-                if (this.currentDialogueIndex < this.activeInteractable.message.length) {
-                this.dialogText.setText(this.activeInteractable.message[this.currentDialogueIndex]);
-            
-                // Hide arrow if it's the very last line
-                if (this.currentDialogueIndex === this.activeInteractable.message.length - 1) {
-                this.dialogArrow.setVisible(false);
-                }
-                return;
-            } else {
+                // 1. Determine which lines we are currently reading based on the state
+                let lines = [];
+                if (this.questState === 'PRE_SEARCH') lines = currentQuest.preLine;
+                else if (this.questState === 'OBJECT') lines = currentQuest.objectLines;
+                else if (this.questState === 'CARD') lines = currentQuest.narratorLine;
+                else if (this.questState === 'POST_REACTION') lines = currentQuest.postLine;
 
-                // No more lines? Close everything
-                this.dialogBg.setVisible(false);
-                this.dialogText.setVisible(false);
-                this.dialogArrow.setVisible(false);
-                this.activeInteractable = null;
-                return;
-        }
-    }
+                // 2. Check if we should show the next line or move to the next phase
+                if (this.currentDialogueIndex < lines.length) {
+                    this.dialogText.setText(lines[this.currentDialogueIndex]);
+                    
+                    // Hide arrow on the very last line of the current text phase
+                    if (this.currentDialogueIndex === lines.length - 1) {
+                        this.dialogArrow.setVisible(false);
+                    }
+                    return;
+                } else {
+                    // Reached the end of these lines -> Trigger the transition to the next part of the sequence
+                    this.handleQuestTransition();
+                    return;
+                }
+            }
 
             // B. Door Logic
             this.doorList.forEach(door => {
@@ -250,41 +253,39 @@ class HouseScene extends Phaser.Scene {
                 }
             });
 
-            // C. Interactable Logic
-            this.interactableList.forEach(item => {
-                if (item.isNear) {
-                    // Play the clicking sound when opening the dialogue
-                    if (this.clickSound) this.clickSound.play(); 
+            // C. Interactable Logic (card lost quest aware discovery)
+            if (this.questState === 'PRE_SEARCH') {
+                this.interactableList.forEach((item, index) => {
+                    // Only allow interaction with the object that matches the current quest step
+                    if (item.isNear && index === this.questIndex) {
+                        if (this.clickSound) this.clickSound.play();
+                        
+                        this.questState = 'OBJECT';
+                        this.activeInteractable = item;
+                        this.currentDialogueIndex = 0;
 
-                    this.activeInteractable = item;
-                    this.currentDialogueIndex = 0;
+                        // Start with the first line of the object discovery
+                        this.dialogText.setText(currentQuest.objectLines[0]);
+                        
+                        // Set texture based on the quest speaker (usually Rem)
+                        if (item.speaker === 'Rem') this.dialogBg.setTexture('dialogue-rem');
+                        else if (item.speaker === 'Dot') this.dialogBg.setTexture('dialogue-dot');
+                        else this.dialogBg.setTexture('dialogue-box');
 
-                    // Add [0] so it only shows the first line, not the whole array
-                    this.dialogText.setText(item.message[0]);
-                    
-                    // DIALOGUE SWAPPING LOGIC
-                    if (item.speaker === 'Rem') {
-                        this.dialogBg.setTexture('dialogue-rem'); // Rem's box
-                    } 
-                    else if (item.speaker === 'Dot') {
-                        this.dialogBg.setTexture('dialogue-dot'); // Dot's box
-                    } 
-                    else { // Narrator or default
-                        this.dialogBg.setTexture('dialogue-box'); // Main box
+                        this.dialogBg.setVisible(true);
+                        this.dialogText.setVisible(true);
+
+                        // Show/Animate arrow if there are more lines to read about this object
+                        if (currentQuest.objectLines.length > 1) {
+                            this.dialogArrow.setVisible(true);
+                            this.arrowTween.resume();
+                        }
                     }
-
-                    this.dialogBg.setVisible(true);
-                    this.dialogText.setVisible(true);
-
-                    // Show arrow ONLY if there is more than one line
-                    if (item.message.length > 1) {
-                        this.dialogArrow.setVisible(true);
-                        this.arrowTween.resume(); // start the animation
-                }
+                });
             }
         });
-    });
 
+        
         // 14. CONTROLS & MAIN CAMERA
         this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
