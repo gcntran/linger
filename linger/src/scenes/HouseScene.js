@@ -387,7 +387,7 @@ class HouseScene extends Phaser.Scene {
         this.tarotCard = this.add.image(1920 / 2, 1080 / 2 - 50, 'tarot-0')
             .setScrollFactor(0)
             .setDepth(300) 
-            .setScale(1.2)
+            .setScale(3)
             .setVisible(false);
 
         // Tell the cameras how to handle the UI
