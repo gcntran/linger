@@ -20,6 +20,9 @@ class AssetLoader extends Phaser.Scene {
             }
         }
 
+        // Card flipping transition sound effect
+        this.load.audio('card-flip', 'assets/sounds/card-sfx.mp3'); // src: https://pixabay.com/sound-effects/film-special-effects-flipcard-91468/
+
         // Dialogues
         this.load.image('dialogue-box', 'assets/ui/dialogues/dialogue.png'); // main dialogue box
         this.load.image('dialogue-rem', 'assets/ui/dialogues/dialogue-rem.png'); // Rem's dialogue box
