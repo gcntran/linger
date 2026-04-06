@@ -209,12 +209,29 @@ class HouseScene extends Phaser.Scene {
         // When the player clicks anywhere, it checks if they are near the door and opens it if they are.
         this.input.on('pointerdown', (pointer) => {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
-            // A. Close dialog if it is open
+            // A. IF DIALOGUE IS ALREADY OPEN
             if (this.dialogBg.visible) {
-                this.dialogBg.setVisible(false);
-                this.dialogText.setVisible(false);
-                return; // Stop here so we don't accidentally click a door beneath the UI
+            this.currentDialogueIndex++;
+
+            // Check if there are more lines left in the message array
+            if (this.currentDialogueIndex < this.activeInteractable.message.length) {
+            this.dialogText.setText(this.activeInteractable.message[this.currentDialogueIndex]);
+            
+            // Hide arrow if it's the very last line
+            if (this.currentDialogueIndex === this.activeInteractable.message.length - 1) {
+                this.dialogArrow.setVisible(false);
             }
+            return;
+            } else {
+
+            // No more lines? Close everything
+            this.dialogBg.setVisible(false);
+            this.dialogText.setVisible(false);
+            this.dialogArrow.setVisible(false);
+            this.activeInteractable = null;
+            return;
+        }
+    }
 
             // B. Door Logic
             this.doorList.forEach(door => {
@@ -226,9 +243,12 @@ class HouseScene extends Phaser.Scene {
             // C. Interactable Logic
             this.interactableList.forEach(item => {
                 if (item.isNear) {
+                    this.activeInteractable = item;
+                    this.currentDialogueIndex = 0;
+
                     this.dialogText.setText(item.message);
                     
-                    // DIALOGUE COLOR LOGIC:
+                    // DIALOGUE SWAPPING LOGIC
                     if (item.speaker === 'Rem') {
                         this.dialogBg.setTexture('dialogue-rem'); // Rem's box
                     } 
@@ -241,9 +261,14 @@ class HouseScene extends Phaser.Scene {
 
                     this.dialogBg.setVisible(true);
                     this.dialogText.setVisible(true);
+
+                    // Show arrow ONLY if there is more than one line
+                if (item.message.length > 1) {
+                    this.dialogArrow.setVisible(true);
                 }
-            });
+            }
         });
+    });
 
         // 14. CONTROLS & MAIN CAMERA
         this.wasd = this.input.keyboard.addKeys({
@@ -472,6 +497,9 @@ class HouseScene extends Phaser.Scene {
             if (this.dialogBg.visible) {
                 this.dialogBg.setVisible(false);
                 this.dialogText.setVisible(false);
+                this.dialogArrow.setVisible(false); // Hide arrow
+                this.currentDialogueIndex = 0;      // Reset index
+                this.activeInteractable = null;     // Clear active item
             }
 
             // If moving and the sound isn't already playing, start it
