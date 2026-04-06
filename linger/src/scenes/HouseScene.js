@@ -301,7 +301,7 @@ class HouseScene extends Phaser.Scene {
             }
         });
 
-        // DIALOGUE BOX UI
+        // 16. DIALOGUE BOX UI
         // The dialogue background image
         this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
             .setScrollFactor(0)
@@ -321,14 +321,23 @@ class HouseScene extends Phaser.Scene {
         .setDepth(201)
         .setVisible(false);
 
+        // The dialogue arrow tracking
+        this.currentDialogueIndex = 0;
+        this.activeInteractable = null; // To keep track of which object is talking
+
+        this.dialogArrow = this.add.image(1920 / 2 - 500, 880, 'dialogue-arrow')
+            .setScrollFactor(0)
+            .setDepth(202)
+            .setScale(1.2)
+    .       setVisible(false);
 
         // Tell the cameras how to handle the UI
-        this.cameras.main.ignore([this.dialogBg, this.dialogText]);
+        this.cameras.main.ignore([this.dialogBg, this.dialogText, this.dialogArrow]);
         uiCam.ignore([layout, this.player, this.walls]);
     }
 
 
-    // 16. DOOR HELPER FUNCTION
+    // 17. DOOR HELPER FUNCTION
     addDoor(x, y, w, h) {
         // Create the physical wall
         let wall = this.add.zone(x, y, w, h);
