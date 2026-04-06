@@ -9,6 +9,11 @@ class AssetLoader extends Phaser.Scene {
         this.load.image('layout-house', '/assets/environment/layout-house.png');
         this.load.image('player', '/assets/characters/playerplaceholder.png');
 
+        // Tarot cards
+        for (let i = 0; i < 12; i++) {
+            this.load.image('tarot-${i}', '/assets/tarot/tarot-${i}.png');
+        }
+
         // Dialogues
         this.load.image('dialogue-box', '/assets/ui/dialogues/dialogue.png'); // main dialogue box
         this.load.image('dialogue-rem', '/assets/ui/dialogues/dialogue-rem.png'); // Rem's dialogue box

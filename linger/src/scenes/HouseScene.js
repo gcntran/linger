@@ -176,11 +176,11 @@ class HouseScene extends Phaser.Scene {
                 x: 1367, y: 422, w: 95, h: 22, 
                 speaker: 'Rem', 
                 message: [
-                    "Really, Dot, how did you tuck a card in here?",
-                    "I remember those days… pushing myself forward just to avoid standing still.",
-                    "Maybe I wasn’t lost, maybe I was learning."
+                    "Dot… did you hide something in this scarf?",
+                    "Here we go, I didn’t expect to find The Fool as the first card.",
             ] 
             },
+
         ];
 
 
