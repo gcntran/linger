@@ -350,7 +350,7 @@ class HouseScene extends Phaser.Scene {
         this.currentDialogueIndex = 0;
         this.activeInteractable = null; // To keep track of which object is talking
 
-        this.dialogArrow = this.add.image(1920 / 2 + 500, 880, 'dialogue-arrow')
+        this.dialogArrow = this.add.image(1920 / 2 + 500, 920, 'dialogue-arrow')
             .setScrollFactor(0)
             .setDepth(202)
             .setScale(1.2)
