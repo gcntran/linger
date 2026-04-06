@@ -167,28 +167,31 @@ class HouseScene extends Phaser.Scene {
         this.addDoor(1178, 635, 80, 150, 'storage');
 
 
-        // 10. INTERACTION OBJECTS
+        // 10. LOST TAROT DATA % INTERACTIONS
+        this.questIndex = 0; // Tracks which card we are on (0-11)
+        this.questState = 'PRE_SEARCH'; // Current phase: PRE_SEARCH, OBJECT, CARD, POST_REACTION
+
+        this.questData = [
+        {
+            name: "The Scarf",
+            preLine: ["I need to find where I left that first clue... maybe my desk?"],
+            objectLines: ["Dot… did you hide something in this scarf?", "There's a card wedged inside the wool!"],
+            tarotKey: 'tarot-0', 
+            narratorLine: ["The Fool: A new journey begins with a curious discovery."],
+            postLine: ["The Fool... that's a bit on the nose, isn't it?"],
+        },
+    // Add 11 more objects here following the same structure...
+];
+
+        // Physical interactables
         this.interactableList = [];
-
-        // Added the 'speaker' property to each item
-        const interactables = [
-            { 
-                x: 1367, y: 422, w: 95, h: 22, 
-                speaker: 'Rem', 
-                message: [
-                    "Dot… did you hide something in this scarf?",
-                    "Here we go, I didn’t expect to find The Fool as the first card.",
-            ] 
-            },
-
-        ];
-
-
-        // Pass the speaker to the helper function
-        interactables.forEach(item => {
-            this.addInteractable(item.x, item.y, item.w, item.h, item.message, item.speaker);
-        });
-
+        this.questData.forEach((data, index) => {
+        // For now, let's map index 0 to your scarf/keyboard coordinates
+        if(index === 0) {
+            this.addInteractable(1367, 422, 95, 22, data.objectLines, 'Rem');
+        }
+    // Add more 'else if' or a coordinate map here for the other 11 objects
+});
 
         // 11. PLAYER SETUP
         this.player = this.physics.add.sprite(920, 550, 'player');
@@ -338,7 +341,7 @@ class HouseScene extends Phaser.Scene {
             }
         });
 
-        // 16. DIALOGUE BOX UI
+        // 16A. DIALOGUE BOX UI
         // The dialogue background image
         this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
             .setScrollFactor(0)
