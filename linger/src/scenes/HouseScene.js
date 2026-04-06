@@ -332,15 +332,16 @@ class HouseScene extends Phaser.Scene {
         this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
             .setScrollFactor(0)
             .setDepth(200)
-            .setScale(1.5)
+            .setScale(1.7)
             .setVisible(false);
 
         // The dialogue text
         this.dialogText = this.add.text(1920 / 2, 850, '', {
             fontSize: '30px', 
             color: '#2F3A56', 
-            align: 'start', 
-            wordWrap: { width: 1300 }
+            align: 'left', 
+            lineSpacing: 12,
+            wordWrap: { width: 1000 }
         })
         .setOrigin(0.5)
         .setScrollFactor(0)
@@ -351,7 +352,7 @@ class HouseScene extends Phaser.Scene {
         this.currentDialogueIndex = 0;
         this.activeInteractable = null; // To keep track of which object is talking
 
-        this.dialogArrow = this.add.image(1920 / 2 + 500, 920, 'dialogue-arrow')
+        this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow')
             .setScrollFactor(0)
             .setDepth(202)
             .setScale(1.2)
