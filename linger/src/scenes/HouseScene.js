@@ -210,7 +210,7 @@ class HouseScene extends Phaser.Scene {
         this.clickSound = this.sound.add('click', {volume: 0.5 });
 
         // Card flipping sound (when the tarot card reveals)
-        this.cardSound = this.sound.add('card-flip', {volume: 0.5};)
+        this.cardSound = this.sound.add('card-flip', {volume: 0.5});
 
         // 13. COLLISIONS & INTERACTIONS
         this.physics.add.collider(this.player, this.walls);
@@ -563,6 +563,12 @@ class HouseScene extends Phaser.Scene {
         else if (this.questState === 'OBJECT') {
             // Transition: Object lines finished -> Show Tarot Card
             this.questState = 'CARD';
+
+            // Play the card flipping sound effect
+            if (this.cardSound) {
+                this.cardSound.play();
+            }
+
             console.log("Showing card:", currentQuest.tarotKey);
             this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
             this.dialogBg.setTexture('dialogue-box'); // Narrator/Default box
