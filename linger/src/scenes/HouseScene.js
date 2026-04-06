@@ -252,7 +252,7 @@ class HouseScene extends Phaser.Scene {
                 if (item.isNear) {
                     // Play the clicking sound when opening the dialogue
                     if (this.clickSound) this.clickSound.play(); 
-                    
+
                     this.activeInteractable = item;
                     this.currentDialogueIndex = 0;
 
@@ -274,8 +274,9 @@ class HouseScene extends Phaser.Scene {
                     this.dialogText.setVisible(true);
 
                     // Show arrow ONLY if there is more than one line
-                if (item.message.length > 1) {
-                    this.dialogArrow.setVisible(true);
+                    if (item.message.length > 1) {
+                        this.dialogArrow.setVisible(true);
+                        this.arrowTween.resume(); // start the animation
                 }
             }
         });
@@ -366,7 +367,18 @@ class HouseScene extends Phaser.Scene {
             .setScrollFactor(0)
             .setDepth(202)
             .setScale(1.2)
-    .       setVisible(false);
+            .setVisible(false);
+
+        // Arrow animation: floating up and down (using Tweens)
+        this.arrowTween = this.tweens.add({
+            targets: this.dialogArrow,
+            y: '+=10',          // Move down by 10 pixels
+            duration: 600,      // Over 0.6 seconds
+            yoyo: true,         // Reverse back to original position
+            repeat: -1,         // Repeat forever
+            ease: 'Sine.easeInOut' // Smooth movement
+        });
+
 
         // Tell the cameras how to handle the UI
         this.cameras.main.ignore([this.dialogBg, this.dialogText, this.dialogArrow]);
@@ -510,6 +522,7 @@ class HouseScene extends Phaser.Scene {
                 this.dialogBg.setVisible(false);
                 this.dialogText.setVisible(false);
                 this.dialogArrow.setVisible(false); // Hide arrow
+                this.arrowTween.pause(); // Pause the arrow animation
                 this.currentDialogueIndex = 0;      // Reset index
                 this.activeInteractable = null;     // Clear active item
             }
