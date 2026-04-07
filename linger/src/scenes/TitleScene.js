@@ -6,16 +6,30 @@ class TitleScene extends Phaser.Scene {
     }
 
     create() {
-        // Add your background image here if you have one
         const { width, height } = this.scale;
-
-        // Add the Start Button
+    
+        // Initial button state (Normal)
         const startBtn = this.add.image(width / 2, height / 2, 'start-button')
             .setInteractive({ useHandCursor: true });
-
+    
+        // 1. Hover State (Mouse enters button)
+        startBtn.on('pointerover', () => {
+            startBtn.setTexture('start-button-hovered');
+        });
+    
+        // 2. Normal State (Mouse leaves button)
+        startBtn.on('pointerout', () => {
+            startBtn.setTexture('start-button');
+        });
+    
+        // 3. Active State (Mouse clicks/holds down)
         startBtn.on('pointerdown', () => {
-            // Transition to the Intro Dialogue screen
-            this.scene.start('IntroScene');
+            startBtn.setTexture('start-button-active');
+            
+            // Slight delay so the player can actually see the "active" texture before the scene changes
+            this.time.delayedCall(100, () => {
+                this.scene.start('IntroScene');
+            });
         });
     }
 }
