@@ -693,13 +693,12 @@ class HouseScene extends Phaser.Scene {
             this.dialogBg.setTexture('dialogue-rem');
             this.dialogText.setText(currentQuest.postLine[0]);
             
-            // This is the final phase! Hide the arrow if there's only 1 line left.
-            if (currentQuest.postLine.length > 1) {
-                this.dialogArrow.setVisible(true);
-            } else {
-                this.dialogArrow.setVisible(false);
-            }
-        } 
+            // Always show the arrow on the final reaction line 
+            // so the player knows to click to "finish" the sequence.
+            this.dialogArrow.setVisible(true); 
+            if (this.arrowTween) this.arrowTween.resume();
+        }
+
         else if (this.questState === 'POST_REACTION') {
             // Transition: Quest step complete!
             this.dialogBg.setVisible(false);
