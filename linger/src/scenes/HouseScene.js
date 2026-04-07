@@ -162,6 +162,7 @@ class HouseScene extends Phaser.Scene {
 
         // Physics Collider
         this.physics.add.collider(this.player, this.walls);
+        
 
         // ==========================================
         // 5. INPUT & CONTROLS
@@ -173,13 +174,18 @@ class HouseScene extends Phaser.Scene {
             right: Phaser.Input.Keyboard.KeyCodes.D,
         });
 
+        // --- ADD DOT HERE ---
+// Creating her early so the Camera can find her
+this.dotSofa = this.add.rectangle(1450, 450, 80, 40, 0xff0000, 0.5); 
+this.dotSofa.setDepth(5);
+
         // Central Click Listener
         this.input.on('pointerdown', (pointer) => {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
-            if (this.clickSound) this.clickSound.play();
+            
 
             // --- A. STORY PHASE LOGIC (Intro, Wakeup, Dot Discovery, Ending) ---
-            if (this.storyPhase !== 'FIND_CARDS') {
+            if (this.storyPhase !== 'FIND_CARDS' && this.storyPhase !== 'SEARCH_DOT') {
                 this.lineIndex++;
                 let currentArray = [];
                 if (this.storyPhase === 'INTRO') currentArray = this.introLines;
@@ -263,8 +269,22 @@ class HouseScene extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#222222');
         this.physics.world.setBounds(0, 0, 1920, 1080);
 
+        // This is the UI Camera that stays still
         const uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
         uiCam.renderGL = false; 
+
+        const worldItems = [
+            layout, 
+            this.player, 
+            this.dotSofa, 
+            ...this.walls.getChildren()
+        ];
+        
+        uiCam.ignore(worldItems);
+        
+        // Ensure the main camera ignores UI (to be added later)
+        this.uiElements = [];
+
         if (this.physics.world.debugGraphic) {
             uiCam.ignore(this.physics.world.debugGraphic);
         }
@@ -275,6 +295,8 @@ class HouseScene extends Phaser.Scene {
 
         this.cameras.main.ignore(fsButton);
         uiCam.ignore([layout, this.player, ...this.walls.getChildren()]);
+
+        
         this.doorList.forEach(door => { uiCam.ignore(door.trigger); });
 
         fsButton.on('pointerup', () => {
@@ -337,6 +359,7 @@ class HouseScene extends Phaser.Scene {
             
             this.addInteractable(x, y, w, h, data.objectLines, 'Rem');
         });
+
 
         // START THE STORY
         this.storyPhase = 'INTRO'; 
