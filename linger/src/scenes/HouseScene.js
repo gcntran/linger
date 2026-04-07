@@ -186,6 +186,8 @@ this.dotSofa.setDepth(5);
 
             // --- A. STORY PHASE LOGIC (Intro, Wakeup, Dot Discovery, Ending) ---
             if (this.storyPhase !== 'FIND_CARDS' && this.storyPhase !== 'SEARCH_DOT') {
+                // Clicking sound ONLY play the click sound if we are actually advancing dialogue lines
+                if (this.clickSound) this.clickSound.play();
                 this.lineIndex++;
                 let currentArray = [];
                 if (this.storyPhase === 'INTRO') currentArray = this.introLines;
@@ -206,6 +208,9 @@ this.dotSofa.setDepth(5);
 
             // 1. Handle open dialogue paging
             if (this.dialogBg.visible) {
+                // Play click sound when moving to the next line of quest text
+                if (this.clickSound) this.clickSound.play();
+
                 this.currentDialogueIndex++;
                 let lines = [];
                 
@@ -220,6 +225,13 @@ this.dotSofa.setDepth(5);
 
                 if (this.currentDialogueIndex < lines.length) {
                     this.dialogText.setText(lines[this.currentDialogueIndex]);
+
+                    // --- ADD THE CARD FLIP SOUND HERE ---
+        // If we just clicked into the CARD state, play the flip sound!
+        if (this.questState === 'CARD' && this.currentDialogueIndex === 0) {
+            if (this.cardSound) this.cardSound.play();
+        }
+
                     this.dialogArrow.setVisible(true);
                     if (this.arrowTween && this.arrowTween.isPaused()) this.arrowTween.resume();
                     return;
@@ -240,6 +252,9 @@ this.dotSofa.setDepth(5);
             if (this.questState === 'PRE_SEARCH') {
                 this.interactableList.forEach((item, index) => {
                     if (item.isNear && index === this.questIndex) {
+
+                        // Play click sound for the initial interaction
+                        if (this.clickSound) this.clickSound.play();
                         this.questState = 'OBJECT';
                         this.activeInteractable = item;
                         this.currentDialogueIndex = 0;
@@ -393,7 +408,12 @@ this.dotSofa.setDepth(5);
         if (this.dialogBg.visible) {
             this.player.setVelocity(0, 0);
             if (this.anims.exists('idle')) this.player.anims.play('idle', true);
-            return; // Don't let player move if reading
+            
+            // STOP the walking sound if it's playing while dialogue is open
+            if (this.walkSound && this.walkSound.isPlaying) {
+                this.walkSound.stop();
+            }
+            return; 
         }
 
         // A. PROXIMITY CHECKS 
@@ -494,6 +514,10 @@ this.dotSofa.setDepth(5);
         } 
         else if (this.questState === 'OBJECT') {
             this.questState = 'CARD';
+
+            // --- PLAY SOUND HERE ---
+    if (this.cardSound) this.cardSound.play();
+
             this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
             this.dialogBg.setTexture('dialogue-box'); 
             this.dialogText.setText(currentQuest.narratorLine[0]);
