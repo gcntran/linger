@@ -686,12 +686,7 @@ if (vx === 0 && vy === 0) {
     if (this.anims.exists('idle')) this.player.anims.play('idle', true);
     if (this.walkSound.isPlaying) this.walkSound.stop();
     
-    // Hide dialog if the player is standing still/walking away
-    if (this.dialogBg.visible && this.questState === 'PRE_SEARCH') {
-        this.dialogBg.setVisible(false);
-        this.dialogText.setVisible(false);
-        this.dialogArrow.setVisible(false);
-    }
+
 } else {
     this.player.body.velocity.normalize().scale(speed);
     if (!this.walkSound.isPlaying) this.walkSound.play();
