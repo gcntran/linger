@@ -300,6 +300,17 @@ class HouseScene extends Phaser.Scene {
             this.addInteractable(x, y, w, h, data.objectLines, 'Rem');
         });
 
+        // QUEST HUD
+        this.cardCounterText = this.add.text(20, 20, `Cards Collected: 0/12`, {
+            fontSize: '20px',
+            fill: '#ffffff',
+            backgroundColor: '#00000066',
+            padding: { x: 10, y: 5 },
+            fontFamily: 'Arial',
+        });
+        this.cardCounterText.setScrollFactor(0); // Fixes it to the screen
+
+
         // 11. PLAYER SETUP
         this.player = this.physics.add.sprite(920, 550, 'player');
         this.player.setScale(2);
@@ -339,6 +350,12 @@ class HouseScene extends Phaser.Scene {
                 else if (this.questState === 'OBJECT') lines = currentQuest.objectLines;
                 else if (this.questState === 'CARD') lines = currentQuest.narratorLine;
                 else if (this.questState === 'POST_REACTION') lines = currentQuest.postLine;
+                // Handle the announcement state
+                else if (this.questState === 'ANNOUNCEMENT') {
+                    const cardName = currentQuest.name.split(' - ')[1];
+                    lines = [`You collected ${cardName}.`];
+                }
+                
 
                 // 2. Check if we should show the next line or move to the next phase
                 if (this.currentDialogueIndex < lines.length) {
@@ -661,68 +678,59 @@ class HouseScene extends Phaser.Scene {
     }
 
     handleQuestTransition() {
-        let currentQuest = this.questData[this.questIndex];
-        this.currentDialogueIndex = 0; // Reset text pager for the new phase
-    
-        if (this.questState === 'PRE_SEARCH') {
-            // Hide the dialogue box so the player can actually go find the object
-            this.dialogBg.setVisible(false);
-            this.dialogText.setVisible(false);
-            this.dialogArrow.setVisible(false);
-            if (this.arrowTween) this.arrowTween.pause();
-        }
-        else if (this.questState === 'OBJECT') {
-            // Transition: Object -> Show Tarot Card
-            this.questState = 'CARD';
-            
-            if (this.cardSound) this.cardSound.play();
-    
-            console.log("Showing card:", currentQuest.tarotKey);
-            this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
-            this.dialogBg.setTexture('dialogue-box'); 
-            this.dialogText.setText(currentQuest.narratorLine[0]);
-            
-            // Keep arrow visible so they know to click for Rem's reaction
-            this.dialogArrow.setVisible(true);
-            if (this.arrowTween) this.arrowTween.resume();
-        } 
-        else if (this.questState === 'CARD') {
-            // Transition: Narrator -> Show Rem's reaction
-            this.questState = 'POST_REACTION';
-            this.tarotCard.setVisible(false);
-            this.dialogBg.setTexture('dialogue-rem');
-            this.dialogText.setText(currentQuest.postLine[0]);
-            
-            // Always show the arrow on the final reaction line 
-            // so the player knows to click to "finish" the sequence.
-            this.dialogArrow.setVisible(true); 
-            if (this.arrowTween) this.arrowTween.resume();
-        }
+let currentQuest = this.questData[this.questIndex];
+    this.currentDialogueIndex = 0;
 
-        else if (this.questState === 'POST_REACTION') {
-            // Transition: Quest step complete!
-            this.dialogBg.setVisible(false);
-            this.dialogText.setVisible(false);
-            this.dialogArrow.setVisible(false); // Ensure arrow hides
-            this.questIndex++; 
-            
-            if (this.questIndex < this.questData.length) {
-                this.questState = 'PRE_SEARCH';
-                this.dialogBg.setTexture('dialogue-rem');
-                this.dialogText.setText(this.questData[this.questIndex].preLine[0]);
-                this.dialogBg.setVisible(true);
-                this.dialogText.setVisible(true);
-                
-                // Show arrow if the next preLine has multiple lines
-                if (this.questData[this.questIndex].preLine.length > 1) {
-                    this.dialogArrow.setVisible(true);
-                    if (this.arrowTween) this.arrowTween.resume();
-                } else {
-                    this.dialogArrow.setVisible(false);
-                }
-            }
+    if (this.questState === 'PRE_SEARCH') {
+        this.dialogBg.setVisible(false);
+        this.dialogText.setVisible(false);
+        this.dialogArrow.setVisible(false);
+    } 
+    else if (this.questState === 'OBJECT') {
+        // Step 1: Show Tarot Card & Narrator Lines
+        this.questState = 'CARD';
+        this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
+        this.dialogBg.setTexture('dialogue-box'); 
+        this.dialogText.setText(currentQuest.narratorLine[0]);
+        this.dialogArrow.setVisible(true);
+    } 
+    else if (this.questState === 'CARD') {
+        // Step 2: Hide Card & Show Rem's Reaction
+        this.questState = 'POST_REACTION';
+        this.tarotCard.setVisible(false);
+        this.dialogBg.setTexture('dialogue-rem');
+        this.dialogText.setText(currentQuest.postLine[0]);
+        this.dialogArrow.setVisible(true);
+    }
+    else if (this.questState === 'POST_REACTION') {
+        // Step 3: Show Collection Announcement
+        this.questState = 'ANNOUNCEMENT';
+        this.dialogBg.setTexture('dialogue-box'); 
+        const cardName = currentQuest.name.split(' - ')[1];
+        this.dialogText.setText(`You collected ${cardName}.`);
+        
+        // Update HUD
+        this.cardCounterText.setText(`Cards Collected: ${this.questIndex + 1}/12`);
+        this.dialogArrow.setVisible(true);
+    }
+    else if (this.questState === 'ANNOUNCEMENT') {
+        // Step 4: Close and go to next Pre-Search hint
+        this.dialogBg.setVisible(false);
+        this.dialogText.setVisible(false);
+        this.dialogArrow.setVisible(false);
+        this.questIndex++; 
+
+        if (this.questIndex < this.questData.length) {
+            this.questState = 'PRE_SEARCH';
+            this.dialogBg.setTexture('dialogue-rem');
+            this.dialogText.setText(this.questData[this.questIndex].preLine[0]);
+            this.dialogBg.setVisible(true);
+            this.dialogText.setVisible(true);
+            this.dialogArrow.setVisible(this.questData[this.questIndex].preLine.length > 1);
         }
     }
+}
+    
 }
 
 export default HouseScene;
