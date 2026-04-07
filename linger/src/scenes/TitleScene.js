@@ -15,7 +15,7 @@ class TitleScene extends Phaser.Scene {
 
         startBtn.on('pointerdown', () => {
             // Transition to the Intro Dialogue screen
-            this.scene.start('IntroScreen');
+            this.scene.start('IntroScene');
         });
     }
 }

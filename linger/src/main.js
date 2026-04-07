@@ -23,7 +23,10 @@ const config = {
 
     scene: [
         AssetLoader,
-        HouseScene
+        TitleScene,
+        IntroScene,
+        HouseScene,
+        EndingScene
     ]
 };
 
