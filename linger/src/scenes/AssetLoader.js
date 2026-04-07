@@ -57,7 +57,7 @@ class AssetLoader extends Phaser.Scene {
 
     create() {
         console.log("AssetLoader finished");
-        this.scene.start('HouseScene');
+        this.scene.start('TitleScene');
 
         // Background music
         const music = this.sound.add('bgm');
