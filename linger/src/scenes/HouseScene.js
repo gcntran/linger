@@ -184,7 +184,7 @@ class HouseScene extends Phaser.Scene {
             ],
             postLine: ["The Fool... I guess every path has to start somewhere."],
         },
-        
+
         {
             name: "The Sketchbook - The Magician",
             preLine: ["My desk is a mess. I wonder if Dot knocked something over by my sketchbook."],
@@ -665,8 +665,12 @@ class HouseScene extends Phaser.Scene {
         this.currentDialogueIndex = 0; // Reset text pager for the new phase
     
         if (this.questState === 'PRE_SEARCH') {
-            // Logic handled in pointerdown.
-        } 
+            // Hide the dialogue box so the player can actually go find the object
+            this.dialogBg.setVisible(false);
+            this.dialogText.setVisible(false);
+            this.dialogArrow.setVisible(false);
+            if (this.arrowTween) this.arrowTween.pause();
+        }
         else if (this.questState === 'OBJECT') {
             // Transition: Object -> Show Tarot Card
             this.questState = 'CARD';

@@ -10,6 +10,7 @@ class AssetLoader extends Phaser.Scene {
         this.load.image('player', 'assets/characters/playerplaceholder.png');
 
         // Tarot cards
+        // Only major arcana cards are used
         for (let i = 0; i <= 11; i++) {
             // Use backticks `` so that ${i} turns into the actual number
             const assetKey = `tarot-${i}`;
