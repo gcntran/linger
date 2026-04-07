@@ -652,7 +652,18 @@ class HouseScene extends Phaser.Scene {
             this.storyPhase = 'FIND_CARDS';
             this.questIndex = 0;
             this.questState = 'PRE_SEARCH';
-            this.showQuestHint(); // Show the first card hint
+            this.currentDialogueIndex = 0; // Reset this for the new quest text
+    
+            // Grab the first hint from your questData
+            let currentQuest = this.questData[this.questIndex];
+            
+            // Show the hint box manually
+            this.dialogBg.setVisible(true).setTexture('dialogue-box');
+            this.dialogText.setVisible(true).setText(currentQuest.preLine[0]);
+            this.dialogText.setStyle({ fontStyle: 'italic' }); // Hints are usually narrator style
+            this.dialogArrow.setVisible(true);
+            
+            if (this.arrowTween) this.arrowTween.resume();
         }
     
         // 3. ENDING -> FINAL_DOOR_WAIT (The new logic)
