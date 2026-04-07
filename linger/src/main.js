@@ -1,6 +1,10 @@
 import Phaser from 'phaser';
 import AssetLoader from './scenes/AssetLoader.js';
+import TitleScene from './scenes/TitleScene.js';
+import IntroScene from './scenes/IntroScene.js';
 import HouseScene from './scenes/HouseScene.js';
+import EndingScene from './scenes/EndingScene.js';
+
 
 //  Find out more information about the Game Config at: https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config = {
