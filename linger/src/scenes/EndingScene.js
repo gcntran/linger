@@ -9,7 +9,6 @@ class EndingScene extends Phaser.Scene {
         const { width, height } = this.scale;
 
         // 1. BACKGROUND
-        // We'll use a deep, cozy black or dark purple to match the tarot vibe
         this.add.rectangle(0, 0, width, height, 0x1a1a1a).setOrigin(0);
 
         // 2. TITLE TEXT
@@ -35,17 +34,19 @@ class EndingScene extends Phaser.Scene {
         ).setOrigin(0.5).setAlpha(0);
 
         // 4. BACK TO MENU BUTTON
-        const menuBtn = this.add.image(width / 2, height * 0.8, 'start-button') 
+        // Start with the default texture
+        const menuBtn = this.add.image(width / 2, height * 0.8, 'go-to-title-button') 
             .setScale(0.8)
             .setInteractive({ useHandCursor: true })
             .setAlpha(0);
 
+        // Optional: Keep the "Main Menu" text if it's not already baked into your PNG
         const btnText = this.add.text(width / 2, height * 0.8, 'Main Menu', {
             fontSize: '20px',
             color: '#ffffff'
         }).setOrigin(0.5).setAlpha(0);
 
-        // 5. ENTRANCE ANIMATION (Fading everything in slowly)
+        // 5. ENTRANCE ANIMATIONS
         this.tweens.add({
             targets: [title],
             alpha: 1,
@@ -69,17 +70,30 @@ class EndingScene extends Phaser.Scene {
             ease: 'Power2'
         });
 
-        // 6. BUTTON INTERACTION
-        menuBtn.on('pointerdown', () => {
-            // Stop any playing music if you have it
-            this.sound.stopAll();
-            // Go back to the Title Scene
-            this.scene.start('TitleScene');
+        // 6. BUTTON STATES & INTERACTION
+        
+        // Hover State
+        menuBtn.on('pointerover', () => {
+            menuBtn.setTexture('go-to-title-button-hovered');
+            menuBtn.setScale(0.82); // Tiny "pop" effect
         });
 
-        // Hover effect for the button
-        menuBtn.on('pointerover', () => menuBtn.setTint(0xcccccc));
-        menuBtn.on('pointerout', () => menuBtn.clearTint());
+        // Normal State
+        menuBtn.on('pointerout', () => {
+            menuBtn.setTexture('go-to-title-button');
+            menuBtn.setScale(0.8);
+        });
+
+        // Active/Click State
+        menuBtn.on('pointerdown', () => {
+            menuBtn.setTexture('go-to-title-button-active');
+            
+            // Give the player a split second to see the 'active' state before switching scenes
+            this.time.delayedCall(150, () => {
+                this.sound.stopAll();
+                this.scene.start('TitleScene');
+            });
+        });
     }
 }
 
