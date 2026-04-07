@@ -301,11 +301,11 @@ class HouseScene extends Phaser.Scene {
         });
 
         // QUEST HUD
-        this.cardCounterText = this.add.text(20, 20, `Cards Collected: 0/12`, {
-            fontSize: '20px',
+        this.cardCounterText = this.add.text(20, 60, `Cards Collected: 0/12`, {
+            fontSize: '32px',
             fill: '#ffffff',
-            backgroundColor: '#00000066',
-            padding: { x: 10, y: 5 },
+            backgroundColor: 'rgba(23, 61, 54, 0.4)',
+            padding: { x: 20, y: 20 },
             fontFamily: 'Arial',
         });
         this.cardCounterText.setScrollFactor(0); // Fixes it to the screen
