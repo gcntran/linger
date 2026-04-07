@@ -7,6 +7,15 @@ class TitleScene extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
+
+        // Start background music
+        if (!this.sound.get('bgm')) {
+        const music = this.sound.add('bgm', {
+            loop: true,
+            volume: 0.1
+        });
+            music.play();
+        }
     
         // Initial button state (Normal)
         const startBtn = this.add.image(width / 2, height / 2, 'start-button')
@@ -24,10 +33,17 @@ class TitleScene extends Phaser.Scene {
     
         // 3. Active State (Mouse clicks/holds down)
         startBtn.on('pointerdown', () => {
+            // If the music was blocked, this line wakes it up.
+            if (this.sound.context.state === 'suspended') {
+                this.sound.context.resume();
+            }
+            
             // Play the clicking sound effect
             this.sound.play('click', { volume: 0.5 });
-            console.log("Button clicked!");
+
             startBtn.setTexture('start-button-active');
+
+            console.log("Button clicked!");
             
             // Slight delay so the player can actually see the "active" texture before the scene changes
             this.time.delayedCall(150, () => {
