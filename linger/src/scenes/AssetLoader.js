@@ -6,6 +6,11 @@ class AssetLoader extends Phaser.Scene {
     }
 
     preload() {
+
+        // Load the buttons
+        // Title screen button
+        this.load.image('bstart-button', 'assets/ui/buttons/start-button.png');
+
         this.load.image('layout-house', 'assets/environment/layout-house.png');
         // this.load.image('player', 'assets/characters/playerplaceholder.png');
 

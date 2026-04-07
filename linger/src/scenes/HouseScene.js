@@ -124,7 +124,7 @@ class HouseScene extends Phaser.Scene {
         // ==========================================
         // 4. PLAYER SETUP & SFX
         // ==========================================
-        this.player = this.physics.add.sprite(920, 550, 'player');
+        this.player = this.physics.add.sprite(1470, 300, 'player'); // Rem starts in the bedroom
         this.player.setScale(3.4);
         this.player.body.setSize(12, 12);
         this.player.body.setOffset(10, 16);
