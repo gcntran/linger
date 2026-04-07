@@ -42,8 +42,6 @@ export const storyData = {
         { speaker: 'narrator', text: "But you have changed, even if only a little." },
         { speaker: 'dot', text: "Meow." },
         { speaker: 'rem', text: "Alright, Dot. I’m ready." },
-        { speaker: 'narrator', text: "The door opens. Light spills in - not the blinding kind, but the gentle kind that invites rather than demands." },
-        { speaker: 'narrator', text: "Step forward. Not into the past, not into the future, but into the present, you’ve finally learned to hold." }
     ]
 
 };
