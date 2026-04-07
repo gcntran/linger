@@ -377,7 +377,7 @@ this.dotSofa.setDepth(5);
 
 
         // START THE STORY
-        this.storyPhase = 'INTRO'; 
+        this.storyPhase = 'WAKEUP'; 
         this.lineIndex = 0;
         this.questIndex = 0;
         this.questState = 'PRE_SEARCH';
