@@ -41,7 +41,7 @@ export const storyData = {
         { speaker: 'narrator', text: "Nothing outside this room has changed. The world is still waiting - bright, warm, full of possibility." },
         { speaker: 'narrator', text: "But you have changed, even if only a little." },
         { speaker: 'dot', text: "Meow." },
-        { speaker: 'rem', text: "Alright, Dot. I’m ready." },
+        { speaker: 'rem', text: "Alright, Dot. I'm ready to go. I'll see you after. I'm heading to the main door now." },
     ]
 
 };
