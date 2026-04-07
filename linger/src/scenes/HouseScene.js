@@ -184,6 +184,7 @@ class HouseScene extends Phaser.Scene {
             ],
             postLine: ["The Fool... I guess every path has to start somewhere."],
         },
+        
         {
             name: "The Sketchbook - The Magician",
             preLine: ["My desk is a mess. I wonder if Dot knocked something over by my sketchbook."],
@@ -196,6 +197,7 @@ class HouseScene extends Phaser.Scene {
             ],
             postLine: ["The Magician. It is easy to forget what I am capable of building."],
         },
+
         {
             name: "The Hallway Mirror - The High Priestess",
             preLine: ["There's a strange reflection catching the light near the hallway mirror."],
@@ -208,6 +210,7 @@ class HouseScene extends Phaser.Scene {
             ],
             postLine: ["The High Priestess. I need to trust myself a bit more."],
         },
+
         {
             name: "The Window Plant - The Empress",
             preLine: ["I need to water the pothos anyway. Maybe there's a clue there."],
@@ -220,6 +223,7 @@ class HouseScene extends Phaser.Scene {
             ],
             postLine: ["The Empress... some things just need time and water."],
         },
+
         {
             name: "The Heavy Bookshelf - The Emperor",
             preLine: ["Those old textbooks on the bottom shelf... Dot loves hiding behind them."],
@@ -232,6 +236,7 @@ class HouseScene extends Phaser.Scene {
             ],
             postLine: ["The Emperor. Structure is good, but I don't want to be trapped by it."],
         },
+
         {
             name: "The Mantel Clock - The Hierophant",
             preLine: ["The clock has been ticking louder than usual today. Let's take a look."],
@@ -244,6 +249,7 @@ class HouseScene extends Phaser.Scene {
             ],
             postLine: ["The Hierophant. Maybe it's okay to break the routine."],
         },
+
         {
             name: "The Mismatched Mugs - The Lovers",
             preLine: ["I left a pair of mugs on the coffee table. Let's see if Dot knocked them over."],
@@ -276,13 +282,23 @@ class HouseScene extends Phaser.Scene {
 
         // Physical interactables
         this.interactableList = [];
+        
         this.questData.forEach((data, index) => {
-        // For now, let's map index 0 to your scarf/keyboard coordinates
-        if(index === 7) {
-            this.addInteractable(1367, 422, 95, 22, data.objectLines, 'Rem');
-        }
-    // Add more 'else if' or a coordinate map here for the other 11 objects
-});
+            // Define random placeholder coordinates for the first 7 objects, 
+            let x = 0, y = 0, w = 50, h = 50; 
+            
+            if (index === 0) { x = 852; y = 770; w = 40; h = 85; }      // tarot-0: Shoes
+            else if (index === 1) { x = 1392; y = 220; w = 105; h = 70; } // tarot-1: Sketchbook
+            else if (index === 2) { x = 415; y = 575; w = 165; h = 30; }  // tarot-2: Mirror
+            else if (index === 3) { x = 1285; y = 452; w = 40; h = 30; }  // tarot-3: Plant
+            else if (index === 4) { x = 1165; y = 225; w = 130; h = 22; } // tarot-4: Bookshelf
+            else if (index === 5) { x = 930; y = 220; w = 150; h = 70; }  // tarot-5: Clock
+            else if (index === 6) { x = 930; y = 345; w = 100; h = 40; }  // tarot-6: Mugs
+            else if (index === 7) { x = 1367; y = 422; w = 95; h = 22; }  // tarot-7: Keyboard (The Chariot)
+            
+            // Add the interactable using the coordinates mapped above
+            this.addInteractable(x, y, w, h, data.objectLines, 'Rem');
+        });
 
         // 11. PLAYER SETUP
         this.player = this.physics.add.sprite(920, 550, 'player');
