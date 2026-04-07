@@ -173,21 +173,112 @@ class HouseScene extends Phaser.Scene {
 
         this.questData = [
         {
-            name: "The Scarf",
-            preLine: ["I need to find where I left that first clue... maybe my desk?"],
-            objectLines: ["Dot… did you hide something in this scarf?", "There's a card wedged inside the wool!"],
+            name: "The Entryway Shoes - The Fool",
+            preLine: ["I should probably start at the beginning. Where did I leave my walking shoes?"],
+            objectLines: ["Dot, you didn't chew on the laces again, did you?", "Ah... there's a card tucked right inside the heel."],
             tarotKey: 'tarot-0', 
-            narratorLine: ["The Fool: A new journey begins with a curious discovery."],
-            postLine: ["The Fool... that's a bit on the nose, isn't it?"],
+            narratorLine: [
+                "The Fool: A leap into the unknown.",
+                "Every step you took was a risk, and every risk brought you to this very room.",
+                "The Fool reminds you that starting over isn't failing; it is simply stepping forward."
+            ],
+            postLine: ["The Fool... I guess every path has to start somewhere."],
         },
-    // Add 11 more objects here following the same structure...
-];
+        {
+            name: "The Sketchbook - The Magician",
+            preLine: ["My desk is a mess. I wonder if Dot knocked something over by my sketchbook."],
+            objectLines: ["Just a bunch of half-finished doodles.", "Wait, there's a card wedged beneath the back cover."],
+            tarotKey: 'tarot-1', 
+            narratorLine: [
+                "The Magician: The power of creation.",
+                "You hold the tools to build your own reality, even when the canvas feels too blank.",
+                "The Magician speaks to the quiet spark inside you that turns nothing into something."
+            ],
+            postLine: ["The Magician. It is easy to forget what I am capable of building."],
+        },
+        {
+            name: "The Hallway Mirror - The High Priestess",
+            preLine: ["There's a strange reflection catching the light near the hallway mirror."],
+            objectLines: ["Dot, are you staring at your own reflection again?", "No... there's a card slipped neatly into the frame."],
+            tarotKey: 'tarot-2', 
+            narratorLine: [
+                "The High Priestess: Trusting your inner voice.",
+                "The answers were always quiet, waiting patiently beneath the surface.",
+                "She reminds you to listen to the feeling in your chest before the noise of the world."
+            ],
+            postLine: ["The High Priestess. I need to trust myself a bit more."],
+        },
+        {
+            name: "The Window Plant - The Empress",
+            preLine: ["I need to water the pothos anyway. Maybe there's a clue there."],
+            objectLines: ["The soil is dry, but look at this...", "A card hidden right under the leaves. Taking care of things always grounded me."],
+            tarotKey: 'tarot-3', 
+            narratorLine: [
+                "The Empress: Growth, patience, and nurturing.",
+                "You cultivated life around you, even when you felt entirely barren yourself.",
+                "The Empress reflects the quiet beauty of letting things bloom in their own time."
+            ],
+            postLine: ["The Empress... some things just need time and water."],
+        },
+        {
+            name: "The Heavy Bookshelf - The Emperor",
+            preLine: ["Those old textbooks on the bottom shelf... Dot loves hiding behind them."],
+            objectLines: ["Dusty. But there's a card slipping out from a heavy binder.", "I relied on these rules for structure when everything else felt chaotic."],
+            tarotKey: 'tarot-4', 
+            narratorLine: [
+                "The Emperor: Stability and foundation.",
+                "You built walls to feel safe, but walls can also trap you if you forget to build doors.",
+                "He asks you to examine the rules you laid down for yourself."
+            ],
+            postLine: ["The Emperor. Structure is good, but I don't want to be trapped by it."],
+        },
+        {
+            name: "The Mantel Clock - The Hierophant",
+            preLine: ["The clock has been ticking louder than usual today. Let's take a look."],
+            objectLines: ["Right behind the pendulum. Good hiding spot, Dot.", "Time just keeps moving, following the exact same rhythm."],
+            tarotKey: 'tarot-5', 
+            narratorLine: [
+                "The Hierophant: Tradition and shared belief.",
+                "You sought meaning in the ways things have always been done by others.",
+                "But the Hierophant wonders if those old routines still serve the person you are becoming."
+            ],
+            postLine: ["The Hierophant. Maybe it's okay to break the routine."],
+        },
+        {
+            name: "The Mismatched Mugs - The Lovers",
+            preLine: ["I left a pair of mugs on the coffee table. Let's see if Dot knocked them over."],
+            objectLines: ["Still here. And look, a card resting right between them.", "Connection... it's always been the hardest part to figure out."],
+            tarotKey: 'tarot-6', 
+            narratorLine: [
+                "The Lovers: Harmony and deep choices.",
+                "It is about more than romance; it is about choosing what aligns with your soul.",
+                "The Lovers remind you that every connection shapes the world you live in."
+            ],
+            postLine: ["The Lovers. It's all about who and what I choose to keep close."],
+        },
+        {
+            name: "The Piano keyboard - The Chariot",
+            preLine: ["Dot also likes walking on my keyboard to make some funny sounds. I need to check it too."],
+            objectLines: [
+                "Really, Dot, how did you tuck a card in here?", 
+                "I remember those days… pushing myself forward just to avoid standing still."
+            ],
+            tarotKey: 'tarot-7', 
+            narratorLine: [
+                "The Chariot: The past, lack of direction.",
+                "There were times when you moved without knowing why, pulled by old habits or old fears.",
+                "The Chariot remembers those moments - when you pushed ahead but felt no true direction.",
+                "Yet even wandering teaches you something. You learned what didn’t feel right, and that is its own kind of guidance."
+            ],
+            postLine: ["The Chariot... Maybe I wasn’t lost, maybe I was learning."],
+        }
+    ];
 
         // Physical interactables
         this.interactableList = [];
         this.questData.forEach((data, index) => {
         // For now, let's map index 0 to your scarf/keyboard coordinates
-        if(index === 0) {
+        if(index === 7) {
             this.addInteractable(1367, 422, 95, 22, data.objectLines, 'Rem');
         }
     // Add more 'else if' or a coordinate map here for the other 11 objects
@@ -237,10 +328,11 @@ class HouseScene extends Phaser.Scene {
                 if (this.currentDialogueIndex < lines.length) {
                     this.dialogText.setText(lines[this.currentDialogueIndex]);
                     
-                    // Hide arrow on the very last line of the current text phase
-                    if (this.currentDialogueIndex === lines.length - 1) {
-                        this.dialogArrow.setVisible(false);
-                    }
+                    // Because there is a sequence, the arrow always needs to be visible 
+                    // while flipping through lines, unless it's a floating PRE_SEARCH thought.
+                    this.dialogArrow.setVisible(true);
+                    if (this.arrowTween && this.arrowTween.isPaused()) this.arrowTween.resume();
+
                     return;
                 } else {
                     // Reached the end of these lines -> Trigger the transition to the next part of the sequence
@@ -278,12 +370,12 @@ class HouseScene extends Phaser.Scene {
                         this.dialogBg.setVisible(true);
                         this.dialogText.setVisible(true);
 
-                        // Show/Animate arrow if there are more lines to read about this object
-                        if (currentQuest.objectLines.length > 1) {
-                            this.dialogArrow.setVisible(true);
-                            this.arrowTween.resume();
-                        }
-                    }
+                        // NEW ARROW LOGIC: 
+                        // Always show the arrow when finding an object, because even if 
+                        // there is only 1 line of dialogue, the Tarot Card phase comes next!
+                        this.dialogArrow.setVisible(true);
+                        if (this.arrowTween) this.arrowTween.resume();
+                    }    
                 });
             }
         });
@@ -557,47 +649,61 @@ class HouseScene extends Phaser.Scene {
         this.currentDialogueIndex = 0; // Reset text pager for the new phase
     
         if (this.questState === 'PRE_SEARCH') {
-            // This state ends when the player clicks the object. 
             // Logic handled in pointerdown.
         } 
         else if (this.questState === 'OBJECT') {
-            // Transition: Object lines finished -> Show Tarot Card
+            // Transition: Object -> Show Tarot Card
             this.questState = 'CARD';
-
-            // Play the card flipping sound effect
-            if (this.cardSound) {
-                this.cardSound.play();
-            }
-
+            
+            if (this.cardSound) this.cardSound.play();
+    
             console.log("Showing card:", currentQuest.tarotKey);
             this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
-            this.dialogBg.setTexture('dialogue-box'); // Narrator/Default box
+            this.dialogBg.setTexture('dialogue-box'); 
             this.dialogText.setText(currentQuest.narratorLine[0]);
+            
+            // Keep arrow visible so they know to click for Rem's reaction
+            this.dialogArrow.setVisible(true);
+            if (this.arrowTween) this.arrowTween.resume();
         } 
         else if (this.questState === 'CARD') {
-            // Transition: Narrator finished -> Show Rem's reaction
+            // Transition: Narrator -> Show Rem's reaction
             this.questState = 'POST_REACTION';
             this.tarotCard.setVisible(false);
             this.dialogBg.setTexture('dialogue-rem');
             this.dialogText.setText(currentQuest.postLine[0]);
+            
+            // This is the final phase! Hide the arrow if there's only 1 line left.
+            if (currentQuest.postLine.length > 1) {
+                this.dialogArrow.setVisible(true);
+            } else {
+                this.dialogArrow.setVisible(false);
+            }
         } 
         else if (this.questState === 'POST_REACTION') {
             // Transition: Quest step complete!
             this.dialogBg.setVisible(false);
             this.dialogText.setVisible(false);
+            this.dialogArrow.setVisible(false); // Ensure arrow hides
             this.questIndex++; 
             
             if (this.questIndex < this.questData.length) {
                 this.questState = 'PRE_SEARCH';
-                // Optional: Automatically trigger Rem's next thought
                 this.dialogBg.setTexture('dialogue-rem');
                 this.dialogText.setText(this.questData[this.questIndex].preLine[0]);
                 this.dialogBg.setVisible(true);
                 this.dialogText.setVisible(true);
+                
+                // Show arrow if the next preLine has multiple lines
+                if (this.questData[this.questIndex].preLine.length > 1) {
+                    this.dialogArrow.setVisible(true);
+                    if (this.arrowTween) this.arrowTween.resume();
+                } else {
+                    this.dialogArrow.setVisible(false);
+                }
             }
         }
     }
 }
-
 
 export default HouseScene;
