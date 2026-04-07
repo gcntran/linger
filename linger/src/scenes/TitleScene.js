@@ -24,10 +24,13 @@ class TitleScene extends Phaser.Scene {
     
         // 3. Active State (Mouse clicks/holds down)
         startBtn.on('pointerdown', () => {
+            // Play the clicking sound effect
+            this.sound.play('click', { volume: 0.5 });
+            console.log("Button clicked!");
             startBtn.setTexture('start-button-active');
             
             // Slight delay so the player can actually see the "active" texture before the scene changes
-            this.time.delayedCall(100, () => {
+            this.time.delayedCall(150, () => {
                 this.scene.start('IntroScene');
             });
         });

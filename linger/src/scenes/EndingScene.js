@@ -40,12 +40,6 @@ class EndingScene extends Phaser.Scene {
             .setInteractive({ useHandCursor: true })
             .setAlpha(0);
 
-        // Optional: Keep the "Main Menu" text if it's not already baked into your PNG
-        const btnText = this.add.text(width / 2, height * 0.8, 'Main Menu', {
-            fontSize: '20px',
-            color: '#ffffff'
-        }).setOrigin(0.5).setAlpha(0);
-
         // 5. ENTRANCE ANIMATIONS
         this.tweens.add({
             targets: [title],
@@ -63,7 +57,7 @@ class EndingScene extends Phaser.Scene {
         });
 
         this.tweens.add({
-            targets: [menuBtn, btnText],
+            targets: [menuBtn],
             alpha: 1,
             duration: 1000,
             delay: 3500,
@@ -86,6 +80,8 @@ class EndingScene extends Phaser.Scene {
 
         // Active/Click State
         menuBtn.on('pointerdown', () => {
+            // Play the clicking sound effect
+            this.sound.play('click', { volume: 0.5 });
             menuBtn.setTexture('go-to-title-button-active');
             
             // Give the player a split second to see the 'active' state before switching scenes

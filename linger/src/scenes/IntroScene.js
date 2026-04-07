@@ -41,7 +41,7 @@ class IntroScene extends Phaser.Scene {
             this.lineIndex++;
             if (this.lineIndex < this.introLines.length) {
                 this.updateText();
-                if (this.sound.get('click')) this.sound.play('click', { volume: 0.5 });
+                this.sound.play('click', { volume: 0.5 });
             } else {
                 // Intro finished, go to the house!
                 this.scene.start('HouseScene');
