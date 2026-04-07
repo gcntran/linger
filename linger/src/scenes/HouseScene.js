@@ -327,6 +327,9 @@ class HouseScene extends Phaser.Scene {
             { key: 'walk-left', start: 29, end: 30 },
             { key: 'walk-right', start: 42, end: 43 }
         ];
+
+        const playerTexture = this.textures.get('player');
+        const totalFramesAvailable = playerTexture.frameTotal - 1;
         
         anims.forEach(anim => {
             // Safety: Check if the texture exists and has enough frames
@@ -467,7 +470,7 @@ class HouseScene extends Phaser.Scene {
         // 15. UI CAMERA & FULLSCREEN BUTTON (The Fix)
         // Create a new camera specifically for UI that doesn't zoom
         const uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
-        uiCam.inputEnabled = false;
+        //uiCam.inputEnabled = false;
         uiCam.renderGL = false; // This prevents the debug overlay from double-rendering on this camera
         // Only ignore the debug graphic if it actually exists!
             if (this.physics.world.debugGraphic) {
@@ -482,7 +485,8 @@ class HouseScene extends Phaser.Scene {
         })
             .setPadding(10)
             .setInteractive({ useHandCursor: true })
-            .setDepth(100); // Forces the button to render on top of everything
+            .setDepth(100) // Forces the button to render on top of everything
+            .setScrollFactor(0);
 
         // Instruct the main camera to ignore the UI button, 
         // and the UI camera to ignore the game world
@@ -497,6 +501,7 @@ class HouseScene extends Phaser.Scene {
 
         // Add a click event listener to the fullscreen button that toggles fullscreen mode when clicked.
         fsButton.on('pointerup', () => {
+            console.log('fullscreen clicked');
             if (this.scale.isFullscreen) {
                 this.scale.stopFullscreen();
             } else {
@@ -510,7 +515,8 @@ class HouseScene extends Phaser.Scene {
             .setScrollFactor(0)
             .setDepth(200)
             .setScale(1.7)
-            .setVisible(false);
+            .setVisible(false)
+            .setScrollFactor(0);
 
         // The dialogue text
         this.dialogText = this.add.text(1920 / 2, 850, '', {
