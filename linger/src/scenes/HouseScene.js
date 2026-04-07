@@ -175,18 +175,61 @@ class HouseScene extends Phaser.Scene {
         });
 
         // --- ADD DOT HERE ---
-// Creating her early so the Camera can find her
-this.dotSofa = this.add.rectangle(1450, 450, 80, 40, 0xff0000, 0.5); 
-this.dotSofa.setDepth(5);
+        // Creating her early so the Camera can find her
+        this.dotSofa = this.add.rectangle(1450, 450, 80, 40, 0xff0000, 0.5); 
+        this.dotSofa.setDepth(5);
 
         // Central Click Listener
         this.input.on('pointerdown', (pointer) => {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
             
+            // --- THE FINAL DOOR & CREDITS LOGIC ---
+            // This handles the transition from clicking the door to the ending scene
+            if (this.storyPhase === 'FINAL_DOOR_WAIT') {
+            // Approximate coordinates for the main front door (bottom center)
+            // Adjust these numbers based on your actual door position
+            const doorX = 1000; 
+            const doorY = 950;
+            const dist = Phaser.Math.Distance.Between(pointer.worldX, pointer.worldY, doorX, doorY);
+
+            if (dist < 150) { // If clicking near the door
+            if (this.clickSound) this.clickSound.play();
+            
+            this.storyPhase = 'CREDITS_SEQUENCE';
+            this.finalLineIndex = 0;
+            this.finalLines = [
+                "The door opens. Light spills in - not the blinding kind, but the gentle kind that invites rather than demands.",
+                "Step forward. Not into the past, not into the future, but into the present, you’ve finally learned to hold."
+            ];
+            
+            // Show the first line manually
+            this.dialogBg.setVisible(true).setTexture('dialogue-box');
+            this.dialogText.setVisible(true).setText(this.finalLines[0]).setStyle({ fontStyle: 'italic' });
+            this.dialogArrow.setVisible(true);
+            return;
+            }
+        }
+
+            if (this.storyPhase === 'CREDITS_SEQUENCE') {
+            if (this.clickSound) this.clickSound.play();
+                this.finalLineIndex++;
+        
+            if (this.finalLineIndex < this.finalLines.length) {
+                this.dialogText.setText(this.finalLines[this.finalLineIndex]);
+            } else {
+                // GO TO THE ENDING SCENE!
+                this.scene.start('EndingScene'); 
+            }
+            return;
+        }
 
             // --- A. STORY PHASE LOGIC (Intro, Wakeup, Dot Discovery, Ending) ---
-            if (this.storyPhase !== 'FIND_CARDS' && this.storyPhase !== 'SEARCH_DOT') {
-                // Clicking sound ONLY play the click sound if we are actually advancing dialogue lines
+            // New Phases
+            if (this.storyPhase !== 'FIND_CARDS' && 
+                this.storyPhase !== 'SEARCH_DOT' && 
+                this.storyPhase !== 'FINAL_DOOR_WAIT' && 
+                this.storyPhase !== 'CREDITS_SEQUENCE') {
+                
                 if (this.clickSound) this.clickSound.play();
                 this.lineIndex++;
                 let currentArray = [];
@@ -194,13 +237,13 @@ this.dotSofa.setDepth(5);
                 else if (this.storyPhase === 'WAKEUP') currentArray = this.wakeupLines;
                 else if (this.storyPhase === 'DOT_TALK') currentArray = this.dotDiscoveryLines;
                 else if (this.storyPhase === 'ENDING') currentArray = this.endingLines;
-
+        
                 if (this.lineIndex < currentArray.length) {
                     this.showStoryDialogue();
                 } else {
                     this.transitionStoryPhase();
                 }
-                return; // Stop here so gameplay logic doesn't trigger
+                return; 
             }
 
             // --- B. QUEST & GAMEPLAY LOGIC (Only runs during 'FIND_CARDS') ---
