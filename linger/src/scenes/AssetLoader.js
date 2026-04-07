@@ -7,7 +7,13 @@ class AssetLoader extends Phaser.Scene {
 
     preload() {
         this.load.image('layout-house', 'assets/environment/layout-house.png');
-        this.load.image('player', 'assets/characters/playerplaceholder.png');
+        // this.load.image('player', 'assets/characters/playerplaceholder.png');
+
+        // Load the spritesheet for Rem's animation
+        this.load.spritesheet('player', 'assets/characters/rem.png', { 
+            frameWidth: 32, 
+            frameHeight: 32 
+        });
 
         // Tarot cards
         // Only major arcana cards are used

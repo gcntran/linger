@@ -313,11 +313,39 @@ class HouseScene extends Phaser.Scene {
 
         // 11. PLAYER SETUP
         this.player = this.physics.add.sprite(920, 550, 'player');
-        this.player.setScale(2);
-        this.player.body.setSize(16, 20);
-        this.player.body.setOffset(8, 12);
+        this.player.setScale(3.4);
+        this.player.body.setSize(12, 12);
+        this.player.body.setOffset(10, 16);
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(10); // Keeps player above the floor
+
+        // 11B. PlAYER ANIMATION
+        const anims = [
+            { key: 'idle', start: 0, end: 3 },
+            { key: 'walk-down', start: 21, end: 27 }, // Adjusted to safer frame ranges
+            { key: 'walk-up', start: 45, end: 51 },
+            { key: 'walk-left', start: 29, end: 30 },
+            { key: 'walk-right', start: 42, end: 43 }
+        ];
+        
+        anims.forEach(anim => {
+            // Safety: Check if the texture exists and has enough frames
+            const texture = this.textures.get('player');
+            const totalFrames = texture.frameTotal - 1;
+        
+            if (anim.end <= totalFrames) {
+                if (!this.anims.exists(anim.key)) {
+                    this.anims.create({
+                        key: anim.key,
+                        frames: this.anims.generateFrameNumbers('player', { start: anim.start, end: anim.end }),
+                        frameRate: 8,
+                        repeat: -1
+                    });
+                }
+            } else {
+                console.warn(`Skipping ${anim.key}: Frame ${anim.end} exceeds total frames (${totalFrames})`);
+            }
+        });
 
 
         // 12. SFX
@@ -433,12 +461,18 @@ class HouseScene extends Phaser.Scene {
         // The physics world bounds are also set to match the layout size, ensuring that the player cannot move outside of the intended game area.
         this.physics.world.setBounds(0, 0, 1920, 1080);
 
+        
+
 
         // 15. UI CAMERA & FULLSCREEN BUTTON (The Fix)
         // Create a new camera specifically for UI that doesn't zoom
         const uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
+        uiCam.inputEnabled = false;
         uiCam.renderGL = false; // This prevents the debug overlay from double-rendering on this camera
-        uiCam.ignore(this.physics.world.debugGraphic);
+        // Only ignore the debug graphic if it actually exists!
+            if (this.physics.world.debugGraphic) {
+                uiCam.ignore(this.physics.world.debugGraphic);
+            }
 
         // Create a fullscreen toggle button in the top-left corner of the screen.
         const fsButton = this.add.text(20, 20, 'Fullscreen', {
@@ -454,11 +488,11 @@ class HouseScene extends Phaser.Scene {
         // and the UI camera to ignore the game world
         this.cameras.main.ignore(fsButton);
 
-        // CAMERA FIX: The UI camera MUST ignore the game world and door triggers
-        uiCam.ignore([layout, this.player, this.walls]);
+        // Instruct the UI camera to ignore the game world
+        uiCam.ignore([layout, this.player, ...this.walls.getChildren()]);
 
         this.doorList.forEach(door => {
-            uiCam.ignore(door.trigger);
+        uiCam.ignore(door.trigger);
         });
 
         // Add a click event listener to the fullscreen button that toggles fullscreen mode when clicked.
@@ -609,72 +643,55 @@ class HouseScene extends Phaser.Scene {
     // UPDATE FUNCTION
     update() {
 
-        // Player movement speed
-        const speed = 150;
-        this.player.setVelocity(0, 0);
+// A. PROXIMITY CHECKS (Allows doors and items to detect the player)
+this.doorList.forEach(door => {
+    door.isNear = Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), door.trigger.getBounds());
+});
 
-        // Check proximity for every door in the house
-        this.doorList.forEach(door => {
-            if (this.physics.overlap(this.player, door.trigger)) {
-                door.isNear = true;
-            } else {
-                door.isNear = false;
-            }
-        });
+this.interactableList.forEach(item => {
+    item.isNear = Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), item.trigger.getBounds());
+});
 
-        // Interaction check for each item
-        // Check if player is near any interactable object
-        this.interactableList.forEach(item => {
-            if (this.physics.overlap(this.player, item.trigger)) {
-                item.isNear = true;
-            } else {
-                item.isNear = false;
-            }
+// B. MOVEMENT LOGIC
+const speed = 170;
+let vx = 0;
+let vy = 0;
 
-        });
+if (this.wasd.left.isDown) {
+    vx = -speed;
+    if (this.anims.exists('walk-left')) this.player.anims.play('walk-left', true);
+} else if (this.wasd.right.isDown) {
+    vx = speed;
+    if (this.anims.exists('walk-right')) this.player.anims.play('walk-right', true);
+}
 
-        // The player's velocity is set based on the WASD input
-        if (this.wasd.up.isDown) {
-            this.player.setVelocityY(-speed);
-        } else if (this.wasd.down.isDown) {
-            this.player.setVelocityY(speed);
-        }
+if (this.wasd.up.isDown) {
+    vy = -speed;
+    if (vx === 0 && this.anims.exists('walk-up')) this.player.anims.play('walk-up', true);
+} else if (this.wasd.down.isDown) {
+    vy = speed;
+    if (vx === 0 && this.anims.exists('walk-down')) this.player.anims.play('walk-down', true);
+}
 
-        if (this.wasd.left.isDown) {
-            this.player.setVelocityX(-speed);
-        } else if (this.wasd.right.isDown) {
-            this.player.setVelocityX(speed);
-        }
+this.player.setVelocity(vx, vy);
 
-        // Check if the player has any velocity
-        if (this.player.body.velocity.x !== 0 && this.player.body.velocity.y !== 0) {
-            this.player.body.velocity.normalize().scale(speed);
-        }
+// C. IDLE & SOUND LOGIC
+if (vx === 0 && vy === 0) {
+    if (this.anims.exists('idle')) this.player.anims.play('idle', true);
+    if (this.walkSound.isPlaying) this.walkSound.stop();
+    
+    // Hide dialog if the player is standing still/walking away
+    if (this.dialogBg.visible && this.questState === 'PRE_SEARCH') {
+        this.dialogBg.setVisible(false);
+        this.dialogText.setVisible(false);
+        this.dialogArrow.setVisible(false);
+    }
+} else {
+    this.player.body.velocity.normalize().scale(speed);
+    if (!this.walkSound.isPlaying) this.walkSound.play();
+}
 
-        // Walking sound & Auto-close logic
-        if (this.player.body.velocity.x !== 0 || this.player.body.velocity.y !== 0) {
 
-            // Hide the dialog if the player walks away
-            if (this.dialogBg.visible) {
-                this.dialogBg.setVisible(false);
-                this.dialogText.setVisible(false);
-                this.dialogArrow.setVisible(false); // Hide arrow
-                this.arrowTween.pause(); // Pause the arrow animation
-                this.currentDialogueIndex = 0;      // Reset index
-                this.activeInteractable = null;     // Clear active item
-            }
-
-            // If moving and the sound isn't already playing, start it
-            if (this.walkSound && !this.walkSound.isPlaying) {
-                this.walkSound.play();
-            }
-        } else {
-            // If the player stops, stop the sound immediately
-            if (this.walkSound && this.walkSound.isPlaying) {
-                this.walkSound.stop();
-                
-            }
-        }
     }
 
     handleQuestTransition() {
