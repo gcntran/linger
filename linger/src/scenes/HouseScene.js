@@ -594,22 +594,33 @@ this.dotSofa.setDepth(5);
 
     transitionStoryPhase() {
         this.lineIndex = 0;
-        if (this.storyPhase === 'INTRO') {
-            this.storyPhase = 'WAKEUP';
-            this.showStoryDialogue();
-        } else if (this.storyPhase === 'WAKEUP') {
-            this.storyPhase = 'SEARCH_DOT'; // Gameplay begins!
+
+        // 1. WAKEUP -> SEARCH_DOT
+        // This happens after Rem finishes the waking up monologue
+        if (this.storyPhase === 'WAKEUP') {
+            this.storyPhase = 'SEARCH_DOT'; // Now the player can walk to find Dot
             this.dialogBg.setVisible(false);
             this.dialogText.setVisible(false);
             this.dialogArrow.setVisible(false);
-        } else if (this.storyPhase === 'DOT_TALK') {
+        } 
+        
+        // 2. DOT_TALK -> FIND_CARDS
+        else if (this.storyPhase === 'DOT_TALK') {
             this.storyPhase = 'FIND_CARDS';
             this.questIndex = 0;
             this.questState = 'PRE_SEARCH';
-            // Show first card hint
-            this.dialogBg.setVisible(true).setTexture('dialogue-rem');
-            this.dialogText.setText(this.questData[0].preLine[0]);
-            this.dialogArrow.setVisible(true);
+            this.showQuestHint(); // Show the first card hint
+        }
+    
+        // 3. ENDING -> FINAL_DOOR_WAIT (The new logic)
+        // This happens after Rem says "Alright, Dot. I'm ready."
+        else if (this.storyPhase === 'ENDING') {
+            this.dialogBg.setVisible(false);
+            this.dialogText.setVisible(false);
+            this.dialogArrow.setVisible(false);
+            
+            // Change state so the click listener knows to look for the door click
+            this.storyPhase = 'FINAL_DOOR_WAIT'; 
         }
     }
 }
