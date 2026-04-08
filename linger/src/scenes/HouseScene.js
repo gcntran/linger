@@ -202,8 +202,8 @@ class HouseScene extends Phaser.Scene {
         });
 
         // DOT
-        this.dot = this.physics.add.sprite(930, 220, 'dot'); 
-        this.dot.setScale(2.5);
+        this.dot = this.physics.add.sprite(930, 254, 'dot'); // Dot starts on the sofa in the living room
+        this.dot.setScale(1);
         this.dot.setImmovable(true);
         this.dot.body.setAllowGravity(false);
         this.dot.setDepth(150);
@@ -212,8 +212,8 @@ class HouseScene extends Phaser.Scene {
         if (!this.anims.exists('dot-idle')) {
         this.anims.create({
             key: 'dot-idle',
-            frames: this.anims.generateFrameNumbers('dot', { start: 0, end: 3 }),
-            frameRate: 4,
+            frames: this.anims.generateFrameNumbers('dot', { start: 0, end: 2 }),
+            frameRate: 3,
             repeat: -1
         });
     }
@@ -411,7 +411,7 @@ class HouseScene extends Phaser.Scene {
         const worldItems = [
             layout, 
             this.player, 
-            this.dotSofa, 
+            this.dot, 
             ...this.walls.getChildren()
         ];
         
@@ -549,9 +549,7 @@ class HouseScene extends Phaser.Scene {
     update() {
         // --- 1. STORY TRIGGERS ---
         if (this.storyPhase === 'SEARCH_DOT') {
-            const sofaX = 1450; 
-            const sofaY = 450;
-            const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, sofaX, sofaY);
+            const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.dot.x, this.dot.y);
             
             if (dist < 100) {
                 this.storyPhase = 'DOT_TALK';
