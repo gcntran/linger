@@ -9,14 +9,15 @@ class EndingScene extends Phaser.Scene {
         const { width, height } = this.scale;
 
         // 1. BACKGROUND
-        this.add.rectangle(0, 0, width, height, 0x1a1a1a).setOrigin(0);
+        const bg = this.add.sprite(width / 2, height / 2, 'intro-bg');
+        bg.setDisplaySize(width, height);
 
         // 2. TITLE TEXT
         const title = this.add.text(width / 2, height * 0.3, 'LINGER', {
             fontSize: '84px',
             color: '#ffffff',
             fontFamily: 'Georgia, serif',
-            fontStyle: 'italic'
+            fontStyle: 'normal'
         }).setOrigin(0.5).setAlpha(0);
 
         // 3. CREDITS TEXT
