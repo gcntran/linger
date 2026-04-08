@@ -31,11 +31,11 @@ class TitleScene extends Phaser.Scene {
             fontStyle: 'normal'
         }).setOrigin(0.5).setAlpha(0); // Start invisible to match the ending logic
         
-        // 2. Fade it in gracefully
+        // Fade it in gracefully
         this.tweens.add({
             targets: title,
             alpha: 1,
-            duration: 2000, // 2 seconds to fade in
+            duration: 3000, // 3s
             ease: 'Power2'
         });
 
@@ -76,7 +76,7 @@ class TitleScene extends Phaser.Scene {
 
             console.log("Transitioning to Intro...");
 
-            // Fade out transition
+            // Fade out transition to introSene
             this.tweens.add({
             targets: [title, startBtn, bg], 
             alpha: 0,
