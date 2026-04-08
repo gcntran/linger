@@ -6,7 +6,6 @@ class AssetLoader extends Phaser.Scene {
     }
 
     preload() {
-
         // Load the buttons
         // Title button
         this.load.image('start-button', 'assets/ui/buttons/start-button.png');
@@ -16,6 +15,12 @@ class AssetLoader extends Phaser.Scene {
         this.load.image('go-to-title-button', 'assets/ui/buttons/go-to-title-button.png');
         this.load.image('go-to-title-button-hovered', 'assets/ui/buttons/go-to-title-button-hovered.png');
         this.load.image('go-to-title-button-active', 'assets/ui/buttons/go-to-title-button-active.png');
+
+        // Load the background gif for title scene
+        this.load.gif('title-bg', 'assets/environment/cat-pinterest.gif', {
+            frameWidth: 1920, 
+            frameHeight: 1080
+        });
 
         // Load the house layout
         this.load.image('layout-house', 'assets/environment/layout-house.png');
