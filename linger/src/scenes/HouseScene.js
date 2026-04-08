@@ -38,9 +38,12 @@ class HouseScene extends Phaser.Scene {
 
         // Kitchen Area
         const kitchenZones = [
-            { x: 540, y: 230, w: 430, h: 40 },  { x: 360, y: 280, w: 45, h: 120 },
-            { x: 592, y: 370, w: 195, h: 60 },  { x: 592, y: 403, w: 100, h: 50 },
-            { x: 340, y: 380, w: 25, h: 100 },  { x: 360, y: 360, w: 20, h: 20 },
+            { x: 540, y: 230, w: 430, h: 40 },  // Counter part horizontal
+            { x: 360, y: 280, w: 45, h: 120 },  // Counter part vertical
+            { x: 592, y: 370, w: 195, h: 60 },  // Dining table
+            { x: 592, y: 403, w: 100, h: 50 },  // Dining chairs
+            { x: 340, y: 380, w: 25, h: 100 },  // cupboard
+            { x: 360, y: 360, w: 20, h: 20 },   // trash Can
         ];
         kitchenZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
@@ -50,11 +53,15 @@ class HouseScene extends Phaser.Scene {
 
         // Bathroom Area
         const bathroomZones = [
-            { x: 612, y: 575, w: 60, h: 30 },   { x: 415, y: 670, w: 170, h: 30 },
-            { x: 615, y: 670, w: 70, h: 30 },   { x: 410, y: 700, w: 93, h: 30 },
-            { x: 613, y: 700, w: 26, h: 30 },   { x: 345, y: 760, w: 20, h: 20 },
-            { x: 360, y: 800, w: 50, h: 30 },   { x: 405, y: 855, w: 150, h: 50 },
-            { x: 570, y: 850, w: 70, h: 50 },   { x: 620, y: 780, w: 40, h: 20 },
+            { x: 415, y: 670, w: 170, h: 30 },  // Left wall with floor
+            { x: 615, y: 670, w: 70, h: 30 },   // Right wall with floor
+            { x: 410, y: 700, w: 93, h: 30 },   // Cabinet
+            { x: 613, y: 700, w: 26, h: 30 },   // Plant pot
+            { x: 345, y: 760, w: 20, h: 20 },   // Trash can
+            { x: 360, y: 800, w: 50, h: 30 },   // Toilet
+            { x: 405, y: 855, w: 150, h: 50 },  // Bathtub
+            { x: 570, y: 850, w: 70, h: 50 },   // Sink
+            { x: 620, y: 780, w: 40, h: 20 },   // Cat litter box
         ];
         bathroomZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
@@ -64,8 +71,10 @@ class HouseScene extends Phaser.Scene {
 
         // Laundry Area
         const laundryZones = [
-            { x: 683, y: 770, w: 20, h: 120 },  { x: 683, y: 770, w: 20, h: 120 },
-            { x: 727, y: 850, w: 70, h: 70 },   { x: 776, y: 752, w: 25, h: 25 },
+            { x: 683, y: 770, w: 20, h: 120 },  // Right wall with floor, no need for left because the shelf blocks it
+            { x: 683, y: 770, w: 20, h: 120 },  // Laundry shelf
+            { x: 727, y: 850, w: 70, h: 70 },   // Washer/dryer
+            { x: 776, y: 752, w: 25, h: 25 },   // Box
         ];
         laundryZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
@@ -75,12 +84,18 @@ class HouseScene extends Phaser.Scene {
 
         // Living Room Area
         const livingZones = [
-            { x: 820, y: 240, w: 50, h: 40 },   { x: 930, y: 220, w: 150, h: 70 },
-            { x: 1057, y: 335, w: 68, h: 115 }, { x: 928, y: 422, w: 77, h: 32 },
-            { x: 930, y: 345, w: 100, h: 40 },  { x: 1000, y: 400, w: 35, h: 60 },
-            { x: 1053, y: 220, w: 75, h: 20 },  { x: 1165, y: 225, w: 130, h: 22 },
-            { x: 830, y: 735, w: 50, h: 75 },   { x: 852, y: 770, w: 40, h: 85 },
-            { x: 1065, y: 722, w: 50, h: 170 },
+            { x: 820, y: 240, w: 50, h: 40 },   // End table
+            { x: 930, y: 220, w: 150, h: 70 },  // Sofa top
+            { x: 1057, y: 335, w: 68, h: 115 }, // Sofa right
+            { x: 928, y: 422, w: 77, h: 32 },   // Chair
+            { x: 930, y: 345, w: 100, h: 40 },  // Coffee table
+            // I need to add a TV here
+            { x: 1000, y: 400, w: 35, h: 60 },  // Floor lamp
+            { x: 1053, y: 220, w: 75, h: 20 },  // Retro speaker
+            { x: 1165, y: 225, w: 130, h: 22 }, // Bookshelf
+            { x: 830, y: 735, w: 50, h: 75 },   // Shoe cabinet
+            { x: 852, y: 770, w: 40, h: 85 },   // Clothes rack
+            { x: 1065, y: 722, w: 50, h: 170 }, // Outerwear closet
         ];
         livingZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
@@ -90,11 +105,15 @@ class HouseScene extends Phaser.Scene {
 
         // Bedroom Area
         const bedroomZones = [
-            { x: 1303, y: 230, w: 60, h: 30 },  { x: 1392, y: 220, w: 105, h: 70 },
-            { x: 1394, y: 255, w: 45, h: 55 },  { x: 1478, y: 245, w: 47, h: 25 },
-            { x: 1555, y: 295, w: 100, h: 100 },{ x: 1473, y: 380, w: 50, h: 30 },
-            { x: 1480, y: 422, w: 100, h: 20 }, { x: 1367, y: 422, w: 95, h: 22 },
-            { x: 1285, y: 452, w: 40, h: 30 },
+            { x: 1303, y: 230, w: 60, h: 30 },  // Bookshelf
+            { x: 1392, y: 220, w: 105, h: 70 }, // Desk
+            { x: 1394, y: 255, w: 45, h: 55 },  // Chair
+            { x: 1478, y: 245, w: 47, h: 25 },  // End table
+            { x: 1555, y: 295, w: 100, h: 100 },// Bed
+            { x: 1473, y: 380, w: 50, h: 30 },  // Cat bed
+            { x: 1480, y: 422, w: 100, h: 20 }, // Small dresser
+            { x: 1367, y: 422, w: 95, h: 22 },  // Keyboard
+            { x: 1285, y: 452, w: 40, h: 30 },  // Plant pot
         ];
         bedroomZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
@@ -104,7 +123,8 @@ class HouseScene extends Phaser.Scene {
 
         // Storage Area
         const storageZones = [
-            { x: 1132, y: 760, w: 20, h: 160 }, { x: 1223, y: 750, w: 40, h: 10 },
+            { x: 1132, y: 760, w: 20, h: 160 }, // Laundry storage
+            { x: 1223, y: 750, w: 40, h: 10 },  // Box
         ];
         storageZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
@@ -114,14 +134,23 @@ class HouseScene extends Phaser.Scene {
 
         // Main Walls
         const mainWalls = [
-            { x: 970, y: 119, w: 1330, h: 30 }, { x: 315, y: 519, w: 30, h: 770 },
-            { x: 800, y: 910, w: 935, h: 30 },  { x: 758, y: 290, w: 30, h: 370 },
-            { x: 415, y: 575, w: 165, h: 30 },  { x: 663, y: 575, w: 35, h: 30 },
-            { x: 793, y: 575, w: 35, h: 30 },   { x: 654, y: 740, w: 25, h: 300 },
-            { x: 800, y: 740, w: 20, h: 310 },  { x: 1645, y: 320, w: 25, h: 340 },
-            { x: 1252, y: 220, w: 20, h: 150 }, { x: 1252, y: 665, w: 20, h: 500 },
-            { x: 1445, y: 500, w: 365, h: 20 }, { x: 1104, y: 740, w: 20, h: 310 },
-            { x: 1113, y: 575, w: 38, h: 30 },  { x: 1238, y: 575, w: 35, h: 30 },
+            { x: 970, y: 119, w: 1330, h: 30 }, // Top wall
+            { x: 800, y: 910, w: 935, h: 30 },  // Bottom wall
+            { x: 315, y: 519, w: 30, h: 770 },  // Left wall
+            { x: 1645, y: 320, w: 25, h: 340 }, // Right wall
+            { x: 758, y: 290, w: 30, h: 370 },  // Kitchen/living
+            { x: 415, y: 575, w: 165, h: 30 },  // Bathroom left
+            { x: 612, y: 575, w: 60, h: 30 },   // Bathroom right
+            { x: 663, y: 575, w: 35, h: 30 },   // Laundry left
+            { x: 793, y: 575, w: 35, h: 30 },   // Laundry right
+            { x: 654, y: 740, w: 25, h: 300 },  // Bathroom/laundry
+            { x: 800, y: 740, w: 20, h: 310 },  // Bathroom/living
+            { x: 1252, y: 220, w: 20, h: 150 }, // Living/bedroom top
+            { x: 1252, y: 665, w: 20, h: 500 }, // Living/bedroom bottom
+            { x: 1445, y: 500, w: 365, h: 20 }, // Bedroom bottom
+            { x: 1104, y: 740, w: 20, h: 310 }, // Storage/living
+            { x: 1113, y: 575, w: 38, h: 30 },  // Storage left
+            { x: 1238, y: 575, w: 35, h: 30 },  // Storage right
         ];
         mainWalls.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
