@@ -348,7 +348,9 @@ class HouseScene extends Phaser.Scene {
         }
 
         const fsButton = this.add.text(20, 20, 'Fullscreen', {
-            fontSize: '20px', color: '#ffffff', backgroundColor: '#333'
+            fontSize: '20px', 
+            color: '#ffffff', 
+            backgroundColor: '#333'
         }).setPadding(10).setInteractive({ useHandCursor: true }).setDepth(100).setScrollFactor(0);
 
         this.cameras.main.ignore(fsButton);
@@ -366,10 +368,17 @@ class HouseScene extends Phaser.Scene {
         // 7. PROPER UI SETUP (Must happen BEFORE showStoryDialogue)
         // ==========================================
         this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
-            .setScrollFactor(0).setDepth(200).setScale(1.7).setVisible(false);
+            .setScrollFactor(0)
+            .setDepth(200)
+            .setScale(1.7)
+            .setVisible(false);
 
         this.dialogText = this.add.text(1920 / 2, 850, '', {
-            fontSize: '30px', color: '#2F3A56', align: 'left', lineSpacing: 12, wordWrap: { width: 1000 }
+            fontSize: '30px', 
+            color: '#2F3A56', 
+            align: 'left', 
+            lineSpacing: 12, 
+            wordWrap: { width: 1000 }
         }).setOrigin(0.5).setScrollFactor(0).setDepth(201).setVisible(false);
 
         this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow')
@@ -388,8 +397,11 @@ class HouseScene extends Phaser.Scene {
 
         // HUD Text
         this.cardCounterText = this.add.text(20, 60, `Cards Collected: 0/12`, {
-            fontSize: '32px', fill: '#ffffff', backgroundColor: 'rgba(23, 61, 54, 0.4)',
-            padding: { x: 20, y: 20 }, fontFamily: 'Arial',
+            fontSize: '32px', 
+            fill: '#ffffff', 
+            backgroundColor: 'rgba(23, 61, 54, 0.4)',
+            padding: { x: 20, y: 20 }, 
+            fontFamily: 'Arial',
         }).setScrollFactor(0).setDepth(200);
         this.cameras.main.ignore(this.cardCounterText);
 
@@ -570,14 +582,14 @@ class HouseScene extends Phaser.Scene {
             this.questState = 'POST_REACTION';
             this.tarotCard.setVisible(false);
             this.dialogBg.setTexture('dialogue-rem');
-            this.dialogText.setText(currentQuest.postLine[0]);
+            this.dialogText.setText(currentQuest.postLine[0]).setStyle({ fontStyle: 'normal' });
             this.dialogArrow.setVisible(true);
         }
         else if (this.questState === 'POST_REACTION') {
             this.questState = 'ANNOUNCEMENT';
             this.dialogBg.setTexture('dialogue-box'); 
             const cardName = currentQuest.name.split(' - ')[1];
-            this.dialogText.setText(`You collected ${cardName}.`);
+            this.dialogText.setText(`You collected ${cardName}.`).setStyle({ fontStyle: 'italic' });
             
             this.cardCounterText.setText(`Cards Collected: ${this.questIndex + 1}/12`);
             this.dialogArrow.setVisible(true);
@@ -593,7 +605,7 @@ class HouseScene extends Phaser.Scene {
                 // Keep playing!
                 this.questState = 'PRE_SEARCH';
                 this.dialogBg.setTexture('dialogue-rem');
-                this.dialogText.setText(this.questData[this.questIndex].preLine[0]);
+                this.dialogText.setText(this.questData[this.questIndex].preLine[0]).setStyle({ fontStyle: 'normal' });
                 this.dialogBg.setVisible(true);
                 this.dialogText.setVisible(true);
                 this.dialogArrow.setVisible(this.questData[this.questIndex].preLine.length > 1);

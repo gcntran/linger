@@ -19,9 +19,9 @@ class IntroScene extends Phaser.Scene {
         this.dialogBg = this.add.image(width / 2, height - 150, 'dialogue-box').setScale(1.7);
         
         this.dialogText = this.add.text(width / 2, height - 150, '', {
-            fontSize: '28px', 
-            color: '#ffffff', 
-            align: 'center', 
+            fontSize: '30px', 
+            color: '#2F3A56', 
+            align: 'start', 
             wordWrap: { width: 1000 }, 
             fontStyle: 'italic'
         }).setOrigin(0.5);
