@@ -168,8 +168,8 @@ class HouseScene extends Phaser.Scene {
         this.addDoor(1178, 635, 80, 150, 'storage');
 
 
-        // --- 4. PLAYER SETUP & SFX ---
-
+        // --- 4. CHARACTERS SETUP & SFX ---
+        // REM
         this.player = this.physics.add.sprite(1470, 300, 'player'); // Rem starts in the bedroom
         this.player.setScale(3.4);
         this.player.body.setSize(12, 12);
@@ -177,7 +177,7 @@ class HouseScene extends Phaser.Scene {
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(10); 
 
-        // Player Animations
+        // Rem's Animations
         const anims = [
             { key: 'idle', start: 0, end: 3 },
             { key: 'walk-down', start: 21, end: 27 },
@@ -201,6 +201,26 @@ class HouseScene extends Phaser.Scene {
             }
         });
 
+        // DOT
+        this.dot = this.physics.add.sprite(930, 220, 'dot'); 
+        this.dot.setScale(2.5);
+        this.dot.setImmovable(true);
+        this.dot.body.setAllowGravity(false);
+        this.dot.setDepth(150);
+
+        // Dot's Animations
+        if (!this.anims.exists('dot-idle')) {
+        this.anims.create({
+            key: 'dot-idle',
+            frames: this.anims.generateFrameNumbers('dot', { start: 0, end: 3 }),
+            frameRate: 4,
+            repeat: -1
+        });
+    }
+
+        // Start the animation
+        this.dot.play('dot-idle');        
+
         // SFX Setup
         this.walkSound = this.sound.add('walk', { volume: 1.2, loop: true });
         this.clickSound = this.sound.add('click', { volume: 0.5 });
@@ -210,7 +230,6 @@ class HouseScene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.walls);
         
 
-
         // --- 5. INPUT & CONTROLS ---
 
         this.wasd = this.input.keyboard.addKeys({
@@ -219,27 +238,6 @@ class HouseScene extends Phaser.Scene {
             down: Phaser.Input.Keyboard.KeyCodes.S,
             right: Phaser.Input.Keyboard.KeyCodes.D,
         });
-
-        // --- ADD DOT HERE ---
-        this.dot = this.physics.add.sprite(930, 220, 'dot'); 
-        this.dot.setScale(2.5);
-        this.dot.setImmovable(true);
-        this.dot.body.setAllowGravity(false);
-        this.dot.setDepth(150);
-
-        // Add Dot's animations
-        // Create Dot's idle animation
-        if (!this.anims.exists('dot-idle')) {
-        this.anims.create({
-            key: 'dot-idle',
-            frames: this.anims.generateFrameNumbers('dot', { start: 0, end: 3 }), // Adjust based on your sheet
-            frameRate: 4,
-            repeat: -1
-        });
-    }
-
-        // Start the animation
-        this.dot.play('dot-idle');
 
         // Central Click Listener
         this.input.on('pointerdown', (pointer) => {
