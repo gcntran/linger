@@ -9,6 +9,27 @@ class TitleScene extends Phaser.Scene {
         console.log("TitleScene loaded");
         const { width, height } = this.scale;
 
+        // Fullscreen button
+        const fsButton = this.add.text(20, 20, 'Fullscreen', {
+            fontSize: '20px', 
+            color: '#cccccc', 
+            backgroundColor: '#222222',
+            fontFamily: 'Georgia, serif',
+            fontStyle: 'italic'
+        })
+        .setPadding(10)
+        .setInteractive({ useHandCursor: true })
+        .setDepth(2000) // Super high depth so it sits above your fade curtains
+        .setScrollFactor(0);
+
+        fsButton.on('pointerup', () => {
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            } else {
+                this.scale.startFullscreen();
+            }
+        });
+
         // Add the animated background
         this.anims.create({
             key: 'title-flow',
