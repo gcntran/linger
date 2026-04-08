@@ -15,7 +15,7 @@ class IntroScene extends Phaser.Scene {
         introBG.setDisplaySize(width, height);
         introBG.setAlpha(0);
 
-        // Fade in the scene
+        // Fade in transition from TitleScene
         this.tweens.add({
             targets: introBG,
             alpha: 1,
@@ -59,8 +59,22 @@ class IntroScene extends Phaser.Scene {
                 this.updateText();
                 this.sound.play('click', { volume: 0.5 });
             } else {
-                // Intro finished, go to the house!
+            const { width, height } = this.scale;
+            // Fade out transition to HouseScene
+            // 1. Create a curtain for the transition
+            const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
+            curtain.setOrigin(0, 0).setAlpha(0).setDepth(1000);
+
+            // 2. Play the fade-out tween
+            this.tweens.add({
+                targets: curtain,
+                alpha: 1,
+                duration: 1000, // 1s
+                onComplete: () => {
+                // 3. Move to the house only after the fade is done
                 this.scene.start('HouseScene');
+            }
+        });
             }
         });
     }

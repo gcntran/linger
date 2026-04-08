@@ -7,12 +7,29 @@ class HouseScene extends Phaser.Scene {
     }
 
     create() {
+        const { width, height } = this.scale;
         console.log("HouseScene loaded");
 
         // ==========================================
         // 1. BACKGROUND & LAYOUT
         // ==========================================
         const layout = this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
+        layout.setDisplaySize(width, height);
+
+        // Fade in transition (from IntroScene)
+        // Create a curtain for the transition
+        const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
+        curtain.setOrigin(0, 0).setDepth(1000);
+
+        // Fade away to reveal the house
+        this.tweens.add({
+            targets: curtain,
+            alpha: 0,
+            duration: 1000, // 1s
+            onComplete: () => {
+                curtain.destroy();
+        }
+});
 
         // ==========================================
         // 2. PHYSICS GROUPS & COLLISION ZONES
