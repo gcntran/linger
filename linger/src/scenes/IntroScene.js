@@ -7,13 +7,24 @@ class IntroScene extends Phaser.Scene {
     }
 
     create() {
+        const { width, height } = this.scale;
+        console.log("IntroScene loaded");
+
+        // 0. BACKGROUND & LAYOUT
+        const introBG = this.add.image(width / 2, height / 2, 'intro-bg');
+        introBG.setDisplaySize(width, height);
+        introBG.setAlpha(0);
+
+        // Fade in the scene
+        this.tweens.add({
+            targets: introBG,
+            alpha: 1,
+            duration: 1000
+        });
+    
         // 1. DATA SETUP
         this.introLines = storyData.intro;
         this.lineIndex = 0;
-        const { width, height } = this.scale;
-
-        // 2. VISUALS (Black background for atmosphere)
-        this.add.rectangle(0, 0, width, height, 0x000000).setOrigin(0);
 
         // Dialogue Box (using the same assets as your HouseScene)
         this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
