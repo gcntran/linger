@@ -12,6 +12,20 @@ class EndingScene extends Phaser.Scene {
         const bg = this.add.sprite(width / 2, height / 2, 'intro-bg');
         bg.setDisplaySize(width, height);
 
+        // Transition from the HouseScene
+        const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
+        curtain.setOrigin(0, 0).setDepth(1000);
+
+        // Fade the curtain out
+        this.tweens.add({
+            targets: curtain,
+            alpha: 0,
+            duration: 1500,
+            onComplete: () => {
+                curtain.destroy();
+        }
+    });
+
         // 2. TITLE TEXT
         const title = this.add.text(width / 2, height * 0.3, 'LINGER', {
             fontSize: '84px',
