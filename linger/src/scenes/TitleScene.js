@@ -31,11 +31,11 @@ class TitleScene extends Phaser.Scene {
             fontStyle: 'normal'
         }).setOrigin(0.5).setAlpha(0); // Start invisible to match the ending logic
         
-        // Fade it in gracefully
+        // Title text fade in animation
         this.tweens.add({
             targets: title,
             alpha: 1,
-            duration: 3000, // 3s
+            duration: 5000, // 5s
             ease: 'Power2'
         });
 
@@ -80,7 +80,7 @@ class TitleScene extends Phaser.Scene {
             this.tweens.add({
             targets: [title, startBtn, bg], 
             alpha: 0,
-            duration: 500,
+            duration: 1000,
             onComplete: () => {
             // Scene change happens after the fade
             this.scene.start('IntroScene');
