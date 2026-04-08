@@ -59,7 +59,7 @@ class EndingScene extends Phaser.Scene {
         this.tweens.add({
             targets: [title],
             alpha: 1,
-            duration: 2000,
+            duration: 3000,
             ease: 'Power2'
         });
 
