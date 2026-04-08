@@ -6,7 +6,38 @@ class TitleScene extends Phaser.Scene {
     }
 
     create() {
+        console.log("TitleScene loaded");
         const { width, height } = this.scale;
+
+        // Add the animated background
+        this.anims.create({
+            key: 'title-flow',
+            frames: this.anims.generateFrameNumbers('title-bg', { start: 0, end: 16 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        // Add the spritesheet and play the animation
+        const bg = this.add.sprite(width / 2, height / 2, 'title-bg');
+        bg.play('title-flow');
+
+        bg.setDisplaySize(width, height);
+
+        // Title text
+        const title = this.add.text(width / 2, height * 0.4, 'LINGER', { // For left: const title = this.add.text(width * 0.25, height * 0.5, 'LINGER', {
+            fontSize: '100px',
+            color: '#ffffff',
+            fontFamily: 'Georgia, serif',
+            fontStyle: 'normal'
+        }).setOrigin(0.5).setAlpha(0); // Start invisible to match the ending logic
+        
+        // 2. Fade it in gracefully
+        this.tweens.add({
+            targets: title,
+            alpha: 1,
+            duration: 2000, // 2 seconds to fade in
+            ease: 'Power2'
+        });
 
         // Start background music
         if (!this.sound.get('bgm')) {
@@ -18,7 +49,7 @@ class TitleScene extends Phaser.Scene {
         }
     
         // Initial button state (Normal)
-        const startBtn = this.add.image(width / 2, height / 2, 'start-button')
+        const startBtn = this.add.image(width / 2, height * 0.7, 'start-button') // For left: const startBtn = this.add.image(width * 0.25, height * 0.8, 'start-button')
             .setInteractive({ useHandCursor: true });
     
         // 1. Hover State (Mouse enters button)
@@ -43,11 +74,17 @@ class TitleScene extends Phaser.Scene {
 
             startBtn.setTexture('start-button-active');
 
-            console.log("Button clicked!");
-            
-            // Slight delay so the player can actually see the "active" texture before the scene changes
-            this.time.delayedCall(150, () => {
-                this.scene.start('IntroScene');
+            console.log("Transitioning to Intro...");
+
+            // Fade out transition
+            this.tweens.add({
+            targets: [title, startBtn, bg], 
+            alpha: 0,
+            duration: 500,
+            onComplete: () => {
+            // Scene change happens after the fade
+            this.scene.start('IntroScene');
+            }
             });
         });
     }

@@ -17,10 +17,16 @@ class AssetLoader extends Phaser.Scene {
         this.load.image('go-to-title-button-active', 'assets/ui/buttons/go-to-title-button-active.png');
 
         // Load the background gif for title scene
-        this.load.gif('title-bg', 'assets/environment/cat-pinterest-sheet.png', {
-            frameWidth: 1920, 
-            frameHeight: 1080
+        this.load.spritesheet('title-bg', 'assets/environment/cat-pinterest-sheet.png', {
+            frameWidth: 800, 
+            frameHeight: 535
         });
+
+        // Load the intro image
+        this.load.image('intro-bg', 'assets/environment/intro-bg.png');
+
+        // Load the ending image
+        this.load.image('intro-bg', 'assets/environment/intro-bg.png');
 
         // Load the house layout
         this.load.image('layout-house', 'assets/environment/layout-house.png');
