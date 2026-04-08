@@ -379,18 +379,29 @@ class HouseScene extends Phaser.Scene {
             align: 'left', 
             lineSpacing: 12, 
             wordWrap: { width: 1000 }
-        }).setOrigin(0.5).setScrollFactor(0).setDepth(201).setVisible(false);
+        })
+        .setOrigin(0.5)
+        .setScrollFactor(0).
+        setDepth(201)
+        setVisible(false);
 
-        this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow')
-            .setScrollFactor(0).setDepth(202).setScale(1.2).setVisible(false);
+        this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow')   
+        .setScrollFactor(0)
+        .setDepth(202)
+        .setScale(1.2)
+        .setVisible(false);
 
+        // Animation for the arrow using tweens
         this.arrowTween = this.tweens.add({
             targets: this.dialogArrow,
             y: '+=10', duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
         });
 
         this.tarotCard = this.add.image(1920 / 2, 1080 / 2 - 50, 'tarot-0')
-            .setScrollFactor(0).setDepth(300).setScale(3).setVisible(false);
+            .setScrollFactor(0)
+            .setDepth(300)
+            .setScale(3)
+            .setVisible(false);
 
         // Tell main camera to ignore all UI elements
         this.cameras.main.ignore([this.dialogBg, this.dialogText, this.dialogArrow, this.tarotCard]);
@@ -402,7 +413,9 @@ class HouseScene extends Phaser.Scene {
             backgroundColor: 'rgba(23, 61, 54, 0.4)',
             padding: { x: 20, y: 20 }, 
             fontFamily: 'Arial',
-        }).setScrollFactor(0).setDepth(200);
+        })
+        .setScrollFactor(0)
+        .setDepth(200);
         this.cameras.main.ignore(this.cardCounterText);
 
         // ==========================================
@@ -670,9 +683,9 @@ class HouseScene extends Phaser.Scene {
             let currentQuest = this.questData[this.questIndex];
             
             // Show the hint box manually
-            this.dialogBg.setVisible(true).setTexture('dialogue-box');
+            this.dialogBg.setVisible(true).setTexture('dialogue-rem');
             this.dialogText.setVisible(true).setText(currentQuest.preLine[0]);
-            this.dialogText.setStyle({ fontStyle: 'italic' }); // Hints are usually narrator style
+            this.dialogText.setStyle({ fontStyle: 'normal' }); // Hints are usually italic as narrator, but I want to keep them in Rem's style
             this.dialogArrow.setVisible(true);
             
             if (this.arrowTween) this.arrowTween.resume();
