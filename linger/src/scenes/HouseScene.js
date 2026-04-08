@@ -381,9 +381,9 @@ class HouseScene extends Phaser.Scene {
             wordWrap: { width: 1000 }
         })
         .setOrigin(0.5)
-        .setScrollFactor(0).
-        setDepth(201)
-        setVisible(false);
+        .setScrollFactor(0)
+        .setDepth(201)
+        .setVisible(false);
 
         this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow')   
         .setScrollFactor(0)

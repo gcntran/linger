@@ -16,9 +16,9 @@ class IntroScene extends Phaser.Scene {
         this.add.rectangle(0, 0, width, height, 0x000000).setOrigin(0);
 
         // Dialogue Box (using the same assets as your HouseScene)
-        this.dialogBg = this.add.image(width / 2, height - 150, 'dialogue-box').setScale(1.7);
+        this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box').setScale(1.7);
         
-        this.dialogText = this.add.text(width / 2, height - 150, '', {
+        this.dialogText = this.add.text(1920 / 2, 850, '', {
             fontSize: '30px', 
             color: '#2F3A56', 
             align: 'start', 
@@ -27,7 +27,7 @@ class IntroScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // Animated Arrow
-        this.dialogArrow = this.add.image(width / 2 + 500, height - 100, 'dialogue-arrow').setScale(1.2);
+        this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow').setScale(1.2);
         this.tweens.add({
             targets: this.dialogArrow,
             y: '+=10', duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
