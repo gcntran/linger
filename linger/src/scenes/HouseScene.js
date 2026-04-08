@@ -10,9 +10,9 @@ class HouseScene extends Phaser.Scene {
         const { width, height } = this.scale;
         console.log("HouseScene loaded");
 
-        // ==========================================
-        // 1. BACKGROUND & LAYOUT
-        // ==========================================
+
+        // --- 1. BACKGROUND & LAYOUT ---
+
         const layout = this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
         layout.setDisplaySize(width, height);
 
@@ -31,9 +31,9 @@ class HouseScene extends Phaser.Scene {
         }
 });
 
-        // ==========================================
-        // 2. PHYSICS GROUPS & COLLISION ZONES
-        // ==========================================
+
+        // --- 2. PHYSICS GROUPS & COLLISION ZONES ---
+
         this.walls = this.physics.add.staticGroup();
 
         // Kitchen Area
@@ -129,18 +129,18 @@ class HouseScene extends Phaser.Scene {
             this.walls.add(zone);
         });
 
-        // ==========================================
-        // 3. DOORS LOGIC
-        // ==========================================
+
+        // --- 3. DOORS LOGIC ---
+
         this.doorList = [];
         this.addDoor(540, 635, 80, 150, 'bathroom');
         this.addDoor(727, 635, 80, 150, 'laundry');
         this.addDoor(1252, 355, 20, 110, 'bedroom');
         this.addDoor(1178, 635, 80, 150, 'storage');
 
-        // ==========================================
-        // 4. PLAYER SETUP & SFX
-        // ==========================================
+
+        // --- 4. PLAYER SETUP & SFX ---
+
         this.player = this.physics.add.sprite(1470, 300, 'player'); // Rem starts in the bedroom
         this.player.setScale(3.4);
         this.player.body.setSize(12, 12);
@@ -181,9 +181,9 @@ class HouseScene extends Phaser.Scene {
         this.physics.add.collider(this.player, this.walls);
         
 
-        // ==========================================
-        // 5. INPUT & CONTROLS
-        // ==========================================
+
+        // --- 5. INPUT & CONTROLS ---
+
         this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -200,159 +200,161 @@ class HouseScene extends Phaser.Scene {
         this.input.on('pointerdown', (pointer) => {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
             
-            // --- THE FINAL DOOR & CREDITS LOGIC ---
-            // This handles the transition from clicking the door to the ending scene
-            if (this.storyPhase === 'FINAL_DOOR_WAIT') {
-            // Approximate coordinates for the main front door (bottom center)
-            // Adjust these numbers based on your actual door position
-            const doorX = 1000; 
-            const doorY = 950;
-            const dist = Phaser.Math.Distance.Between(pointer.worldX, pointer.worldY, doorX, doorY);
+        // --- THE FINAL DOOR & CREDITS LOGIC ---
+        // This handles the transition from clicking the door to the ending scene
+        if (this.storyPhase === 'FINAL_DOOR_WAIT') {
+        // Approximate coordinates for the main front door (bottom center)
+        // Adjust these numbers based on your actual door position
+        const doorX = 1000; 
+        const doorY = 950;
+        const dist = Phaser.Math.Distance.Between(pointer.worldX, pointer.worldY, doorX, doorY);
 
-            if (dist < 150) { // If clicking near the door
-            if (this.clickSound) this.clickSound.play();
+        if (dist < 150) { // If clicking near the door
+        if (this.clickSound) this.clickSound.play();
             
-            this.storyPhase = 'CREDITS_SEQUENCE';
-            this.finalLineIndex = 0;
-            this.finalLines = [
-                "The door opens. Light spills in - not the blinding kind, but the gentle kind that invites rather than demands.",
-                "Step forward. Not into the past, not into the future, but into the present, you’ve finally learned to hold."
-            ];
+        this.storyPhase = 'CREDITS_SEQUENCE';
+        this.finalLineIndex = 0;
+        this.finalLines = [
+            "The door opens. Light spills in - not the blinding kind, but the gentle kind that invites rather than demands.",
+            "Step forward. Not into the past, not into the future, but into the present, you’ve finally learned to hold."
+        ];
             
-            // Show the first line manually
-            this.dialogBg.setVisible(true).setTexture('dialogue-box');
-            this.dialogText.setVisible(true).setText(this.finalLines[0]).setStyle({ fontStyle: 'italic' });
-            this.dialogArrow.setVisible(true);
-            return;
-            }
+        // Show the first line manually
+        this.dialogBg.setVisible(true).setTexture('dialogue-box');
+        this.dialogText.setVisible(true).setText(this.finalLines[0]).setStyle({ fontStyle: 'italic' });
+        this.dialogArrow.setVisible(true);
+        return;
         }
+    }
 
-            if (this.storyPhase === 'CREDITS_SEQUENCE') {
-            if (this.clickSound) this.clickSound.play();
-                this.finalLineIndex++;
+        if (this.storyPhase === 'CREDITS_SEQUENCE') {
+        if (this.clickSound) this.clickSound.play();
+            this.finalLineIndex++;
         
-            if (this.finalLineIndex < this.finalLines.length) {
-                this.dialogText.setText(this.finalLines[this.finalLineIndex]);
-            } else {
-                // Transition to EndingScene after the final line
-                const { width, height } = this.scale;
+        if (this.finalLineIndex < this.finalLines.length) {
+            this.dialogText.setText(this.finalLines[this.finalLineIndex]);
+        } else {
 
-                // Create the black curtain
-                const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
-                curtain.setOrigin(0, 0).setAlpha(0).setDepth(2000); // Higher depth than UI
+            // Transition to EndingScene after the final line
+            const { width, height } = this.scale;
 
-                // Fade to black
-                this.tweens.add({
-                    targets: curtain,
-                    alpha: 1,
-                    duration: 1500, // Slightly longer fade for a dramatic ending
+            // Create the black curtain
+            const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
+            curtain.setOrigin(0, 0).setAlpha(0).setDepth(2000); // Higher depth than UI
+
+            // Transition to EndingScene
+            this.tweens.add({
+                targets: curtain,
+                alpha: 1,
+                duration: 1500, // Slightly longer fade for a dramatic ending
                     onComplete: () => {
-                // GO TO THE ENDING SCENE!
+                // OK! NOW GO TO THE ENDING SCENE!
                 this.scene.start('EndingScene'); 
             }
         });
     }
-            return;
+        return;
 }
 
-            // --- A. STORY PHASE LOGIC (Intro, Wakeup, Dot Discovery, Ending) ---
-            // New Phases
-            if (this.storyPhase !== 'FIND_CARDS' && 
-                this.storyPhase !== 'SEARCH_DOT' && 
-                this.storyPhase !== 'FINAL_DOOR_WAIT' && 
-                this.storyPhase !== 'CREDITS_SEQUENCE') {
+
+        // --- 6. LOGICS ---
+        // A. STORY PHASE LOGIC (Intro, Wakeup, Dot Discovery, Ending)
+        // New Phases
+        if (this.storyPhase !== 'FIND_CARDS' && 
+            this.storyPhase !== 'SEARCH_DOT' && 
+            this.storyPhase !== 'FINAL_DOOR_WAIT' && 
+            this.storyPhase !== 'CREDITS_SEQUENCE') {
                 
-                if (this.clickSound) this.clickSound.play();
-                this.lineIndex++;
-                let currentArray = [];
-                if (this.storyPhase === 'INTRO') currentArray = this.introLines;
-                else if (this.storyPhase === 'WAKEUP') currentArray = this.wakeupLines;
-                else if (this.storyPhase === 'DOT_TALK') currentArray = this.dotDiscoveryLines;
-                else if (this.storyPhase === 'ENDING') currentArray = this.endingLines;
+            if (this.clickSound) this.clickSound.play();
+            this.lineIndex++;
+            let currentArray = [];
+            if (this.storyPhase === 'INTRO') currentArray = this.introLines;
+            else if (this.storyPhase === 'WAKEUP') currentArray = this.wakeupLines;
+            else if (this.storyPhase === 'DOT_TALK') currentArray = this.dotDiscoveryLines;
+            else if (this.storyPhase === 'ENDING') currentArray = this.endingLines;
         
-                if (this.lineIndex < currentArray.length) {
-                    this.showStoryDialogue();
-                } else {
-                    this.transitionStoryPhase();
-                }
-                return; 
+            if (this.lineIndex < currentArray.length) {
+                this.showStoryDialogue();
+            } else {
+                this.transitionStoryPhase();
             }
-
-            // --- B. QUEST & GAMEPLAY LOGIC (Only runs during 'FIND_CARDS') ---
-            let currentQuest = this.questData[this.questIndex];
-
-            // 1. Handle open dialogue paging
-            if (this.dialogBg.visible) {
-                // Play click sound when moving to the next line of quest text
-                if (this.clickSound) this.clickSound.play();
-
-                this.currentDialogueIndex++;
-                let lines = [];
-                
-                if (this.questState === 'PRE_SEARCH') lines = currentQuest.preLine;
-                else if (this.questState === 'OBJECT') lines = currentQuest.objectLines;
-                else if (this.questState === 'CARD') lines = currentQuest.narratorLine; 
-                else if (this.questState === 'POST_REACTION') lines = currentQuest.postLine;
-                else if (this.questState === 'ANNOUNCEMENT') {
-                    const cardName = currentQuest.name.split(' - ')[1];
-                    lines = [`You collected ${cardName}.`];
-                }
-
-                if (this.currentDialogueIndex < lines.length) {
-                    this.dialogText.setText(lines[this.currentDialogueIndex]);
-
-                    // --- ADD THE CARD FLIP SOUND HERE ---
-        // If we just clicked into the CARD state, play the flip sound!
-        if (this.questState === 'CARD' && this.currentDialogueIndex === 0) {
-            if (this.cardSound) this.cardSound.play();
+            return; 
         }
 
-                    this.dialogArrow.setVisible(true);
-                    if (this.arrowTween && this.arrowTween.isPaused()) this.arrowTween.resume();
-                    return;
-                } else {
-                    this.handleQuestTransition();
-                    return;
-                }
+        // B. QUEST & GAMEPLAY LOGIC (Only runs during 'FIND_CARDS')
+        let currentQuest = this.questData[this.questIndex];
+
+        // DIALOGUE ADVANCEMENT LOGIC
+        if (this.dialogBg.visible) {
+            // Play click sound when moving to the next line of quest text
+            if (this.clickSound) this.clickSound.play();
+
+            this.currentDialogueIndex++;
+            let lines = [];
+                
+            if (this.questState === 'PRE_SEARCH') lines = currentQuest.preLine;
+            else if (this.questState === 'OBJECT') lines = currentQuest.objectLines;
+            else if (this.questState === 'CARD') lines = currentQuest.narratorLine; 
+            else if (this.questState === 'POST_REACTION') lines = currentQuest.postLine;
+            else if (this.questState === 'ANNOUNCEMENT') {
+                const cardName = currentQuest.name.split(' - ')[1];
+                lines = [`You collected ${cardName}.`];
             }
 
-            // 2. Door Logic
-            this.doorList.forEach(door => {
-                if (door.isNear && door.isOpen === false) {
-                    this.openDoor(door);
-                }
-            });
+            if (this.currentDialogueIndex < lines.length) {
+                this.dialogText.setText(lines[this.currentDialogueIndex]);
 
-            // 3. Interactable Logic
-            if (this.questState === 'PRE_SEARCH') {
-                this.interactableList.forEach((item, index) => {
-                    if (item.isNear && index === this.questIndex) {
+            // Sound effect when the card is revealed
+            if (this.questState === 'CARD' && this.currentDialogueIndex === 0) {
+                if (this.cardSound) this.cardSound.play();
+            }
 
-                        // Play click sound for the initial interaction
-                        if (this.clickSound) this.clickSound.play();
-                        this.questState = 'OBJECT';
-                        this.activeInteractable = item;
-                        this.currentDialogueIndex = 0;
+            this.dialogArrow.setVisible(true);
+            if (this.arrowTween && this.arrowTween.isPaused()) this.arrowTween.resume();
+            return;
+            } else {
+                this.handleQuestTransition();
+                return;
+            }
+        }
 
-                        this.dialogText.setText(currentQuest.objectLines[0]);
-                        
-                        // Set texture based on speaker
-                        if (item.speaker === 'Rem') this.dialogBg.setTexture('dialogue-rem');
-                        else if (item.speaker === 'Dot') this.dialogBg.setTexture('dialogue-dot');
-                        else this.dialogBg.setTexture('dialogue-box');
-
-                        this.dialogBg.setVisible(true);
-                        this.dialogText.setVisible(true);
-                        this.dialogArrow.setVisible(true);
-                        if (this.arrowTween) this.arrowTween.resume();
-                    }    
-                });
+        // C. DOOR LOGIC
+        this.doorList.forEach(door => {
+        if (door.isNear && door.isOpen === false) {
+            this.openDoor(door);
             }
         });
 
-        // ==========================================
-        // 6. CAMERAS
-        // ==========================================
+        // D. INTERACTABLE OBJECT LOGIC (ONLY IN PRE_SEARCH PHASE)
+        if (this.questState === 'PRE_SEARCH') {
+            this.interactableList.forEach((item, index) => {
+            if (item.isNear && index === this.questIndex) {
+
+             // Play click sound for the initial interaction
+                if (this.clickSound) this.clickSound.play();
+                this.questState = 'OBJECT';
+                this.activeInteractable = item;
+                this.currentDialogueIndex = 0;
+
+                this.dialogText.setText(currentQuest.objectLines[0]);
+                        
+            // Set texture based on speaker
+                if (item.speaker === 'Rem') this.dialogBg.setTexture('dialogue-rem');
+                else if (item.speaker === 'Dot') this.dialogBg.setTexture('dialogue-dot');
+                else this.dialogBg.setTexture('dialogue-box');
+
+                this.dialogBg.setVisible(true);
+                this.dialogText.setVisible(true);
+                this.dialogArrow.setVisible(true);
+                if (this.arrowTween) this.arrowTween.resume();
+                }    
+            });
+        }
+    });
+
+
+        // --- 7. CAMERAS ---
+
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setBounds(0, 0, 1920, 1080);
         this.cameras.main.setZoom(1.5);
@@ -372,13 +374,14 @@ class HouseScene extends Phaser.Scene {
         
         uiCam.ignore(worldItems);
         
-        // Ensure the main camera ignores UI (to be added later)
+        // Ensure the main camera ignores UI 
         this.uiElements = [];
 
         if (this.physics.world.debugGraphic) {
             uiCam.ignore(this.physics.world.debugGraphic);
         }
 
+        // Fullscreen Button (from Arlin's suggestion)
         const fsButton = this.add.text(20, 20, 'Fullscreen', {
             fontSize: '20px', 
             color: '#ffffff', 
@@ -392,7 +395,6 @@ class HouseScene extends Phaser.Scene {
         this.cameras.main.ignore(fsButton);
         uiCam.ignore([layout, this.player, ...this.walls.getChildren()]);
 
-        
         this.doorList.forEach(door => { uiCam.ignore(door.trigger); });
 
         fsButton.on('pointerup', () => {
@@ -400,16 +402,17 @@ class HouseScene extends Phaser.Scene {
             else this.scale.startFullscreen();
         });
 
-        // ==========================================
-        // 7. PROPER UI SETUP (Must happen BEFORE showStoryDialogue)
-        // ==========================================
+
+        // --- 8. PROPER UI SETUP (Must happen BEFORE showStoryDialogue) ---
+        
+        // Default dialogue box that can be changed to Rem or Dot versions when talking
         this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
             .setScrollFactor(0)
             .setDepth(200)
-
             .setScale(1.7)
             .setVisible(false);
 
+        // Dialogue text
         this.dialogText = this.add.text(520, 810, '', {
             fontSize: '30px', 
             color: '#2F3A56', 
@@ -425,6 +428,7 @@ class HouseScene extends Phaser.Scene {
         .setDepth(201)
         .setVisible(false);
 
+        // The animated arrow to guide the player click to the next dialogue line 
         this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow')   
         .setScrollFactor(0)
         .setDepth(202)
@@ -458,9 +462,9 @@ class HouseScene extends Phaser.Scene {
         .setDepth(200);
         this.cameras.main.ignore(this.cardCounterText);
 
-        // ==========================================
-        // 8. DATA INITIALIZATION & STORY KICKOFF
-        // ==========================================
+
+        // --- 8. DATA INITIALIZATION & STORY KICKOFF ---
+
         this.questData = questData;
         this.introLines = storyData.intro;
         this.wakeupLines = storyData.wakeup;
@@ -471,7 +475,8 @@ class HouseScene extends Phaser.Scene {
         this.interactableList = [];
         this.questData.forEach((data, index) => {
             let x = 0, y = 0, w = 50, h = 50; 
-            if (index === 0) { x = 852; y = 770; w = 40; h = 85; }      // tarot-0: Shoes
+            // Only for testing now, the real objects will be updated soon
+            if (index === 0) { x = 852; y = 770; w = 40; h = 85; }        // tarot-0: Shoes
             else if (index === 1) { x = 1392; y = 220; w = 105; h = 70; } // tarot-1: Sketchbook
             else if (index === 2) { x = 415; y = 575; w = 165; h = 30; }  // tarot-2: Mirror
             else if (index === 3) { x = 1285; y = 452; w = 40; h = 30; }  // tarot-3: Plant
@@ -483,7 +488,7 @@ class HouseScene extends Phaser.Scene {
             this.addInteractable(x, y, w, h, data.objectLines, 'Rem');
         });
 
-
+        
         // START THE STORY
         this.storyPhase = 'WAKEUP'; 
         this.lineIndex = 0;
@@ -496,11 +501,10 @@ class HouseScene extends Phaser.Scene {
     }
 
 
-    // ==========================================
-    // UPDATE LOGIC
-    // ==========================================
+    // --- UPDATE LOGIC ---
+
     update() {
-        // 1. STORY TRIGGERS
+        // --- 1. STORY TRIGGERS ---
         if (this.storyPhase === 'SEARCH_DOT') {
             const sofaX = 1450; 
             const sofaY = 450;
@@ -512,7 +516,7 @@ class HouseScene extends Phaser.Scene {
             }
         }
 
-        // 2. FREEZE PLAYER DURING DIALOGUE
+        // --- 2. FREEZE PLAYER DURING DIALOGUE ---
         if (this.dialogBg.visible) {
             this.player.setVelocity(0, 0);
             if (this.anims.exists('idle')) this.player.anims.play('idle', true);
@@ -524,7 +528,7 @@ class HouseScene extends Phaser.Scene {
             return; 
         }
 
-        // A. PROXIMITY CHECKS 
+        // --- 3. PROXIMITY CHECKS ---
         this.doorList.forEach(door => {
             door.isNear = Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), door.trigger.getBounds());
         });
@@ -533,7 +537,7 @@ class HouseScene extends Phaser.Scene {
             item.isNear = Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), item.trigger.getBounds());
         });
 
-        // B. MOVEMENT LOGIC
+        // --- 4. MOVEMENT LOGIC ---
         const speed = 170;
         let vx = 0;
         let vy = 0;
@@ -556,7 +560,7 @@ class HouseScene extends Phaser.Scene {
 
         this.player.setVelocity(vx, vy);
 
-        // C. IDLE & SOUND LOGIC
+        // --- 5. IDLE & SOUND LOGIC ---
         if (vx === 0 && vy === 0) {
             if (this.anims.exists('idle')) this.player.anims.play('idle', true);
             if (this.walkSound.isPlaying) this.walkSound.stop();
@@ -567,9 +571,10 @@ class HouseScene extends Phaser.Scene {
     }
 
 
-    // ==========================================
-    // HELPER FUNCTIONS
-    // ==========================================
+
+    // --- HELPER FUNCTIONS ---
+
+    // --- 1. ADD DOOR WITH TRIGGER ZONE ---
     addDoor(x, y, w, h) {
         let wall = this.add.zone(x, y, w, h);
         this.physics.add.existing(wall, true);
@@ -584,6 +589,7 @@ class HouseScene extends Phaser.Scene {
         this.doorList.push({ wall: wall, trigger: trigger, isOpen: false, isNear: false });
     }
 
+    // --- 2. OPEN DOOR BY DISABLING THE WALL COLLIDOR ---
     openDoor(door) {
         if (door.wall && door.wall.active) {
             door.isOpen = true;
@@ -596,6 +602,7 @@ class HouseScene extends Phaser.Scene {
         }
     }
 
+    /// Automatically close the door by re-enabling the wall collider
     closeDoor(door) {
         if (door.wall) {
             door.isOpen = false;
@@ -605,32 +612,42 @@ class HouseScene extends Phaser.Scene {
         }
     }
 
+
+    /// --- INTERACTABLE LOGIC ---
+
+    // --- 1. ADD INTERACTABLE OBJECT ---
+    // Create an interactable zone with associated dialogue and speaker info
     addInteractable(x, y, w, h, message, speaker) {
         let trigger = this.add.zone(x, y, w + 24, h + 24);
         this.physics.add.existing(trigger, true);
         this.interactableList.push({ trigger: trigger, message: message, speaker: speaker || 'Narrator', isNear: false });
     }
 
+    // --- 2. HANDLE QUEST TRANSITION ---
+    // Handle the transition between quest states (PRE_SEARCH -> OBJECT -> CARD -> POST_REACTION -> ANNOUNCEMENT)
     handleQuestTransition() {
         let currentQuest = this.questData[this.questIndex];
         this.currentDialogueIndex = 0;
 
+        // Pre-search state just to show the hint
         if (this.questState === 'PRE_SEARCH') {
             this.dialogBg.setVisible(false);
             this.dialogText.setVisible(false);
             this.dialogArrow.setVisible(false);
         } 
+        // When clicking the object, show the tarot card and the narrator line
         else if (this.questState === 'OBJECT') {
             this.questState = 'CARD';
 
-            // --- PLAY SOUND HERE ---
-    if (this.cardSound) this.cardSound.play();
+        // Card flipping sound effect plays when clicking to reveal the card
+        if (this.cardSound) this.cardSound.play();
 
             this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
             this.dialogBg.setTexture('dialogue-box'); 
             this.dialogText.setText(currentQuest.narratorLine[0]);
             this.dialogArrow.setVisible(true);
         } 
+        // After reacting to the card, show the post-reaction line
         else if (this.questState === 'CARD') {
             this.questState = 'POST_REACTION';
             this.tarotCard.setVisible(false);
@@ -638,6 +655,7 @@ class HouseScene extends Phaser.Scene {
             this.dialogText.setText(currentQuest.postLine[0]).setStyle({ fontStyle: 'normal' });
             this.dialogArrow.setVisible(true);
         }
+        // After the post-reaction, show the announcement of the collected card and update to HUD
         else if (this.questState === 'POST_REACTION') {
             this.questState = 'ANNOUNCEMENT';
             this.dialogBg.setTexture('dialogue-box'); 
@@ -647,13 +665,16 @@ class HouseScene extends Phaser.Scene {
             this.cardCounterText.setText(`Cards Collected: ${this.questIndex + 1}/12`);
             this.dialogArrow.setVisible(true);
         }
+        // After the announcement, either move to find the next card or trigger the ending if all cards are collected
         else if (this.questState === 'ANNOUNCEMENT') {
             this.dialogBg.setVisible(false);
             this.dialogText.setVisible(false);
             this.dialogArrow.setVisible(false);
-            
+
+            // Reset the current interactable object so it won't trigger again
             this.questIndex++; 
 
+            // Check if there are more cards to find, this is a loop that goes back to the PRE_SEARCH state for the next card
             if (this.questIndex < this.questData.length) {
                 // Keep playing!
                 this.questState = 'PRE_SEARCH';
@@ -663,6 +684,7 @@ class HouseScene extends Phaser.Scene {
                 this.dialogText.setVisible(true);
                 this.dialogArrow.setVisible(this.questData[this.questIndex].preLine.length > 1);
             } else {
+
                 // BOOM! ALL CARDS FOUND! TRIGGER THE ENDING!
                 this.storyPhase = 'ENDING';
                 this.lineIndex = 0;
@@ -671,6 +693,8 @@ class HouseScene extends Phaser.Scene {
         }
     }
 
+    // --- 3. SHOW STORY DIALOGUE ---
+    // Showing dialogue based on the Dialogue data and the current story phase
     showStoryDialogue() {
         let currentLine;
         if (this.storyPhase === 'INTRO') currentLine = this.introLines[this.lineIndex];
@@ -678,8 +702,10 @@ class HouseScene extends Phaser.Scene {
         else if (this.storyPhase === 'DOT_TALK') currentLine = this.dotDiscoveryLines[this.lineIndex];
         else if (this.storyPhase === 'ENDING') currentLine = this.endingLines[this.lineIndex];
 
+        // Safety check to prevent errors
         if (!currentLine) return;
 
+        // Show the dialogue box and text, set the content based on the current line
         this.dialogBg.setVisible(true);
         this.dialogText.setVisible(true).setText(currentLine.text);
         
@@ -700,10 +726,11 @@ class HouseScene extends Phaser.Scene {
         }
     }
 
+    // --- 4. TRANSITION BETWEEN STORY PHASES ---
     transitionStoryPhase() {
         this.lineIndex = 0;
 
-        // 1. WAKEUP -> SEARCH_DOT
+        // A. WAKEUP -> SEARCH_DOT
         // This happens after Rem finishes the waking up monologue
         if (this.storyPhase === 'WAKEUP') {
             this.storyPhase = 'SEARCH_DOT'; // Now the player can walk to find Dot
@@ -712,7 +739,7 @@ class HouseScene extends Phaser.Scene {
             this.dialogArrow.setVisible(false);
         } 
         
-        // 2. DOT_TALK -> FIND_CARDS
+        // B. DOT_TALK -> FIND_CARDS
         else if (this.storyPhase === 'DOT_TALK') {
             this.storyPhase = 'FIND_CARDS';
             this.questIndex = 0;
@@ -722,7 +749,7 @@ class HouseScene extends Phaser.Scene {
             // Grab the first hint from your questData
             let currentQuest = this.questData[this.questIndex];
             
-            // Show the hint box manually
+            // Show the hint to look for the next card
             this.dialogBg.setVisible(true).setTexture('dialogue-rem');
             this.dialogText.setVisible(true).setText(currentQuest.preLine[0]);
             this.dialogText.setStyle({ fontStyle: 'normal' }); // Hints are usually italic as narrator, but I want to keep them in Rem's style
@@ -731,14 +758,15 @@ class HouseScene extends Phaser.Scene {
             if (this.arrowTween) this.arrowTween.resume();
         }
     
-        // 3. ENDING -> FINAL_DOOR_WAIT (The new logic)
-        // This happens after Rem says "Alright, Dot. I'm ready."
+        // C. ENDING -> FINAL_DOOR_WAIT (The new logic)
+        // This happens after Rem says "Alright, Dot. I'm ready..."
         else if (this.storyPhase === 'ENDING') {
             this.dialogBg.setVisible(false);
             this.dialogText.setVisible(false);
             this.dialogArrow.setVisible(false);
             
             // Change state so the click listener knows to look for the door click
+            // BOOM! CLICK THE DOOR AND REM WILL FINISH THE GAME! GOOD JOB REM! YAY!!!!
             this.storyPhase = 'FINAL_DOOR_WAIT'; 
         }
     }
