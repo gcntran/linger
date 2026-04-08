@@ -234,11 +234,26 @@ class HouseScene extends Phaser.Scene {
             if (this.finalLineIndex < this.finalLines.length) {
                 this.dialogText.setText(this.finalLines[this.finalLineIndex]);
             } else {
+                // Transition to EndingScene after the final line
+                const { width, height } = this.scale;
+
+                // Create the black curtain
+                const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
+                curtain.setOrigin(0, 0).setAlpha(0).setDepth(2000); // Higher depth than UI
+
+                // Fade to black
+                this.tweens.add({
+                    targets: curtain,
+                    alpha: 1,
+                    duration: 1500, // Slightly longer fade for a dramatic ending
+                    onComplete: () => {
                 // GO TO THE ENDING SCENE!
                 this.scene.start('EndingScene'); 
             }
+        });
+    }
             return;
-        }
+}
 
             // --- A. STORY PHASE LOGIC (Intro, Wakeup, Dot Discovery, Ending) ---
             // New Phases
