@@ -40,8 +40,8 @@ class AssetLoader extends Phaser.Scene {
 
         // Load the spritesheet for Dot's animation
         this.load.spritesheet('dot', 'assets/characters/dot.png', { 
-            frameWidth: 32, 
-            frameHeight: 32 
+            frameWidth: 64, 
+            frameHeight: 48 
         });
 
         // Tarot cards
