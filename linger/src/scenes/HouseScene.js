@@ -16,7 +16,7 @@ class HouseScene extends Phaser.Scene {
         const layout = this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
         layout.setDisplaySize(width, height);
 
-        // Fade in transition (from IntroScene)
+        // Transition from IntroScene
         // Create a curtain for the transition
         const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
         curtain.setOrigin(0, 0).setDepth(1000);

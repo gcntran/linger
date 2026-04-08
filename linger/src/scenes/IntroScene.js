@@ -60,12 +60,13 @@ class IntroScene extends Phaser.Scene {
                 this.sound.play('click', { volume: 0.5 });
             } else {
             const { width, height } = this.scale;
-            // Fade out transition to HouseScene
-            // 1. Create a curtain for the transition
+
+            // Transition to HouseScene
+            // Create a curtain for the transition
             const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
             curtain.setOrigin(0, 0).setAlpha(0).setDepth(1000);
 
-            // 2. Play the fade-out tween
+            // Play the fade-out tween
             this.tweens.add({
                 targets: curtain,
                 alpha: 1,
