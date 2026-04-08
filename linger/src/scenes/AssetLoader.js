@@ -17,7 +17,7 @@ class AssetLoader extends Phaser.Scene {
         this.load.image('go-to-title-button-active', 'assets/ui/buttons/go-to-title-button-active.png');
 
         // Load the background gif for title scene
-        this.load.gif('title-bg', 'assets/environment/cat-pinterest.gif', {
+        this.load.gif('title-bg', 'assets/environment/cat-pinterest-sheet.png', {
             frameWidth: 1920, 
             frameHeight: 1080
         });
