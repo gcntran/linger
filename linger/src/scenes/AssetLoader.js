@@ -38,6 +38,12 @@ class AssetLoader extends Phaser.Scene {
             frameHeight: 32 
         });
 
+        // Load the spritesheet for Dot's animation
+        this.load.spritesheet('dot', 'assets/characters/dot.png', { 
+            frameWidth: 32, 
+            frameHeight: 32 
+        });
+
         // Tarot cards
         // Only major arcana cards are used
         for (let i = 0; i <= 11; i++) {

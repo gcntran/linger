@@ -221,9 +221,25 @@ class HouseScene extends Phaser.Scene {
         });
 
         // --- ADD DOT HERE ---
-        // Creating her early so the Camera can find her
-        this.dotSofa = this.add.rectangle(1450, 450, 80, 40, 0xff0000, 0.5); 
-        this.dotSofa.setDepth(5);
+        this.dot = this.physics.add.sprite(930, 220, 'dot'); 
+        this.dot.setScale(2.5);
+        this.dot.setImmovable(true);
+        this.dot.body.setAllowGravity(false);
+        this.dot.setDepth(150);
+
+        // Add Dot's animations
+        // Create Dot's idle animation
+        if (!this.anims.exists('dot-idle')) {
+        this.anims.create({
+            key: 'dot-idle',
+            frames: this.anims.generateFrameNumbers('dot', { start: 0, end: 3 }), // Adjust based on your sheet
+            frameRate: 4,
+            repeat: -1
+        });
+    }
+
+        // Start the animation
+        this.dot.play('dot-idle');
 
         // Central Click Listener
         this.input.on('pointerdown', (pointer) => {
