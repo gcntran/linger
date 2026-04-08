@@ -351,7 +351,11 @@ class HouseScene extends Phaser.Scene {
             fontSize: '20px', 
             color: '#ffffff', 
             backgroundColor: '#333'
-        }).setPadding(10).setInteractive({ useHandCursor: true }).setDepth(100).setScrollFactor(0);
+        })
+        .setPadding(10)
+        .setInteractive({ useHandCursor: true })
+        .setDepth(100)
+        .setScrollFactor(0);
 
         this.cameras.main.ignore(fsButton);
         uiCam.ignore([layout, this.player, ...this.walls.getChildren()]);
@@ -370,17 +374,21 @@ class HouseScene extends Phaser.Scene {
         this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
             .setScrollFactor(0)
             .setDepth(200)
+
             .setScale(1.7)
             .setVisible(false);
 
-        this.dialogText = this.add.text(1920 / 2, 850, '', {
+        this.dialogText = this.add.text(520, 810, '', {
             fontSize: '30px', 
             color: '#2F3A56', 
             align: 'left', 
             lineSpacing: 12, 
-            wordWrap: { width: 1000 }
+            wordWrap: { 
+                width: 910,
+                useAdvancedWrap: true // This helps align the right edge more precisely 
+            }
         })
-        .setOrigin(0.5)
+        .setOrigin(0.0)
         .setScrollFactor(0)
         .setDepth(201)
         .setVisible(false);

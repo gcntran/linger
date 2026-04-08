@@ -16,15 +16,20 @@ class IntroScene extends Phaser.Scene {
         this.add.rectangle(0, 0, width, height, 0x000000).setOrigin(0);
 
         // Dialogue Box (using the same assets as your HouseScene)
-        this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box').setScale(1.7);
+        this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
+        .setScale(1.7)
+
         
-        this.dialogText = this.add.text(1920 / 2, 850, '', {
+        this.dialogText = this.add.text(520, 800, '', {
             fontSize: '30px', 
             color: '#2F3A56', 
             align: 'start', 
-            wordWrap: { width: 1000 }, 
+            wordWrap: { 
+                width: 910,
+                useAdvancedWrap: true // This helps align the right edge more precisely 
+            }, 
             fontStyle: 'italic'
-        }).setOrigin(0.5);
+        }).setOrigin(0.0);
 
         // Animated Arrow
         this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow').setScale(1.2);
