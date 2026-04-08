@@ -13,13 +13,11 @@ class TitleScene extends Phaser.Scene {
         const fsButton = this.add.text(20, 20, 'Fullscreen', {
             fontSize: '20px', 
             color: '#cccccc', 
-            backgroundColor: '#222222',
-            fontFamily: 'Georgia, serif',
-            fontStyle: 'italic'
+            backgroundColor: '#333',
         })
         .setPadding(10)
         .setInteractive({ useHandCursor: true })
-        .setDepth(2000) // Super high depth so it sits above your fade curtains
+        .setDepth(2000) // Super high depth so it sits above fade curtains
         .setScrollFactor(0);
 
         fsButton.on('pointerup', () => {
