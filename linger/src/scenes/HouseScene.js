@@ -171,19 +171,19 @@ class HouseScene extends Phaser.Scene {
         // --- 4. CHARACTERS SETUP & SFX ---
         // REM
         this.player = this.physics.add.sprite(1470, 300, 'player'); // Rem starts in the bedroom
-        this.player.setScale(3.4);
-        this.player.body.setSize(12, 12);
-        this.player.body.setOffset(10, 16);
+        this.player.setScale(1.4);
+        this.player.body.setSize(30, 20);
+        this.player.body.setOffset(17, 40);
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(10); 
 
         // Rem's Animations
         const anims = [
-            { key: 'idle', start: 0, end: 3 },
-            { key: 'walk-down', start: 21, end: 27 },
-            { key: 'walk-up', start: 45, end: 51 },
-            { key: 'walk-left', start: 29, end: 30 },
-            { key: 'walk-right', start: 42, end: 43 }
+            { key: 'idle', start: 0, end: 2 },
+            { key: 'walk-down', start: 3, end: 5 },
+            { key: 'walk-up', start: 6, end: 8 },
+            { key: 'walk-left', start: 9, end: 11 },
+            { key: 'walk-right', start: 12, end: 14 }
         ];
 
         const playerTexture = this.textures.get('player');
@@ -194,8 +194,9 @@ class HouseScene extends Phaser.Scene {
                     this.anims.create({
                         key: anim.key,
                         frames: this.anims.generateFrameNumbers('player', { start: anim.start, end: anim.end }),
-                        frameRate: 8,
-                        repeat: -1
+                        frameRate: 3,
+                        repeat: -1,
+                        yoyo: true
                     });
                 }
             }

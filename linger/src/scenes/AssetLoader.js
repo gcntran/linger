@@ -34,8 +34,8 @@ class AssetLoader extends Phaser.Scene {
 
         // Load the spritesheet for Rem's animation
         this.load.spritesheet('player', 'assets/characters/rem.png', { 
-            frameWidth: 32, 
-            frameHeight: 32 
+            frameWidth: 64, 
+            frameHeight: 80 
         });
 
         // Load the spritesheet for Dot's animation
