@@ -43,12 +43,12 @@ class HouseScene extends Phaser.Scene {
         morningGlow.setBlendMode(Phaser.BlendModes.MULTIPLY);
 
         // 2. Fake Window Sunbeams
-        // Let's place one by the kitchen window and one by the living room
         // Create the beams
         const beam1 = this.addSunBeam(510, 180);   // Kitchen window
         const beam2 = this.addSunBeam(930, 180);   // Living room window
         const beam3 = this.addSunBeam(1390, 180);   // Bedroom window
 
+        
         // --- 2. PHYSICS GROUPS & COLLISION ZONES ---
 
         this.walls = this.physics.add.staticGroup();
