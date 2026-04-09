@@ -31,6 +31,23 @@ class HouseScene extends Phaser.Scene {
         }
 });
 
+        // Lighting Filter
+        // Create a gradient: Top is a warm orange-white, Bottom is a soft amber
+        // 1. The Global Amber Filter
+        // This adds a warm morning tint to the whole room
+        const morningGlow = this.add.graphics();
+        morningGlow.fillGradientStyle(0xfffae1, 0xfffae1, 0xffe6cc, 0xffe6cc, 0.2); // 0.2 is the intensity
+        morningGlow.fillRect(0, 0, width, height);
+        morningGlow.setDepth(900); // Keeps it above the player but below the UI
+        morningGlow.setScrollFactor(0); // Fixes it to the screen
+        morningGlow.setBlendMode(Phaser.BlendModes.MULTIPLY);
+
+        // 2. Fake Window Sunbeams
+        // Let's place one by the kitchen window and one by the living room
+        // Create the beams
+        const beam1 = this.addSunBeam(510, 180);   // Kitchen window
+        const beam2 = this.addSunBeam(930, 180);   // Living room window
+        const beam3 = this.addSunBeam(1390, 180);   // Bedroom window
 
         // --- 2. PHYSICS GROUPS & COLLISION ZONES ---
 
@@ -413,6 +430,9 @@ class HouseScene extends Phaser.Scene {
             layout, 
             this.player, 
             this.dot, 
+            beam1,
+            beam2,
+            beam3,
             ...this.walls.getChildren()
         ];
         
@@ -622,6 +642,45 @@ class HouseScene extends Phaser.Scene {
 
 
     // --- HELPER FUNCTIONS ---
+
+    // --- 0. SUNBEAM FUNCTION FOR LIGHTING EFFECT ---
+    addSunBeam(x, y) {
+    // Define the triangle shape: 
+    // Narrow at the top (0,0 and 40,0) 
+    // Wide at the bottom (-100, 600 and 140, 600)
+    const points = [
+        40, 0,    // Top Right
+        0, 0,     // Top Left
+        -70, 200, // Bottom Left (Spread out)
+        90, 200   // Bottom Right (Spread out)
+    ];
+
+    // Create the polygon instead of a rectangle
+    const beam = this.add.polygon(x, y, points, 0xfffae1, 0.05);
+    
+    beam.setOrigin(0, 0); // Sets the "pivot" to the top-left of the window
+    beam.setAngle(10);    // Slight tilt to match the morning sun angle
+    beam.setBlendMode(Phaser.BlendModes.ADD);
+    beam.setDepth(850);
+    beam.setScrollFactor(1);
+
+    // Soften the edges so it doesn't look like a sharp paper cutout
+    if (this.renderer.type !== Phaser.CANVAS) {
+        beam.postFX.addBloom(0xffffff, 1, 1, 2, 2);
+    }
+
+    // Gentle breathing animation
+    this.tweens.add({
+        targets: beam,
+        alpha: 0.2,
+        duration: 10000,
+        yoyo: true,
+        repeat: -1,
+        ease: 'Sine.easeInOut'
+    });
+
+    return beam;
+    }
 
     // --- 1. ADD DOOR WITH TRIGGER ZONE ---
     addDoor(x, y, w, h) {
