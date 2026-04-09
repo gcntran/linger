@@ -755,9 +755,29 @@ class HouseScene extends Phaser.Scene {
     // --- 1. ADD INTERACTABLE OBJECT ---
     // Create an interactable zone with associated dialogue and speaker info
     addInteractable(x, y, w, h, message, speaker) {
-        let trigger = this.add.zone(x, y, w + 24, h + 24);
+        let trigger = this.add.zone(x, y, w + 24, h + 24)
+            .setInteractive({ useHandCursor: true });
         this.physics.add.existing(trigger, true);
-        this.interactableList.push({ trigger: trigger, message: message, speaker: speaker || 'Narrator', isNear: false });
+
+        // --- HOVER LOGIC ---
+        trigger.on('pointerover', () => {
+            // Swap to custom hover cursor
+            this.input.setDefaultCursor('url(assets/ui/cursors/cursor-hover.png), pointer');
+            
+            // console.log(`Hovering over: ${speaker}'s item`); 
+        });
+
+        trigger.on('pointerout', () => {
+            // Swap back to custom default cursor
+            this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
+        });
+
+        this.interactableList.push({ 
+            trigger: trigger, 
+            message: message, 
+            speaker: speaker || 'Narrator', 
+            isNear: false 
+        });
     }
 
     // --- 2. HANDLE QUEST TRANSITION ---
