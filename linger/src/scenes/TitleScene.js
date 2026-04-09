@@ -10,7 +10,7 @@ class TitleScene extends Phaser.Scene {
         const { width, height } = this.scale;
 
         // Fullscreen button
-        const fsButton = this.add.text(20, 20, 'Fullscreen', {
+        const fsButton = this.add.text(1720, 20, 'Fullscreen', {
             fontSize: '20px', 
             color: '#cccccc', 
             backgroundColor: '#333',

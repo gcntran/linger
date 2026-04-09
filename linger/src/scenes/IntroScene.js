@@ -11,7 +11,7 @@ class IntroScene extends Phaser.Scene {
         console.log("IntroScene loaded");
 
         // Fullscreen button
-        const fsButton = this.add.text(20, 20, 'Fullscreen', {
+        const fsButton = this.add.text(1720, 20, 'Fullscreen', {
             fontSize: '20px', 
             color: '#cccccc', 
             backgroundColor: '#333',
