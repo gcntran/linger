@@ -495,15 +495,15 @@ class HouseScene extends Phaser.Scene {
         this.cameras.main.ignore([this.dialogBg, this.dialogText, this.dialogArrow, this.tarotCard]);
 
         // HUD Text
-        this.hudBg = this.add.image(20, 60, `card-collected-hud`) 
+        this.hudBg = this.add.image(30, 40, `card-collected-hud`) 
             .setOrigin(0, 0)
-            .setScale(0.8) 
+            .setScale(1.2) 
             .setScrollFactor(0)
             .setDepth(199); 
         // 2. Add the Text on top of the image
         // We remove the backgroundColor and padding since the PNG handles the visuals now
-        this.cardCounterText = this.add.text(80, 55, `0/12`, {
-            fontSize: '28px', 
+        this.cardCounterText = this.add.text(116, 65, `0/12`, {
+            fontSize: '36px', 
             fill: '#2F3A56', 
             fontFamily: 'Georgia, serif', 
             fontStyle: 'bold'
@@ -711,7 +711,7 @@ class HouseScene extends Phaser.Scene {
             const cardName = currentQuest.name.split(' - ')[1];
             this.dialogText.setText(`You collected ${cardName}.`).setStyle({ fontStyle: 'italic' });
             
-            this.cardCounterText.setText(`Cards Collected: ${this.questIndex + 1}/12`);
+            this.cardCounterText.setText(`${this.questIndex + 1}/12`);
             this.dialogArrow.setVisible(true);
         }
         // After the announcement, either move to find the next card or trigger the ending if all cards are collected
