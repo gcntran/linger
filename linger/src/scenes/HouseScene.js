@@ -426,7 +426,7 @@ class HouseScene extends Phaser.Scene {
         }
 
         // Fullscreen Button (from Arlin's suggestion)
-        const fsButton = this.add.text(20, 20, 'Fullscreen', {
+        const fsButton = this.add.text(1720, 20, 'Fullscreen', {
             fontSize: '20px', 
             color: '#ffffff', 
             backgroundColor: '#333'
@@ -495,15 +495,22 @@ class HouseScene extends Phaser.Scene {
         this.cameras.main.ignore([this.dialogBg, this.dialogText, this.dialogArrow, this.tarotCard]);
 
         // HUD Text
-        this.cardCounterText = this.add.text(20, 60, `Cards Collected: 0/12`, {
-            fontSize: '32px', 
-            fill: '#ffffff', 
-            backgroundColor: 'rgba(23, 61, 54, 0.4)',
-            padding: { x: 20, y: 20 }, 
-            fontFamily: 'Arial',
+        this.hudBg = this.add.image(20, 60, `card-collected-hud`) 
+            .setOrigin(0, 0)
+            .setScale(0.8) 
+            .setScrollFactor(0)
+            .setDepth(199); 
+        // 2. Add the Text on top of the image
+        // We remove the backgroundColor and padding since the PNG handles the visuals now
+        this.cardCounterText = this.add.text(80, 55, `0/12`, {
+            fontSize: '28px', 
+            fill: '#2F3A56', 
+            fontFamily: 'Georgia, serif', 
+            fontStyle: 'bold'
         })
         .setScrollFactor(0)
         .setDepth(200);
+
         this.cameras.main.ignore(this.cardCounterText);
 
 
