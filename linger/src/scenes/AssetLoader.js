@@ -44,6 +44,9 @@ class AssetLoader extends Phaser.Scene {
             frameHeight: 48 
         });
 
+        // Load card collected HUD
+        this.load.image('card-collected-hud', 'assets/ui/hud/card-collected.png');
+
         // Tarot cards
         // Only major arcana cards are used
         for (let i = 0; i <= 11; i++) {
