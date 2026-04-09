@@ -6,6 +6,10 @@ class AssetLoader extends Phaser.Scene {
     }
 
     preload() {
+        // Load the cursors
+        this.load.image('cursor-default', 'assets/ui/cursors/cursor-default.png');
+        this.load.image('cursor-hover', 'assets/ui/cursors/cursor-hover.png');
+
         // Load the buttons
         // Title button
         this.load.image('start-button', 'assets/ui/buttons/start-button.png');
