@@ -10,6 +10,9 @@ class HouseScene extends Phaser.Scene {
         const { width, height } = this.scale;
         console.log("HouseScene loaded");
 
+        // Set Cursor
+        this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
+
 
         // --- 1. BACKGROUND & LAYOUT ---
 
