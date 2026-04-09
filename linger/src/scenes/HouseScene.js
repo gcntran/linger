@@ -446,7 +446,7 @@ class HouseScene extends Phaser.Scene {
 
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setBounds(0, 0, 1920, 1080);
-        this.cameras.main.setZoom(1.5);
+        this.cameras.main.setZoom(2);
         this.cameras.main.setBackgroundColor('#222222');
         this.physics.world.setBounds(0, 0, 1920, 1080);
 
