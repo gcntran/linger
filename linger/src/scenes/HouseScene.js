@@ -48,7 +48,32 @@ class HouseScene extends Phaser.Scene {
         const beam2 = this.addSunBeam(930, 180);   // Living room window
         const beam3 = this.addSunBeam(1390, 180);   // Bedroom window
 
-        
+        // Global Overlay Logic (for entire house filtering)
+        const screenOverlay = this.add.rectangle(0, 0, width, height, 0x1a1a2e, 0.08); // 
+        screenOverlay.setOrigin(0, 0);
+        screenOverlay.setScrollFactor(0); // Fixes it to the camera
+        screenOverlay.setDepth(950); // Higher than player and sunbeams, but below UI
+        screenOverlay.setBlendMode(Phaser.BlendModes.SCREEN); // dreamy and light
+
+        // 2. The Color Punch (makes colors look "nicer")
+        const colorPunch = this.add.rectangle(0, 0, width, height, 0xffa500, 0.08); // Vivid Orange
+        colorPunch.setOrigin(0, 0).setScrollFactor(0).setDepth(801);
+        colorPunch.setBlendMode(Phaser.BlendModes.OVERLAY);
+
+        // Create a vignette overlay
+        const vignette = this.add.graphics();
+
+        // 2. Draw a radial gradient 
+        // Center is transparent (alpha 0), edges are soft black (alpha 0.5)
+        vignette.fillGradientStyle(0xfffae1, 0xfffae1, 0xfffae1, 0xfffae1, 0, 0, 0.3, 0.3);
+        vignette.fillRect(0, 0, width, height);
+
+        // 3. Fix to screen and set depth
+        vignette.setScrollFactor(0);
+        vignette.setDepth(960); 
+        vignette.setBlendMode(Phaser.BlendModes.MULTIPLY);
+
+
         // --- 2. PHYSICS GROUPS & COLLISION ZONES ---
 
         this.walls = this.physics.add.staticGroup();
@@ -433,6 +458,7 @@ class HouseScene extends Phaser.Scene {
             beam1,
             beam2,
             beam3,
+            vignette,
             ...this.walls.getChildren()
         ];
         
