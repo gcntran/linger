@@ -171,9 +171,9 @@ class HouseScene extends Phaser.Scene {
         // --- 4. CHARACTERS SETUP & SFX ---
         // REM
         this.player = this.physics.add.sprite(1470, 300, 'player'); // Rem starts in the bedroom
-        this.player.setScale(1.4);
-        this.player.body.setSize(30, 20);
-        this.player.body.setOffset(17, 40);
+        this.player.setScale(1.3);
+        this.player.body.setSize(30, 35);
+        this.player.body.setOffset(17, 44);
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(10); 
 
@@ -204,7 +204,7 @@ class HouseScene extends Phaser.Scene {
 
         // DOT
         this.dot = this.physics.add.sprite(930, 254, 'dot'); // Dot starts on the sofa in the living room
-        this.dot.setScale(1);
+        this.dot.setScale(0.8);
         this.dot.setImmovable(true);
         this.dot.body.setAllowGravity(false);
         this.dot.setDepth(150);
