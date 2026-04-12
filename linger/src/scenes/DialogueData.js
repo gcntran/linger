@@ -48,7 +48,7 @@ export const storyData = {
 // Interactable objects quest data
 export const questData = [
     {
-        name: "Scarf - 0. The Fool",
+        name: "Scarf - The Fool",
         tarotKey: 'tarot-0',
         preLine: ["Ah, I usually saw Dot lying on my scarf as well. Maybe I should check it first.", "I forgot to hang my scarf last night, it should be on the shoe cabinet."],
         objectLines: ["Dot… did you hide something in this scarf?", "Here we go, I didn’t expect to find The Fool as the first card."],
@@ -60,7 +60,7 @@ export const questData = [
         postLine: ["…I guess I’ve always been afraid of starting things. But maybe beginnings don’t have to be perfect. Maybe choosing to move at all is enough."]
     },
     {
-        name: "Keyboard - 1. The Chariot",
+        name: "Keyboard - The Chariot",
         tarotKey: 'tarot-1', // Mapping index 1 to Chariot
         preLine: ["Dot also likes walking on my keyboard to make some funny sounds. I need to check it too."],
         objectLines: ["Really, Dot, how did you tuck a card in here?"],
@@ -72,7 +72,7 @@ export const questData = [
         postLine: ["I remember those days… pushing myself forward just to avoid standing still. Maybe I wasn’t lost, maybe I was learning."]
     },
     {
-        name: "Bookshelf - 2. Wheel of Fortune",
+        name: "Bookshelf - Wheel of Fortune",
         tarotKey: 'tarot-2',
         preLine: ["I haven’t played any song for a while. Should I play something today?", "There are some music sheets I composed on my bookshelf... I can find some cards there, too."],
         objectLines: ["Huh… Dot really hid something here, between my sketchbooks? You’re full of surprises."],
@@ -84,7 +84,7 @@ export const questData = [
         postLine: ["I think I’ve always been scared of change… but maybe it’s just another way of moving forward. My last sketch actually looks nice!"]
     },
     {
-        name: "Mug - 3. The Sun",
+        name: "Mug - The Sun",
         tarotKey: 'tarot-3',
         preLine: ["Hang on, I forgot to have some coffee. I need caffeine to have more energy with this hunt."],
         objectLines: ["There is another card next to my mug. Dot really knows all of my usual stuff."],
@@ -96,7 +96,7 @@ export const questData = [
         postLine: ["The Sun... I wish I could always enjoy the sunlight every morning like today. Maybe I really have come farther than I thought."]
     },
     {
-        name: "Fridge Magnet - 4. The Lovers",
+        name: "Fridge Magnet - The Lovers",
         tarotKey: 'tarot-4',
         preLine: ["Wait, is that something by the fridge?"],
         objectLines: ["This is a fridge magnet from my hometown… and a card under it. I need to train Dot not to touch the fridge."],
@@ -108,7 +108,7 @@ export const questData = [
         postLine: ["Ah, the good old days. I miss who I was… but I’m learning to like who I’m becoming, too."]
     },
     {
-        name: "Speaker - 5. The Magician", // Replaced Page of Wands
+        name: "Speaker - The Magician", // Replaced Page of Wands
         tarotKey: 'tarot-5',
         preLine: ["I should check the speaker, maybe Dot hid something there, too."],
         objectLines: ["I knew it! Dot hid a card in the CDs!"],
@@ -120,7 +120,7 @@ export const questData = [
         postLine: ["I used to dream of being a musician... but playing for myself and my friends is still half the dream. It's enough."]
     },
     {
-        name: "Letter - 6. High Priestess", // Replaced 3 of Swords
+        name: "Letter - High Priestess", // Replaced 3 of Swords
         tarotKey: 'tarot-6',
         preLine: ["I just remember I need to get the watch from my desk drawer to go out.", "Hmm… something’s under the watch. An envelope?"],
         objectLines: ["This letter… is from my old friend. When did we last talk to each other?"],
@@ -132,7 +132,7 @@ export const questData = [
         postLine: ["…I thought I was done hurting. Maybe healing just takes longer than I hoped. I hope she is doing well."]
     },
     {
-        name: "Cat Bed - 7. Strength", // Replaced 9 of Swords
+        name: "Cat Bed - Strength", // Replaced 9 of Swords
         tarotKey: 'tarot-7',
         preLine: ["I also need to look for the cards in Dot’s favourite spot."],
         objectLines: ["Yeah, I was right. She hid a card in her bed."],
@@ -144,10 +144,10 @@ export const questData = [
         postLine: ["I remember those nights... Dot helped me a lot. I’m still learning how to breathe through the heavy times."]
     },
     {
-        name: "Washing Machine - 8. The Hermit", // Replaced Ace of Pentacles
+        name: "Washing Machine - The Hermit", // Replaced Ace of Pentacles
         tarotKey: 'tarot-8',
         preLine: ["I should go to another favourite place of Dot, the laundry room!"],
-        objectLines: ["Wow! Look at this card here, lying behind the door."],
+        objectLines: ["Wow! Look at this card here, lying in front of the washer."],
         narratorLine: [
             "A small, steady promise rests in your palm.",
             "The Hermit reminds you that solitude is not being lost. Sometimes you must go within to find the light.",
@@ -170,8 +170,8 @@ export const questData = [
     {
         name: "Planner - 10. The Tower",
         tarotKey: 'tarot-10',
-        preLine: ["Then, where should I go for the next card? Oh, the front door!"],
-        objectLines: ["Here we go, Dot slipped a card into the planner.", "Oops, The Tower?! Why did Dot pick the most dramatic one..."],
+        preLine: ["Then, where should I go for the next card? Oh, the storage room! Dot likes to hide things there."],
+        objectLines: ["Here we go, Dot slipped a card under a cardboard box.", "Oops, The Tower?! Why did Dot pick the most dramatic one..."],
         narratorLine: [
             "A quiet shift trembles beneath the surface, not destructive, just honest.",
             "The Tower reminds you that some structures fall not to ruin you, but to free you.",
