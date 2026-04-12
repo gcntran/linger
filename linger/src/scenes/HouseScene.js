@@ -513,7 +513,7 @@ class HouseScene extends Phaser.Scene {
             align: 'left', 
             lineSpacing: 12, 
             wordWrap: { 
-                width: 910,
+                width: 950,
                 useAdvancedWrap: true // This helps align the right edge more precisely 
             }
         })
@@ -586,7 +586,7 @@ class HouseScene extends Phaser.Scene {
             else if (index === 7) { x = 1473; y = 380; w = 50; h = 30; }  // 7: Cat Bed
             else if (index === 8) { x = 727; y = 850; w = 70; h = 70; } // 8: Washing Machine (Laundry)
             else if (index === 9) { x = 613; y = 700; w = 26; h = 30; }  // 9: Plant Pot (Washroom)
-            else if (index === 10) { x = 1065; y = 722; w = 50; h = 170; }// 10: Cardboard Box (In Storage Room)
+            else if (index === 10) { x = 1210; y = 790; w = 40; h = 10; }// 10: Cardboard Box (Storage Room)
             else if (index === 11) { x = 930; y = 345; w = 100; h = 40; } // 11: Camera (On Table)
             
             this.addInteractable(x, y, w, h, data.objectLines, 'Rem');
