@@ -15,11 +15,17 @@ class HouseScene extends Phaser.Scene {
 
 
         // --- 1. BACKGROUND & LAYOUT ---
-
+        // Load the house layout
         const layout = this.add.image(0, 0, 'layout-house')
         .setOrigin(0, 0);
         layout.setDepth(0);
         layout.setDisplaySize(width, height);
+
+        // Load the ceiling layout
+        const ceiling = this.add.image(0, 0, 'layout-ceiling')
+        .setOrigin(0, 0);
+        ceiling.setDepth(2);
+        ceiling.setDisplaySize(width, height); 
 
         // Transition from IntroScene
         // Create a curtain for the transition
@@ -460,6 +466,7 @@ class HouseScene extends Phaser.Scene {
 
         const worldItems = [
             layout, 
+            ceiling,
             this.player, 
             this.dot, 
             beam1,
