@@ -575,15 +575,18 @@ class HouseScene extends Phaser.Scene {
         this.interactableList = [];
         this.questData.forEach((data, index) => {
             let x = 0, y = 0, w = 50, h = 50; 
-            // Only for testing now, the real objects will be updated soon
-            if (index === 0) { x = 852; y = 770; w = 40; h = 85; }        // tarot-0: Shoes
-            else if (index === 1) { x = 1392; y = 220; w = 105; h = 70; } // tarot-1: Sketchbook
-            else if (index === 2) { x = 415; y = 575; w = 165; h = 30; }  // tarot-2: Mirror
-            else if (index === 3) { x = 1285; y = 452; w = 40; h = 30; }  // tarot-3: Plant
-            else if (index === 4) { x = 1165; y = 225; w = 130; h = 22; } // tarot-4: Bookshelf
-            else if (index === 5) { x = 930; y = 220; w = 150; h = 70; }  // tarot-5: Clock
-            else if (index === 6) { x = 930; y = 345; w = 100; h = 40; }  // tarot-6: Mugs
-            else if (index === 7) { x = 1367; y = 422; w = 95; h = 22; }  // tarot-7: Keyboard (The Chariot)
+            if (index === 0) { x = 1620; y = 720; w = 100; h = 80; }      // 0: Scarf (Shoe Cabinet)
+            else if (index === 1) { x = 1367; y = 422; w = 95; h = 40; }  // 1: Keyboard (Desk)
+            else if (index === 2) { x = 1165; y = 225; w = 130; h = 60; } // 2: Bookshelf
+            else if (index === 3) { x = 930; y = 345; w = 60; h = 50; }   // 3: Mug (Coffee Table)
+            else if (index === 4) { x = 150; y = 350; w = 80; h = 100; }  // 4: Fridge Magnet
+            else if (index === 5) { x = 450; y = 650; w = 100; h = 80; }  // 5: Speaker/CDs (Living Room)
+            else if (index === 6) { x = 1450; y = 320; w = 70; h = 50; }  // 6: Letter (Desk Drawer)
+            else if (index === 7) { x = 1750; y = 600; w = 90; h = 70; }  // 7: Cat Bed
+            else if (index === 8) { x = 250; y = 850; w = 120; h = 120; } // 8: Washing Machine (Laundry)
+            else if (index === 9) { x = 750; y = 850; w = 80; h = 100; }  // 9: Plant Pot (Washroom)
+            else if (index === 10) { x = 1780; y = 720; w = 70; h = 100; }// 10: Planner (By Front Door)
+            else if (index === 11) { x = 1050; y = 345; w = 70; h = 60; } // 11: Camera (On Table)
             
             this.addInteractable(x, y, w, h, data.objectLines, 'Rem');
         });
