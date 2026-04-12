@@ -76,7 +76,7 @@ class AssetLoader extends Phaser.Scene {
         this.load.audio('click', 'assets/sounds/click-sfx.mp3'); // src: https://pixabay.com/sound-effects/film-special-effects-pen-click-411629/
 
         // Background music
-        this.load.audio('bgm', 'assets/sounds/cozy-piano.mp3'); // src: https://pixabay.com/music/modern-classical-cozy-piano-130875/
+        this.load.audio('bgm', 'assets/sounds/bgm.mp3'); // src: https://pixabay.com/music/modern-classical-cozy-piano-130875/
         
         // Footstep sound effect
         this.load.audio('walk', 'assets/sounds/footstep-sfx.m4a');
