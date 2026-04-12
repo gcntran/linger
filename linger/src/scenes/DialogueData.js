@@ -1,5 +1,4 @@
-// scenes/DialogueData.js
-
+// Characters data
 export const storyData = {
     intro: [
         { speaker: 'narrator', text: "They say each day brings something to look forward to, that new moments line up quietly, waiting for us when tomorrow comes. Tomorrow will be better, brighter, gentler, no matter how heavy the day before felt." },
@@ -20,7 +19,7 @@ export const storyData = {
 
     dotDiscovery: [
         { speaker: 'rem', text: "Good morning, Dot. How are you?" },
-        { speaker: 'dot', text: "Meow…meow…" },
+        { speaker: 'dot', text: "Meow… meow… " },
         { speaker: 'rem', text: "Okay, I get it. You are hungry now. Let’s eat." },
         { speaker: 'rem', text: "(Rem notices Dot is lying on something familiar)\nHey Dot, what is lying under you? Why are my tarot cards here?" },
         { speaker: 'rem', text: "Oh no, Dot… Did you scatter my tarot deck?" },
@@ -46,111 +45,153 @@ export const storyData = {
 
 };
 
+// Interactable objects quest data
 export const questData = [
     {
-        name: "The Entryway Shoes - The Fool",
-        preLine: ["I should probably start at the beginning. Where did I leave my walking shoes?"],
-        objectLines: ["Dot, you didn't chew on the laces again, did you?", "Ah... there's a card tucked right inside the heel."],
-        tarotKey: 'tarot-0', 
+        name: "Scarf - 0. The Fool",
+        tarotKey: 'tarot-0',
+        preLine: ["Ah, I usually saw Dot lying on my scarf as well. Maybe I should check it first.", "I forgot to hang my scarf last night, it should be on the shoe cabinet."],
+        objectLines: ["Dot… did you hide something in this scarf?", "Here we go, I didn’t expect to find The Fool as the first card."],
         narratorLine: [
-            "The Fool: A leap into the unknown.",
-            "Every step you took was a risk, and every risk brought you to this very room.",
-            "The Fool reminds you that starting over isn't failing; it is simply stepping forward."
+            "The fabric warms in your hands, as if remembering the courage of a first step.",
+            "Every beginning asks for a little courage. You may not know where the path leads, but choosing to step forward is already an act of hope.",
+            "The Fool reminds you that you don’t need a perfect plan, just a willingness to try."
         ],
-        postLine: ["The Fool... I guess every path has to start somewhere."],
-    },
-
-    {
-        name: "The Sketchbook - The Magician",
-        preLine: ["My desk is a mess. I wonder if Dot knocked something over by my sketchbook."],
-        objectLines: ["Just a bunch of half-finished doodles.", "Wait, there's a card wedged beneath the back cover."],
-        tarotKey: 'tarot-1', 
-        narratorLine: [
-            "The Magician: The power of creation.",
-            "You hold the tools to build your own reality, even when the canvas feels too blank.",
-            "The Magician speaks to the quiet spark inside you that turns nothing into something."
-        ],
-        postLine: ["The Magician. It is easy to forget what I am capable of building."],
-    },
-
-    {
-        name: "The Hallway Mirror - The High Priestess",
-        preLine: ["There's a strange reflection catching the light near the hallway mirror."],
-        objectLines: ["Dot, are you staring at your own reflection again?", "No... there's a card slipped neatly into the frame."],
-        tarotKey: 'tarot-2', 
-        narratorLine: [
-            "The High Priestess: Trusting your inner voice.",
-            "The answers were always quiet, waiting patiently beneath the surface.",
-            "She reminds you to listen to the feeling in your chest before the noise of the world."
-        ],
-        postLine: ["The High Priestess. I need to trust myself a bit more."],
-    },
-
-    {
-        name: "The Window Plant - The Empress",
-        preLine: ["I need to water the pothos anyway. Maybe there's a clue there."],
-        objectLines: ["The soil is dry, but look at this...", "A card hidden right under the leaves. Taking care of things always grounded me."],
-        tarotKey: 'tarot-3', 
-        narratorLine: [
-            "The Empress: Growth, patience, and nurturing.",
-            "You cultivated life around you, even when you felt entirely barren yourself.",
-            "The Empress reflects the quiet beauty of letting things bloom in their own time."
-        ],
-        postLine: ["The Empress... some things just need time and water."],
-    },
-
-    {
-        name: "The Heavy Bookshelf - The Emperor",
-        preLine: ["Those old textbooks on the bottom shelf... Dot loves hiding behind them."],
-        objectLines: ["Dusty. But there's a card slipping out from a heavy binder.", "I relied on these rules for structure when everything else felt chaotic."],
-        tarotKey: 'tarot-4', 
-        narratorLine: [
-            "The Emperor: Stability and foundation.",
-            "You built walls to feel safe, but walls can also trap you if you forget to build doors.",
-            "He asks you to examine the rules you laid down for yourself."
-        ],
-        postLine: ["The Emperor. Structure is good, but I don't want to be trapped by it."],
-    },
-
-    {
-        name: "The Mantel Clock - The Hierophant",
-        preLine: ["The clock has been ticking louder than usual today. Let's take a look."],
-        objectLines: ["Right behind the pendulum. Good hiding spot, Dot.", "Time just keeps moving, following the exact same rhythm."],
-        tarotKey: 'tarot-5', 
-        narratorLine: [
-            "The Hierophant: Tradition and shared belief.",
-            "You sought meaning in the ways things have always been done by others.",
-            "But the Hierophant wonders if those old routines still serve the person you are becoming."
-        ],
-        postLine: ["The Hierophant. Maybe it's okay to break the routine."],
-    },
-
-    {
-        name: "The Mismatched Mugs - The Lovers",
-        preLine: ["I left a pair of mugs on the coffee table. Let's see if Dot knocked them over."],
-        objectLines: ["Still here. And look, a card resting right between them.", "Connection... it's always been the hardest part to figure out."],
-        tarotKey: 'tarot-6', 
-        narratorLine: [
-            "The Lovers: Harmony and deep choices.",
-            "It is about more than romance; it is about choosing what aligns with your soul.",
-            "The Lovers remind you that every connection shapes the world you live in."
-        ],
-        postLine: ["The Lovers. It's all about who and what I choose to keep close."],
+        postLine: ["…I guess I’ve always been afraid of starting things. But maybe beginnings don’t have to be perfect. Maybe choosing to move at all is enough."]
     },
     {
-        name: "The Piano keyboard - The Chariot",
+        name: "Keyboard - 1. The Chariot",
+        tarotKey: 'tarot-1', // Mapping index 1 to Chariot
         preLine: ["Dot also likes walking on my keyboard to make some funny sounds. I need to check it too."],
-        objectLines: [
-            "Really, Dot, how did you tuck a card in here?", 
-            "I remember those days… pushing myself forward just to avoid standing still."
-        ],
-        tarotKey: 'tarot-7', 
+        objectLines: ["Really, Dot, how did you tuck a card in here?"],
         narratorLine: [
-            "The Chariot: The past, lack of direction.",
+            "The metal hums faintly, like footsteps taken without purpose, hums with the memory of motion without meaning.",
             "There were times when you moved without knowing why, pulled by old habits or old fears.",
-            "The Chariot remembers those moments - when you pushed ahead but felt no true direction.",
-            "Yet even wandering teaches you something. You learned what didn’t feel right, and that is its own kind of guidance."
+            "The Chariot remembers those moments—when you pushed ahead but felt no true direction. Yet even wandering teaches you something."
         ],
-        postLine: ["The Chariot... Maybe I wasn’t lost, maybe I was learning."],
+        postLine: ["I remember those days… pushing myself forward just to avoid standing still. Maybe I wasn’t lost, maybe I was learning."]
+    },
+    {
+        name: "Bookshelf - 2. Wheel of Fortune",
+        tarotKey: 'tarot-2',
+        preLine: ["I haven’t played any song for a while. Should I play something today?", "There are some music sheets I composed on my bookshelf... I can find some cards there, too."],
+        objectLines: ["Huh… Dot really hid something here, between my sketchbooks? You’re full of surprises."],
+        narratorLine: [
+            "The pages flutter softly, as if caught in a turning wind.",
+            "Life turns in quiet circles, shifting when you least expect it. The Wheel reminds you that nothing stays still—not joy, not sorrow, not you.",
+            "Trust that the turning is part of your story."
+        ],
+        postLine: ["I think I’ve always been scared of change… but maybe it’s just another way of moving forward. My last sketch actually looks nice!"]
+    },
+    {
+        name: "Mug - 3. The Sun",
+        tarotKey: 'tarot-3',
+        preLine: ["Hang on, I forgot to have some coffee. I need caffeine to have more energy with this hunt."],
+        objectLines: ["There is another card next to my mug. Dot really knows all of my usual stuff."],
+        narratorLine: [
+            "A warm glow rises from the ceramic, gentle as morning light.",
+            "There are days when the light finally reaches you, warm and honest. The Sun reminds you that you’ve grown more than you realize.",
+            "Success doesn’t always arrive loudly—sometimes it’s a soft glow that follows you into the morning."
+        ],
+        postLine: ["The Sun... I wish I could always enjoy the sunlight every morning like today. Maybe I really have come farther than I thought."]
+    },
+    {
+        name: "Fridge Magnet - 4. The Lovers",
+        tarotKey: 'tarot-4',
+        preLine: ["Wait, is that something by the fridge?"],
+        objectLines: ["This is a fridge magnet from my hometown… and a card under it. I need to train Dot not to touch the fridge."],
+        narratorLine: [
+            "The image softens, like a memory warming in your hands.",
+            "The Lovers honor your connections—to your past, your home, and the person you are becoming.",
+            "Moving forward doesn’t mean forgetting. It means making space for harmony between who you were and who you are now."
+        ],
+        postLine: ["Ah, the good old days. I miss who I was… but I’m learning to like who I’m becoming, too."]
+    },
+    {
+        name: "Speaker - 5. The Magician", // Replaced Page of Wands
+        tarotKey: 'tarot-5',
+        preLine: ["I should check the speaker, maybe Dot hid something there, too."],
+        objectLines: ["I knew it! Dot hid a card in the CDs!"],
+        narratorLine: [
+            "A restless spark flickers at your fingertips.",
+            "The Magician knows the sparks inside you that never quite became flames—the dreams you postponed.",
+            "The tools are still in your hands. It only needs a moment of your attention to catch fire again."
+        ],
+        postLine: ["I used to dream of being a musician... but playing for myself and my friends is still half the dream. It's enough."]
+    },
+    {
+        name: "Letter - 6. High Priestess", // Replaced 3 of Swords
+        tarotKey: 'tarot-6',
+        preLine: ["I just remember I need to get the watch from my desk drawer to go out.", "Hmm… something’s under the watch. An envelope?"],
+        objectLines: ["This letter… is from my old friend. When did we last talk to each other?"],
+        narratorLine: [
+            "A quiet ache pulses from the paper, tender and honest.",
+            "The High Priestess understands the things we keep hidden in the dark. Grief and memories change shape over time.",
+            "You are allowed to acknowledge the space they held and heal at your own pace."
+        ],
+        postLine: ["…I thought I was done hurting. Maybe healing just takes longer than I hoped. I hope she is doing well."]
+    },
+    {
+        name: "Cat Bed - 7. Strength", // Replaced 9 of Swords
+        tarotKey: 'tarot-7',
+        preLine: ["I also need to look for the cards in Dot’s favourite spot."],
+        objectLines: ["Yeah, I was right. She hid a card in her bed."],
+        narratorLine: [
+            "A shadow clings to the object, familiar but fading.",
+            "Strength isn't just about force; it's about the internal courage to face the shadows.",
+            "You survived the nights when thoughts felt heavy. You are learning how to breathe through them."
+        ],
+        postLine: ["I remember those nights... Dot helped me a lot. I’m still learning how to breathe through the heavy times."]
+    },
+    {
+        name: "Washing Machine - 8. The Hermit", // Replaced Ace of Pentacles
+        tarotKey: 'tarot-8',
+        preLine: ["I should go to another favourite place of Dot, the laundry room!"],
+        objectLines: ["Wow! Look at this card here, lying behind the door."],
+        narratorLine: [
+            "A small, steady promise rests in your palm.",
+            "The Hermit reminds you that solitude is not being lost. Sometimes you must go within to find the light.",
+            "What felt like a missed opportunity was actually space being made for a path that fits who you are now."
+        ],
+        postLine: ["Maybe the things I missed weren’t meant for me. I worry about my career, but maybe I just need to find my own light."]
+    },
+    {
+        name: "Plant Pot - 9. The Empress", // Replaced Queen of Pentacles
+        tarotKey: 'tarot-9',
+        preLine: ["There are three cards left. Where didn’t I look? Oh, the washroom."],
+        objectLines: ["Correct! Dot put another card in the plant pot."],
+        narratorLine: [
+            "A grounded, nurturing energy surrounds the object.",
+            "The Empress honors the life you've built, but whispers that your heart needs tending too.",
+            "You worked so hard until you were exhausted. Remember that nurturing yourself is as important as your responsibilities."
+        ],
+        postLine: ["I really forgot to take care of myself before. But I'll try my best on the interview next week and take it one step at a time."]
+    },
+    {
+        name: "Planner - 10. The Tower",
+        tarotKey: 'tarot-10',
+        preLine: ["Then, where should I go for the next card? Oh, the front door!"],
+        objectLines: ["Here we go, Dot slipped a card into the planner.", "Oops, The Tower?! Why did Dot pick the most dramatic one..."],
+        narratorLine: [
+            "A quiet shift trembles beneath the surface, not destructive, just honest.",
+            "The Tower reminds you that some structures fall not to ruin you, but to free you.",
+            "Sometimes life removes what was holding you back to make room for something true to grow."
+        ],
+        postLine: ["Well, I guess some things needed to fall apart so I could finally breathe. It made space for something better."]
+    },
+    {
+        name: "Camera - 11. The Star", // Replaced 3 of Cups
+        tarotKey: 'tarot-11',
+        preLine: ["Okay, only one left. I remember there was something next to my camera in the living room."],
+        objectLines: ["Yay, finally! The last piece of the tarot deck. It was on the coffee table!"],
+        narratorLine: [
+            "A warm, joyful hum rises from the object.",
+            "The Star represents hope and the connection that guides you through the dark.",
+            "You haven’t walked your path alone. Connection is magic, and joy grows when it is shared."
+        ],
+        postLine: ["I always have my beloved people who support me. I’m lucky to have them. Time to have breakfast and get ready!"]
     }
 ];
+
+// Total: 12 cards
+// I had to change some cards from the original version because I only have 12 Major Arcane cards for now.
