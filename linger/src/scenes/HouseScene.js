@@ -581,7 +581,7 @@ class HouseScene extends Phaser.Scene {
             else if (index === 2) { x = 1165; y = 225; w = 130; h = 60; } // 2: Bookshelf
             else if (index === 3) { x = 660; y = 340; w = 10; h = 10; }   // 3: Mug (Coffee Table)
             else if (index === 4) { x = 675; y = 220; w = 20; h = 20; }  // 4: Fridge Magnet
-            else if (index === 5) { x = 1053; y = 220; w = 75; h = 20; }  // 5: Speaker/CDs (Living Room)
+            else if (index === 5) { x = 572; y = 830; w = 20; h = 50; }  // 5: Bathroom Mirror (Bathroom)
             else if (index === 6) { x = 1392; y = 220; w = 105; h = 70; }  // 6: Letter (Desk Drawer)
             else if (index === 7) { x = 1473; y = 380; w = 50; h = 30; }  // 7: Cat Bed
             else if (index === 8) { x = 727; y = 850; w = 70; h = 70; } // 8: Washing Machine (Laundry)

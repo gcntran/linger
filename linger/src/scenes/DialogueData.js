@@ -75,13 +75,15 @@ export const questData = [
         name: "Bookshelf - Wheel of Fortune",
         tarotKey: 'tarot-2',
         preLine: ["I haven’t played any song for a while. Should I play something today?", "There are some music sheets I composed on my bookshelf... I can find some cards there, too."],
-        objectLines: ["Huh… Dot really hid something here, between my sketchbooks? You’re full of surprises."],
+        objectLines: ["Huh… Dot really hid something here, between my music books? You’re full of surprises."],
         narratorLine: [
             "The pages flutter softly, as if caught in a turning wind.",
             "Life turns in quiet circles, shifting when you least expect it. The Wheel reminds you that nothing stays still—not joy, not sorrow, not you.",
             "Trust that the turning is part of your story."
         ],
-        postLine: ["I think I’ve always been scared of change… but maybe it’s just another way of moving forward. My last sketch actually looks nice!"]
+        postLine: ["I think I’ve always been scared of change… but maybe it’s just another way of moving forward.", 
+            "My last song Head in the Clouds is about some moments I went through in the past, maybe I was trying to tell myself that change is not always bad.",
+            "Maybe I just need to trust the turning of the wheel."]
     },
     {
         name: "Mug - The Sun",
@@ -98,8 +100,9 @@ export const questData = [
     {
         name: "Fridge Magnet - The Lovers",
         tarotKey: 'tarot-4',
-        preLine: ["Wait, is that something by the fridge?"],
-        objectLines: ["This is a fridge magnet from my hometown… and a card under it. I need to train Dot not to touch the fridge."],
+        preLine: ["Wait, is that something on the fridge?"],
+        objectLines: ["This is a postcard magnet from my hometown… and a card was tuck behind it.", 
+                    "I have no idea how Dot could do this with the magnet, did she jump on the counter and put this card here?"],
         narratorLine: [
             "The image softens, like a memory warming in your hands.",
             "The Lovers honor your connections—to your past, your home, and the person you are becoming.",
@@ -108,22 +111,23 @@ export const questData = [
         postLine: ["Ah, the good old days. I miss who I was… but I’m learning to like who I’m becoming, too."]
     },
     {
-        name: "Speaker - The Magician", // Replaced Page of Wands
+        name: "Bathroom Mirror - The Magician", // Replaced Page of Wands
         tarotKey: 'tarot-5',
-        preLine: ["I should check the speaker, maybe Dot hid something there, too."],
-        objectLines: ["I knew it! Dot hid a card in the CDs!"],
+        preLine: ["I'm still sleepy. I should probably splash some water on my face to wake up. Let's check the bathroom."],
+        objectLines: ["Wait, there's something stuck to the corner of the mirror...", "The Magician. I wasn't expecting to see it reflecting back at me."],
         narratorLine: [
-            "A restless spark flickers at your fingertips.",
-            "The Magician knows the sparks inside you that never quite became flames—the dreams you postponed.",
-            "The tools are still in your hands. It only needs a moment of your attention to catch fire again."
+        "A restless spark flickers at your fingertips as you touch the glass.",
+        "The Magician knows the sparks inside you that never quite became flames—the dreams you postponed for 'later.'",
+        "The tools to create are already in your hands. It only takes a single moment of focus to catch fire again."
         ],
-        postLine: ["I used to dream of being a musician... but playing for myself and my friends is still half the dream. It's enough."]
+        postLine: ["I used to have so many big plans... I guess I don't have to wait for the 'perfect' time to start. I have what I need right now."]
     },
     {
         name: "Letter - High Priestess", // Replaced 3 of Swords
         tarotKey: 'tarot-6',
-        preLine: ["I just remember I need to get the watch from my desk drawer to go out.", "Hmm… something’s under the watch. An envelope?"],
-        objectLines: ["This letter… is from my old friend. When did we last talk to each other?"],
+        preLine: ["I just remember I need to get the watch from my desk drawer to go out."],
+        objectLines: ["Hmm… something’s under the watch. An envelope?",
+                    "This letter… is from my old friend. When did we last talk to each other?"],
         narratorLine: [
             "A quiet ache pulses from the paper, tender and honest.",
             "The High Priestess understands the things we keep hidden in the dark. Grief and memories change shape over time.",
@@ -156,7 +160,7 @@ export const questData = [
         postLine: ["Maybe the things I missed weren’t meant for me. I worry about my career, but maybe I just need to find my own light."]
     },
     {
-        name: "Plant Pot - 9. The Empress", // Replaced Queen of Pentacles
+        name: "Plant Pot - The Empress", // Replaced Queen of Pentacles
         tarotKey: 'tarot-9',
         preLine: ["There are three cards left. Where didn’t I look? Oh, the washroom."],
         objectLines: ["Correct! Dot put another card in the plant pot."],
@@ -168,7 +172,7 @@ export const questData = [
         postLine: ["I really forgot to take care of myself before. But I'll try my best on the interview next week and take it one step at a time."]
     },
     {
-        name: "Planner - 10. The Tower",
+        name: "Planner - The Tower",
         tarotKey: 'tarot-10',
         preLine: ["Then, where should I go for the next card? Oh, the storage room! Dot likes to hide things there."],
         objectLines: ["Here we go, Dot slipped a card under a cardboard box.", "Oops, The Tower?! Why did Dot pick the most dramatic one..."],
@@ -180,7 +184,7 @@ export const questData = [
         postLine: ["Well, I guess some things needed to fall apart so I could finally breathe. It made space for something better."]
     },
     {
-        name: "Camera - 11. The Star", // Replaced 3 of Cups
+        name: "Camera - The Star", // Replaced 3 of Cups
         tarotKey: 'tarot-11',
         preLine: ["Okay, only one left. I remember there was something next to my camera in the living room."],
         objectLines: ["Yay, finally! The last piece of the tarot deck. It was on the coffee table!"],
@@ -189,7 +193,7 @@ export const questData = [
             "The Star represents hope and the connection that guides you through the dark.",
             "You haven’t walked your path alone. Connection is magic, and joy grows when it is shared."
         ],
-        postLine: ["I always have my beloved people who support me. I’m lucky to have them. Time to have breakfast and get ready!"]
+        postLine: ["I always have my beloved people who support me. I’m lucky to have them. Time to get ready and go to see my friends!"]
     }
 ];
 
