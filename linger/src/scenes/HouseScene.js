@@ -553,7 +553,7 @@ class HouseScene extends Phaser.Scene {
         // We remove the backgroundColor and padding since the PNG handles the visuals now
         this.cardCounterText = this.add.text(116, 65, `0/12`, {
             fontSize: '36px', 
-            fill: '#2F3A56', 
+            fill: '#ffffff', 
             fontFamily: 'Georgia, serif', 
             fontStyle: 'bold'
         })
@@ -759,18 +759,6 @@ class HouseScene extends Phaser.Scene {
             .setInteractive({ useHandCursor: true });
         this.physics.add.existing(trigger, true);
 
-        // --- HOVER LOGIC ---
-        trigger.on('pointerover', () => {
-            // Swap to custom hover cursor
-            this.input.setDefaultCursor('url(assets/ui/cursors/cursor-hover.png), pointer');
-            
-            // console.log(`Hovering over: ${speaker}'s item`); 
-        });
-
-        trigger.on('pointerout', () => {
-            // Swap back to custom default cursor
-            this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
-        });
 
         this.interactableList.push({ 
             trigger: trigger, 
