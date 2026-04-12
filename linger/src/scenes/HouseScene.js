@@ -170,6 +170,7 @@ class HouseScene extends Phaser.Scene {
         const storageZones = [
             { x: 1132, y: 760, w: 20, h: 160 }, // Laundry storage
             { x: 1223, y: 750, w: 40, h: 10 },  // Box
+            { x: 1210, y: 790, w: 40, h: 10 },  // Box
         ];
         storageZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
@@ -575,18 +576,18 @@ class HouseScene extends Phaser.Scene {
         this.interactableList = [];
         this.questData.forEach((data, index) => {
             let x = 0, y = 0, w = 50, h = 50; 
-            if (index === 0) { x = 1620; y = 720; w = 100; h = 80; }      // 0: Scarf (Shoe Cabinet)
+            if (index === 0) { x = 830; y = 735; w = 50; h = 75; }      // 0: Scarf (Shoe Cabinet)
             else if (index === 1) { x = 1367; y = 422; w = 95; h = 40; }  // 1: Keyboard (Desk)
             else if (index === 2) { x = 1165; y = 225; w = 130; h = 60; } // 2: Bookshelf
-            else if (index === 3) { x = 930; y = 345; w = 60; h = 50; }   // 3: Mug (Coffee Table)
-            else if (index === 4) { x = 150; y = 350; w = 80; h = 100; }  // 4: Fridge Magnet
-            else if (index === 5) { x = 450; y = 650; w = 100; h = 80; }  // 5: Speaker/CDs (Living Room)
-            else if (index === 6) { x = 1450; y = 320; w = 70; h = 50; }  // 6: Letter (Desk Drawer)
-            else if (index === 7) { x = 1750; y = 600; w = 90; h = 70; }  // 7: Cat Bed
-            else if (index === 8) { x = 250; y = 850; w = 120; h = 120; } // 8: Washing Machine (Laundry)
-            else if (index === 9) { x = 750; y = 850; w = 80; h = 100; }  // 9: Plant Pot (Washroom)
-            else if (index === 10) { x = 1780; y = 720; w = 70; h = 100; }// 10: Planner (By Front Door)
-            else if (index === 11) { x = 1050; y = 345; w = 70; h = 60; } // 11: Camera (On Table)
+            else if (index === 3) { x = 660; y = 340; w = 10; h = 10; }   // 3: Mug (Coffee Table)
+            else if (index === 4) { x = 675; y = 220; w = 20; h = 20; }  // 4: Fridge Magnet
+            else if (index === 5) { x = 1053; y = 220; w = 75; h = 20; }  // 5: Speaker/CDs (Living Room)
+            else if (index === 6) { x = 1392; y = 220; w = 105; h = 70; }  // 6: Letter (Desk Drawer)
+            else if (index === 7) { x = 1473; y = 380; w = 50; h = 30; }  // 7: Cat Bed
+            else if (index === 8) { x = 727; y = 850; w = 70; h = 70; } // 8: Washing Machine (Laundry)
+            else if (index === 9) { x = 613; y = 700; w = 26; h = 30; }  // 9: Plant Pot (Washroom)
+            else if (index === 10) { x = 1065; y = 722; w = 50; h = 170; }// 10: Cardboard Box (In Storage Room)
+            else if (index === 11) { x = 930; y = 345; w = 100; h = 40; } // 11: Camera (On Table)
             
             this.addInteractable(x, y, w, h, data.objectLines, 'Rem');
         });
@@ -792,7 +793,7 @@ class HouseScene extends Phaser.Scene {
 
             this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
             this.dialogBg.setTexture('dialogue-box'); 
-            this.dialogText.setText(currentQuest.narratorLine[0]);
+            this.dialogText.setText(currentQuest.narratorLine[0]).setStyle({ fontStyle: 'italic' });
             this.dialogArrow.setVisible(true);
         } 
         // After reacting to the card, show the post-reaction line
