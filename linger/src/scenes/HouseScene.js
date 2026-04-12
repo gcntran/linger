@@ -16,7 +16,9 @@ class HouseScene extends Phaser.Scene {
 
         // --- 1. BACKGROUND & LAYOUT ---
 
-        const layout = this.add.image(0, 0, 'layout-house').setOrigin(0, 0);
+        const layout = this.add.image(0, 0, 'layout-house')
+        .setOrigin(0, 0);
+        layout.setDepth(0);
         layout.setDisplaySize(width, height);
 
         // Transition from IntroScene
@@ -129,6 +131,7 @@ class HouseScene extends Phaser.Scene {
 
         // Living Room Area
         const livingZones = [
+            { x: 930, y: 230, w:70, h: 50 },    // Dot
             { x: 820, y: 240, w: 50, h: 40 },   // End table
             { x: 930, y: 220, w: 150, h: 70 },  // Sofa top
             { x: 1057, y: 335, w: 68, h: 115 }, // Sofa right
@@ -221,7 +224,7 @@ class HouseScene extends Phaser.Scene {
         this.player.body.setSize(30, 35);
         this.player.body.setOffset(17, 44);
         this.player.setCollideWorldBounds(true);
-        this.player.setDepth(10); 
+        this.player.setDepth(1); 
 
         // Rem's Animations
         const anims = [
@@ -253,7 +256,7 @@ class HouseScene extends Phaser.Scene {
         this.dot.setScale(0.8);
         this.dot.setImmovable(true);
         this.dot.body.setAllowGravity(false);
-        this.dot.setDepth(150);
+        this.dot.setDepth(0);
 
         // Dot's Animations
         if (!this.anims.exists('dot-idle')) {
