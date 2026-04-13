@@ -11,7 +11,7 @@ class HouseScene extends Phaser.Scene {
         console.log("HouseScene loaded");
 
         // Set Cursor
-        this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
+        // this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
 
 
         // --- 1. BACKGROUND & LAYOUT ---
