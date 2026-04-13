@@ -126,8 +126,8 @@ export const questData = [
         name: "Letter - High Priestess", // Replaced 3 of Swords
         tarotKey: 'tarot-6',
         preLine: ["I just remember I need to get the watch from my desk drawer to go out."],
-        objectLines: ["Hmm… something’s under the watch. An envelope?",
-                    "This letter… is from my old friend. When did we last talk to each other?"],
+        objectLines: ["Hmm… there's an envelope next to the watch. Is this my water bill this month?",
+                    "Oh, I remember I was organizing the drawer and put it here last night. This letter… is from my old friend. When did we last talk to each other?"],
         narratorLine: [
             "A quiet ache pulses from the paper, tender and honest.",
             "The High Priestess understands the things we keep hidden in the dark. Grief and memories change shape over time.",
