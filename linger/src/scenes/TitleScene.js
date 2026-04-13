@@ -13,7 +13,6 @@ class TitleScene extends Phaser.Scene {
         const fsButton = this.add.text(1720, 20, 'Fullscreen', {
             fontSize: '20px', 
             color: '#cccccc', 
-            backgroundColor: '#333',
         })
         .setPadding(10)
         .setInteractive({ useHandCursor: true })
