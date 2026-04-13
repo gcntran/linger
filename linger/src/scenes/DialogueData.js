@@ -150,7 +150,8 @@ export const questData = [
     {
         name: "Washing Machine - The Hermit", // Replaced Ace of Pentacles
         tarotKey: 'tarot-8',
-        preLine: ["I should go to another favourite place of Dot, the laundry room!"],
+        preLine: ["I should go to another favourite place of Dot, the laundry room!", 
+                    "Dot likes watching the washer spinning, so she usually comes here. She might tuck the cards in here. "],
         objectLines: ["Wow! Look at this card here, lying in front of the washer."],
         narratorLine: [
             "A small, steady promise rests in your palm.",
@@ -186,8 +187,8 @@ export const questData = [
     {
         name: "Camera - The Star", // Replaced 3 of Cups
         tarotKey: 'tarot-11',
-        preLine: ["Okay, only one left. I remember there was something next to my camera in the living room."],
-        objectLines: ["Yay, finally! The last piece of the tarot deck. It was on the coffee table!"],
+        preLine: ["Okay, only one left. I just remembered there was something next to my camera in the living room."],
+        objectLines: ["Yay, finally! The last piece of the tarot deck. It was on the coffee table! Why didn't I check this at first?"],
         narratorLine: [
             "A warm, joyful hum rises from the object.",
             "The Star represents hope and the connection that guides you through the dark.",

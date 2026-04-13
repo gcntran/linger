@@ -293,7 +293,6 @@ class HouseScene extends Phaser.Scene {
             sprite: this.dot,
             isNear: false,
             speaker: 'Dot', // This triggers the meow sound 
-            lines: ["*Purr...* (She looks at you expectantly.)"]
         });
 
         // Dot's Animations
@@ -631,7 +630,7 @@ class HouseScene extends Phaser.Scene {
         this.tarotCard = this.add.image(1920 / 2, 1080 / 2 - 50, 'tarot-0')
             .setScrollFactor(0)
             .setDepth(300)
-            .setScale(3)
+            .setScale(3.5)
             .setVisible(false);
 
         // Tell main camera to ignore all UI elements
