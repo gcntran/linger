@@ -22,9 +22,9 @@ class HouseScene extends Phaser.Scene {
         layout.setDisplaySize(width, height);
 
         // Load the doors
-        this.bathDoor = this.add.image(540, 635, 'door').setDepth(2); 
-        this.laundryDoor = this.add.image(727, 635, 'door').setDepth(2);
-        this.storageDoor = this.add.image(1178, 635, 'door').setDepth(2);
+        this.bathDoor = this.add.image(540, 665, 'door').setDepth(2); 
+        this.laundryDoor = this.add.image(727, 665, 'door').setDepth(2);
+        this.storageDoor = this.add.image(1178, 665, 'door').setDepth(2);
 
         // Load the ceiling layout
         const ceiling = this.add.image(0, 0, 'layout-ceiling')
@@ -149,7 +149,7 @@ class HouseScene extends Phaser.Scene {
             { x: 1057, y: 335, w: 68, h: 115 }, // Sofa right
             { x: 928, y: 422, w: 77, h: 32 },   // Chair
             { x: 930, y: 345, w: 100, h: 40 },  // Coffee table
-            // I need to add a TV here
+            { x: 780, y: 340, w: 20, h: 90 },  // TV stand
             { x: 1000, y: 400, w: 35, h: 60 },  // Floor lamp
             { x: 1053, y: 220, w: 75, h: 20 },  // Retro speaker
             { x: 1165, y: 225, w: 130, h: 22 }, // Bookshelf
@@ -223,10 +223,10 @@ class HouseScene extends Phaser.Scene {
         // --- 3. DOORS LOGIC ---
 
         this.doorList = [];
-        this.addDoor(540, 635, 80, 150, 'bathroom');
-        this.addDoor(727, 635, 80, 150, 'laundry');
-        this.addDoor(1252, 355, 20, 110, 'bedroom');
-        this.addDoor(1178, 635, 80, 150, 'storage');
+        this.addDoor(540, 635, 80, 150, this.bathDoor);
+        this.addDoor(727, 635, 80, 150, this.laundryDoor);
+        this.addDoor(1252, 355, 20, 110, null); // Null because the bedroom has no image
+        this.addDoor(1178, 635, 80, 150, this.storageDoor);
 
 
         // --- 4. CHARACTERS SETUP & SFX ---
@@ -305,7 +305,7 @@ class HouseScene extends Phaser.Scene {
         this.input.on('pointerdown', (pointer) => {
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
             
-        // --- THE FINAL DOOR & CREDITS LOGIC ---
+        // --- A. THE FINAL DOOR & CREDITS LOGIC ---
         // This handles the transition from clicking the door to the ending scene
         if (this.storyPhase === 'FINAL_DOOR_WAIT') {
         // Approximate coordinates for the main front door (bottom center)
@@ -332,6 +332,26 @@ class HouseScene extends Phaser.Scene {
         }
     }
 
+        // --- B. NEW: CLICK TO OPEN REGULAR DOORS ---
+        let doorClicked = false;
+        this.doorList.forEach(door => {
+            // If Rem is near and the door is currently closed
+            if (door.isNear && !door.isOpen) {
+                // Check if the click was inside the door's area
+                // (We check the wall bounds if the door has no image, like the bedroom)
+                const bounds = door.visual ? door.visual.getBounds() : door.wall.getBounds();
+                
+                if (Phaser.Geom.Rectangle.Contains(bounds, pointer.worldX, pointer.worldY)) {
+                    this.openDoor(door);
+                    doorClicked = true;
+                }
+            }
+        });
+
+        // If we opened a door, stop here so we don't trigger other clicks
+        if (doorClicked) return;
+
+        // --- C. CLICK TO ADVANCE CREDITS SEQUENCE ---
         if (this.storyPhase === 'CREDITS_SEQUENCE') {
         if (this.clickSound) this.clickSound.play();
             this.finalLineIndex++;
@@ -423,13 +443,6 @@ class HouseScene extends Phaser.Scene {
             }
         }
 
-        // C. DOOR LOGIC
-        this.doorList.forEach(door => {
-        if (door.isNear && door.isOpen === false) {
-            this.openDoor(door);
-            }
-        });
-
         // D. INTERACTABLE OBJECT LOGIC (ONLY IN PRE_SEARCH PHASE)
         if (this.questState === 'PRE_SEARCH') {
             this.interactableList.forEach((item, index) => {
@@ -472,6 +485,9 @@ class HouseScene extends Phaser.Scene {
 
         const worldItems = [
             layout, 
+            this.bathDoor,
+            this.laundryDoor,
+            this.storageDoor,
             ceiling,
             this.player, 
             this.dot, 
@@ -655,6 +671,13 @@ class HouseScene extends Phaser.Scene {
             item.isNear = Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), item.trigger.getBounds());
         });
 
+        // // DOOR LOGIC
+        // this.doorList.forEach(door => {
+        //     if (door.isNear && door.isOpen === false) {
+        //     this.openDoor(door);
+        //     }
+        // });
+
         // --- 4. MOVEMENT LOGIC ---
         const speed = 170;
         let vx = 0;
@@ -732,27 +755,41 @@ class HouseScene extends Phaser.Scene {
     }
 
     // --- 1. ADD DOOR WITH TRIGGER ZONE ---
-    addDoor(x, y, w, h) {
+    addDoor(x, y, w, h, doorImage) {
+        // Invisible collider
         let wall = this.add.zone(x, y, w, h);
         this.physics.add.existing(wall, true);
         this.walls.add(wall);
 
-        let triggerW = (h > w) ? w + 60 : w + 40;
-        let triggerH = (h > w) ? h + 20 : h + 30;
-
-        let trigger = this.add.zone(x, y, triggerW, triggerH);
+        let trigger = this.add.zone(x, y, w + 5, h + 5);
         this.physics.add.existing(trigger, true);
-
-        this.doorList.push({ wall: wall, trigger: trigger, isOpen: false, isNear: false });
+    
+        this.doorList.push({ 
+            wall,
+            visual: doorImage,
+            trigger,
+            isOpen: false,
+            isNear: false  
+        });
     }
 
     // --- 2. OPEN DOOR BY DISABLING THE WALL COLLIDOR ---
     openDoor(door) {
-        if (door.wall && door.wall.active) {
+        if (door.wall && door.wall.active && !door.isOpen) {
             door.isOpen = true;
+    
             this.sound.play('door-opening', { volume: 0.1 });
-            door.wall.body.enable = false;
-
+    
+            // Fade OUT (disappear)
+            this.tweens.add({
+                targets: [door.visual],
+                alpha: 0,
+                duration: 200,
+                onComplete: () => {
+                    door.wall.body.enable = false; // disable AFTER fade
+                }
+            });
+    
             this.time.delayedCall(3000, () => {
                 this.closeDoor(door);
             });
@@ -763,12 +800,24 @@ class HouseScene extends Phaser.Scene {
     closeDoor(door) {
         if (door.wall) {
             door.isOpen = false;
+    
             this.sound.play('door-closing', { volume: 0.1 });
+    
+            // Enable collision first
             door.wall.body.enable = true;
+    
+            // Fade IN (reappear)
+            this.tweens.add({
+                targets: [door.visual],
+                alpha: 1, // re-appear
+                duration: 200
+            });
+    
             this.walls.refresh();
         }
     }
-    
+
+
 
     /// --- INTERACTABLE LOGIC ---
 
