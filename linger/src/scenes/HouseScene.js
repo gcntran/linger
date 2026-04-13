@@ -555,9 +555,9 @@ class HouseScene extends Phaser.Scene {
 
         // Fullscreen Button (from Arlin's suggestion)
         const fsButton = this.add.text(1720, 20, 'Fullscreen', {
-            fontSize: '20px',
-            color: '#ffffff',
-            backgroundColor: '#333'
+            fontSize: '30px',
+            color: '#2F3A56',
+            backgroundColor: '#DAC0A0'
         })
             .setPadding(10)
             .setInteractive({ useHandCursor: true })
@@ -576,9 +576,10 @@ class HouseScene extends Phaser.Scene {
 
         // INSTRUCTION BOX SETUP 
         // Add the instruction text
-        this.instructionText = this.add.text(1920 / 2, 40, 'Click any object to interact', {
-            fontSize: '20px',
-            color: '#ffffff',
+        this.instructionText = this.add.text(1920 / 2, 40, 'WASD to move | Click any object to interact | Enjoy the game!', {
+            fontSize: '30px',
+            color: '#2F3A56',
+            backgroundColor: '#DAC0A0'
         })
             .setPadding(10)
             .setOrigin(0.5)
