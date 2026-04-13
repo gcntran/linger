@@ -55,12 +55,12 @@ class EndingScene extends Phaser.Scene {
 
         // 3. CREDITS TEXT
         const credits = this.add.text(width / 2, height * 0.5, 
-            'A Capstone Project by Gia Tran\n\n' +
-            'Art, Code, and Narrative Design\n' +
-            'Built with Phaser 3\n\n' +
-            'Thank you for finding your way home.', 
+            'A Project by Gia Tran\n\n' +
+            'Built with Phaser\n\n' +
+            'Create with Aseprite\n\n' +
+            'Thank you for playing!', 
             {
-                fontSize: '24px',
+                fontSize: '30px',
                 color: '#cccccc',
                 align: 'center',
                 lineSpacing: 10
