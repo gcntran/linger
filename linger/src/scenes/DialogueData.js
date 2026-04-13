@@ -138,8 +138,8 @@ export const questData = [
     {
         name: "Cat Bed - Strength", // Replaced 9 of Swords
         tarotKey: 'tarot-7',
-        preLine: ["I also need to look for the cards in Dot’s favourite spot."],
-        objectLines: ["Yeah, I was right. She hid a card in her bed."],
+        preLine: ["I also need to look for the cards in Dot’s bed."],
+        objectLines: ["Yeah, I was right. She hid a card under her toy here."],
         narratorLine: [
             "A shadow clings to the object, familiar but fading.",
             "Strength isn't just about force; it's about the internal courage to face the shadows.",
@@ -150,7 +150,7 @@ export const questData = [
     {
         name: "Washing Machine - The Hermit", // Replaced Ace of Pentacles
         tarotKey: 'tarot-8',
-        preLine: ["I should go to another favourite place of Dot, the laundry room!", 
+        preLine: ["I should go to Dot's favourite place, the laundry room!", 
                     "Dot likes watching the washer spinning, so she usually comes here. She might tuck the cards in here. "],
         objectLines: ["Wow! Look at this card here, lying in front of the washer."],
         narratorLine: [
@@ -163,8 +163,8 @@ export const questData = [
     {
         name: "Plant Pot - The Empress", // Replaced Queen of Pentacles
         tarotKey: 'tarot-9',
-        preLine: ["There are three cards left. Where didn’t I look? Oh, the washroom."],
-        objectLines: ["Correct! Dot put another card in the plant pot."],
+        preLine: ["I just realized that I forgot to water the bathroom's plant yesterday. I should check the plant pot if dot hid something there."],
+        objectLines: ["Correct! Dot put The Empress under the leaves."],
         narratorLine: [
             "A grounded, nurturing energy surrounds the object.",
             "The Empress honors the life you've built, but whispers that your heart needs tending too.",
@@ -187,8 +187,10 @@ export const questData = [
     {
         name: "Camera - The Star", // Replaced 3 of Cups
         tarotKey: 'tarot-11',
-        preLine: ["Okay, only one left. I just remembered there was something next to my camera in the living room."],
-        objectLines: ["Yay, finally! The last piece of the tarot deck. It was on the coffee table! Why didn't I check this at first?"],
+        preLine: ["Okay, only one left. I remembered there was something next to my camera on the coffee table."],
+        objectLines: ["Yay, finally! The last piece of the tarot deck. Why didn't I check this at first? It's just right in front of Dot.",
+                        "Anyway, let's see what card is this... Oh, The Star! I love this card. It’s one of my favorites."
+        ],
         narratorLine: [
             "A warm, joyful hum rises from the object.",
             "The Star represents hope and the connection that guides you through the dark.",
