@@ -11,7 +11,7 @@ class HouseScene extends Phaser.Scene {
         console.log("HouseScene loaded");
 
         // Set Cursor
-        // this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
+        this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
 
 
         // --- 1. BACKGROUND & LAYOUT ---
@@ -574,19 +574,11 @@ class HouseScene extends Phaser.Scene {
             else this.scale.startFullscreen();
         });
 
-        // --- INSTRUCTION BOX SETUP ---
-        // Detect if the user is on mobile/tablet or desktop
-        const isMobile = !this.sys.game.device.os.desktop;
-
-        // Choose the message based on the device
-        const message = isMobile 
-            ? 'Tap & hold to move | Tap objects to interact' 
-            : 'WASD & drag the cursor to move | Click objects to interact';
-
-        this.instructionText = this.add.text(1920 / 2, 40, message, {
-            fontSize: isMobile ? '24px' : '20px', // Slightly larger for mobile screens
+        // INSTRUCTION BOX SETUP 
+        // Add the instruction text
+        this.instructionText = this.add.text(1920 / 2, 40, 'Click any object to interact', {
+            fontSize: '20px',
             color: '#ffffff',
-            backgroundColor: 'rgba(0,0,0,0.3)', 
         })
             .setPadding(10)
             .setOrigin(0.5)
@@ -595,6 +587,7 @@ class HouseScene extends Phaser.Scene {
 
         // Ensure the main camera ignores these UI elements
         this.cameras.main.ignore([this.instructionText]);
+
 
         // --- 8. PROPER UI SETUP (Must happen BEFORE showStoryDialogue) ---
 
@@ -749,7 +742,6 @@ class HouseScene extends Phaser.Scene {
         let vx = 0;
         let vy = 0;
 
-        // DESKTOP WASD AND CURSOR CLICK
         if (this.wasd.left.isDown) {
             vx = -speed;
             if (this.anims.exists('walk-left')) this.player.anims.play('walk-left', true);
@@ -766,39 +758,7 @@ class HouseScene extends Phaser.Scene {
             if (vx === 0 && this.anims.exists('walk-down')) this.player.anims.play('walk-down', true);
         }
 
-        // MOBILE TAP TO MOVE
-        if (vx === 0 && vy === 0 && this.input.activePointer.isDown && !this.dialogBg.visible) {
-            const pointer = this.input.activePointer;
-            
-            // Calculate distance between player and tap
-            const distanceX = pointer.worldX - this.player.x;
-            const distanceY = pointer.worldY - this.player.y;
-
-            // Move only if the tap is far enough away (prevents jittering)
-            if (Math.abs(distanceX) > 10) {
-                vx = distanceX > 0 ? speed : -speed;
-                if (vx > 0) this.player.anims.play('walk-right', true);
-                else this.player.anims.play('walk-left', true);
-            }
-            
-            if (Math.abs(distanceY) > 10) {
-                vy = distanceY > 0 ? speed : -speed;
-                // Only play up/down animation if we aren't already moving left/right
-                if (vx === 0) {
-                    if (vy > 0) this.player.anims.play('walk-down', true);
-                    else this.player.anims.play('walk-up', true);
-                }
-            }
-        }
-
         this.player.setVelocity(vx, vy);
-
-        // --- AUTO-HIDE INSTRUCTION AFTER REM MOVES ---
-        // If the instruction text exists and Rem starts moving, remove it
-        if (this.instructionText && (vx !== 0 || vy !== 0)) {
-            this.instructionText.destroy(); 
-            this.instructionText = null; // Clear the reference so it doesn't keep checking
-        }
 
         // --- 5. IDLE & SOUND LOGIC ---
         if (vx === 0 && vy === 0) {

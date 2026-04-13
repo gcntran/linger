@@ -18,7 +18,7 @@ body {
 /* Cursors */
 /* This sets the default cursor for the entire game */
 canvas {
-    cursor: url('/assets/ui/cursors/cursor-default.png') 32 32, auto !important;
+    cursor: url('assets/ui/cursors/cursor-default.png') 32 32, auto !important;
 }
 
 /* This automatically swaps the cursor when hovering over 
