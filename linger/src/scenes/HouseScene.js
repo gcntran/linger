@@ -225,6 +225,7 @@ class HouseScene extends Phaser.Scene {
         this.addDoor(540, 635, 80, 150, this.bathDoor);
         this.addDoor(727, 635, 80, 150, this.laundryDoor);
         this.addDoor(1252, 355, 20, 110, null); // Null because the bedroom has no image
+        this.addDoor(950, 910, 120, 30, null); // Null because the main door has no image
         this.addDoor(1178, 635, 80, 150, this.storageDoor);
 
         // Add hover effects for all doors
@@ -540,6 +541,20 @@ class HouseScene extends Phaser.Scene {
             if (this.scale.isFullscreen) this.scale.stopFullscreen();
             else this.scale.startFullscreen();
         });
+
+        // INSTRUCTION BOX SETUP 
+        // Add the instruction text
+        this.instructionText = this.add.text(1920 / 2, 40, 'Click any object to interact', {
+            fontSize: '20px', 
+            color: '#ffffff', 
+        })
+        .setPadding(10)
+        .setOrigin(0.5)
+        .setScrollFactor(0)
+        .setDepth(1001);
+
+// Ensure the main camera ignores these UI elements
+this.cameras.main.ignore([this.instructionText]);
 
 
         // --- 8. PROPER UI SETUP (Must happen BEFORE showStoryDialogue) ---
