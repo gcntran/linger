@@ -83,6 +83,9 @@ class AssetLoader extends Phaser.Scene {
 
         // Background music
         this.load.audio('bgm', 'assets/sounds/bgm.mp3'); // src: https://www.youtube.com/watch?v=gH9-jGaMIgA
+
+        // Dot's voice
+        this.load.audio('dot-meow', 'assets/sounds/meow.mp3'); // src: https://pixabay.com/sound-effects/nature-cat-meow-9-fx-306185/
         
         // Footstep sound effect
         this.load.audio('walk', 'assets/sounds/footstep-sfx.m4a');
