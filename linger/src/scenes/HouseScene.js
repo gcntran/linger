@@ -22,9 +22,9 @@ class HouseScene extends Phaser.Scene {
         layout.setDisplaySize(width, height);
 
         // Load the doors
-        this.bathDoor = this.add.image(540, 665, 'door').setDepth(2); 
-        this.laundryDoor = this.add.image(727, 665, 'door').setDepth(2);
-        this.storageDoor = this.add.image(1178, 665, 'door').setDepth(2);
+        this.bathDoor = this.add.image(540, 665, 'door').setDepth(1); 
+        this.laundryDoor = this.add.image(727, 665, 'door').setDepth(1);
+        this.storageDoor = this.add.image(1178, 665, 'door').setDepth(1);
 
         // Load the ceiling layout
         const ceiling = this.add.image(0, 0, 'layout-ceiling')
@@ -220,13 +220,28 @@ class HouseScene extends Phaser.Scene {
         });
 
 
-        // --- 3. DOORS LOGIC ---
-
+        // --- 3. ADD DOORS ---
         this.doorList = [];
         this.addDoor(540, 635, 80, 150, this.bathDoor);
         this.addDoor(727, 635, 80, 150, this.laundryDoor);
         this.addDoor(1252, 355, 20, 110, null); // Null because the bedroom has no image
         this.addDoor(1178, 635, 80, 150, this.storageDoor);
+
+        // Add hover effects for all doors
+        this.doorList.forEach(door => {
+        // Change to pointer (hand) when hovering over the door zone
+        door.trigger.on('pointerover', () => {
+        // Only show hand cursor if the door is closed
+        if (!door.isOpen) {
+            this.input.setDefaultCursor('pointer');
+            }
+        });
+
+        // Change back to default cursor when leaving
+        door.trigger.on('pointerout', () => {
+            this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
+        });
+    });
 
 
         // --- 4. CHARACTERS SETUP & SFX ---
@@ -236,7 +251,7 @@ class HouseScene extends Phaser.Scene {
         this.player.body.setSize(30, 35);
         this.player.body.setOffset(17, 44);
         this.player.setCollideWorldBounds(true);
-        this.player.setDepth(1); 
+        this.player.setDepth(2); 
 
         // Rem's Animations
         const anims = [
@@ -293,7 +308,6 @@ class HouseScene extends Phaser.Scene {
         
 
         // --- 5. INPUT & CONTROLS ---
-
         this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -472,7 +486,6 @@ class HouseScene extends Phaser.Scene {
 
 
         // --- 7. CAMERAS ---
-
         this.cameras.main.startFollow(this.player);
         this.cameras.main.setBounds(0, 0, 1920, 1080);
         this.cameras.main.setZoom(2);
@@ -597,7 +610,6 @@ class HouseScene extends Phaser.Scene {
 
 
         // --- 8. DATA INITIALIZATION & STORY KICKOFF ---
-
         this.questData = questData;
         this.introLines = storyData.intro;
         this.wakeupLines = storyData.wakeup;
@@ -761,7 +773,7 @@ class HouseScene extends Phaser.Scene {
         this.physics.add.existing(wall, true);
         this.walls.add(wall);
 
-        let trigger = this.add.zone(x, y, w + 5, h + 5);
+        let trigger = this.add.zone(x, y, w + 10, h + 10).setInteractive();
         this.physics.add.existing(trigger, true);
     
         this.doorList.push({ 
