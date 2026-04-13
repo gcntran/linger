@@ -39,6 +39,9 @@ class AssetLoader extends Phaser.Scene {
         // Load the ceiling layout
         this.load.image('layout-ceiling', 'assets/environment/layout-ceiling.png');
 
+        // Load the door
+        this.load.image('door', 'assets/environment/door.png');
+
         // Load the spritesheet for Rem's animation
         this.load.spritesheet('player', 'assets/characters/rem.png', { 
             frameWidth: 64, 
