@@ -574,11 +574,19 @@ class HouseScene extends Phaser.Scene {
             else this.scale.startFullscreen();
         });
 
-        // INSTRUCTION BOX SETUP 
-        // Add the instruction text
-        this.instructionText = this.add.text(1920 / 2, 40, 'Click any object to interact', {
-            fontSize: '20px',
+        // --- INSTRUCTION BOX SETUP ---
+        // Detect if the user is on mobile/tablet or desktop
+        const isMobile = !this.sys.game.device.os.desktop;
+
+        // Choose the message based on the device
+        const message = isMobile 
+            ? 'Tap & hold to move | Tap objects to interact' 
+            : 'WASD & drag the cursor to move | Click objects to interact';
+
+        this.instructionText = this.add.text(1920 / 2, 40, message, {
+            fontSize: isMobile ? '24px' : '20px', // Slightly larger for mobile screens
             color: '#ffffff',
+            backgroundColor: 'rgba(0,0,0,0.3)', 
         })
             .setPadding(10)
             .setOrigin(0.5)
@@ -587,7 +595,6 @@ class HouseScene extends Phaser.Scene {
 
         // Ensure the main camera ignores these UI elements
         this.cameras.main.ignore([this.instructionText]);
-
 
         // --- 8. PROPER UI SETUP (Must happen BEFORE showStoryDialogue) ---
 
@@ -785,6 +792,13 @@ class HouseScene extends Phaser.Scene {
         }
 
         this.player.setVelocity(vx, vy);
+
+        // --- AUTO-HIDE INSTRUCTION AFTER REM MOVES ---
+        // If the instruction text exists and Rem starts moving, remove it
+        if (this.instructionText && (vx !== 0 || vy !== 0)) {
+            this.instructionText.destroy(); 
+            this.instructionText = null; // Clear the reference so it doesn't keep checking
+        }
 
         // --- 5. IDLE & SOUND LOGIC ---
         if (vx === 0 && vy === 0) {
