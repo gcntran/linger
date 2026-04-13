@@ -319,18 +319,11 @@ class HouseScene extends Phaser.Scene {
 
 
         // --- 5. INPUT & CONTROLS ---
-        this.controls = this.input.keyboard.addKeys({
+        this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             left: Phaser.Input.Keyboard.KeyCodes.A,
             down: Phaser.Input.Keyboard.KeyCodes.S,
             right: Phaser.Input.Keyboard.KeyCodes.D,
-            // Arrow keys
-            arrowUp: Phaser.Input.Keyboard.KeyCodes.UP,
-            arrowLeft: Phaser.Input.Keyboard.KeyCodes.LEFT,
-            arrowDown: Phaser.Input.Keyboard.KeyCodes.DOWN,
-            arrowRight: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-            // Spacebar to interact (more optional than click)
-            space: Phaser.Input.Keyboard.KeyCodes.SPACE
         });
 
         // Central Click Listener
@@ -583,7 +576,7 @@ class HouseScene extends Phaser.Scene {
 
         // INSTRUCTION BOX SETUP 
         // Add the instruction text
-        this.instructionText = this.add.text(1920 / 2, 40, 'WASD/Arrows to move • Space or Click to interact', {
+        this.instructionText = this.add.text(1920 / 2, 40, 'Click any object to interact', {
             fontSize: '20px',
             color: '#ffffff',
         })
@@ -749,22 +742,46 @@ class HouseScene extends Phaser.Scene {
         let vx = 0;
         let vy = 0;
 
-
-        // WASD + Arrow keys
-        if (this.controls.left.isDown || this.controls.arrowLeft.isDown) {
+        // DESKTOP WASD AND CURSOR CLICK
+        if (this.wasd.left.isDown) {
             vx = -speed;
-            this.player.anims.play('walk-left', true);
-        } else if (this.controls.right.isDown || this.controls.arrowRight.isDown) {
+            if (this.anims.exists('walk-left')) this.player.anims.play('walk-left', true);
+        } else if (this.wasd.right.isDown) {
             vx = speed;
-            this.player.anims.play('walk-right', true);
+            if (this.anims.exists('walk-right')) this.player.anims.play('walk-right', true);
         }
-        
-        if (this.controls.up.isDown || this.controls.arrowUp.isDown) {
+
+        if (this.wasd.up.isDown) {
             vy = -speed;
-            if (vx === 0) this.player.anims.play('walk-up', true);
-        } else if (this.controls.down.isDown || this.controls.arrowDown.isDown) {
+            if (vx === 0 && this.anims.exists('walk-up')) this.player.anims.play('walk-up', true);
+        } else if (this.wasd.down.isDown) {
             vy = speed;
-            if (vx === 0) this.player.anims.play('walk-down', true);
+            if (vx === 0 && this.anims.exists('walk-down')) this.player.anims.play('walk-down', true);
+        }
+
+        // MOBILE TAP TO MOVE
+        if (vx === 0 && vy === 0 && this.input.activePointer.isDown && !this.dialogBg.visible) {
+            const pointer = this.input.activePointer;
+            
+            // Calculate distance between player and tap
+            const distanceX = pointer.worldX - this.player.x;
+            const distanceY = pointer.worldY - this.player.y;
+
+            // Move only if the tap is far enough away (prevents jittering)
+            if (Math.abs(distanceX) > 10) {
+                vx = distanceX > 0 ? speed : -speed;
+                if (vx > 0) this.player.anims.play('walk-right', true);
+                else this.player.anims.play('walk-left', true);
+            }
+            
+            if (Math.abs(distanceY) > 10) {
+                vy = distanceY > 0 ? speed : -speed;
+                // Only play up/down animation if we aren't already moving left/right
+                if (vx === 0) {
+                    if (vy > 0) this.player.anims.play('walk-down', true);
+                    else this.player.anims.play('walk-up', true);
+                }
+            }
         }
 
         this.player.setVelocity(vx, vy);
@@ -776,27 +793,6 @@ class HouseScene extends Phaser.Scene {
         } else {
             this.player.body.velocity.normalize().scale(speed);
             if (!this.walkSound.isPlaying) this.walkSound.play();
-        }
-
-        // --- 6. SPACEBAR INTERACTION ---
-        if (Phaser.Input.Keyboard.JustDown(this.controls.space)) {
-            // 1. Check if Rem is near any objects in the interactable list
-            const nearbyObject = this.interactableList.find(item => {
-                // Using .trigger as defined in addInteractable function
-                return Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), item.trigger.getBounds());
-            });
-
-            if (nearbyObject) {
-                // This triggers Dot's voice or dialogue logic
-                this.handleInteraction(nearbyObject); 
-            }
-
-            // 2. Check if Rem is near any doors to open them
-            this.doorList.forEach(door => {
-                if (door.isNear && !door.isOpen) {
-                    this.openDoor(door);
-                }
-            });
         }
     }
 
@@ -924,27 +920,6 @@ class HouseScene extends Phaser.Scene {
             speaker: speaker || 'Narrator',
             isNear: false
         });
-    }
-
-    // Add handleInteraction for the both clicking and spacebar 
-    handleInteraction(item) {
-        // Play Dot's meow if it's her
-        if (item.speaker === 'Dot' && this.meowSound) {
-            this.meowSound.play();
-        }
-
-        // Show the dialogue box
-        this.dialogBg.setVisible(true);
-        this.dialogText.setVisible(true).setText(item.message);
-        this.dialogArrow.setVisible(true);
-
-        if (item.speaker === 'Dot') {
-            this.dialogBg.setTexture('dialogue-dot');
-        } else if (item.speaker === 'Rem') {
-            this.dialogBg.setTexture('dialogue-rem');
-        } else {
-            this.dialogBg.setTexture('dialogue-box');
-        }
     }
 
     // --- 2. HANDLE QUEST TRANSITION ---

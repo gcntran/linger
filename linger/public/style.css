@@ -26,3 +26,9 @@ canvas {
 canvas[style*="cursor: pointer"] {
     cursor: url('assets/ui/cursors/cursor-hover.png') 32 32, pointer !important;
 }
+
+/* No zoom when tap on mobile screen */
+#game-container canvas {
+    touch-action: none;
+    cursor: pointer;
+}
