@@ -17,20 +17,20 @@ class HouseScene extends Phaser.Scene {
         // --- 1. BACKGROUND & LAYOUT ---
         // Load the house layout
         const layout = this.add.image(0, 0, 'layout-house')
-        .setOrigin(0, 0);
+            .setOrigin(0, 0);
         layout.setDepth(0);
         layout.setDisplaySize(width, height);
 
         // Load the doors
-        this.bathDoor = this.add.image(540, 665, 'door').setDepth(1); 
+        this.bathDoor = this.add.image(540, 665, 'door').setDepth(1);
         this.laundryDoor = this.add.image(727, 665, 'door').setDepth(1);
         this.storageDoor = this.add.image(1178, 665, 'door').setDepth(1);
 
         // Load the ceiling layout
         const ceiling = this.add.image(0, 0, 'layout-ceiling')
-        .setOrigin(0, 0);
+            .setOrigin(0, 0);
         ceiling.setDepth(3);
-        ceiling.setDisplaySize(width, height); 
+        ceiling.setDisplaySize(width, height);
 
 
         // Transition from IntroScene
@@ -45,8 +45,8 @@ class HouseScene extends Phaser.Scene {
             duration: 1000, // 1s
             onComplete: () => {
                 curtain.destroy();
-        }
-});
+            }
+        });
 
         // Lighting Filter
         // Create a gradient: Top is a warm orange-white, Bottom is a soft amber
@@ -87,7 +87,7 @@ class HouseScene extends Phaser.Scene {
 
         // 3. Fix to screen and set depth
         vignette.setScrollFactor(0);
-        vignette.setDepth(960); 
+        vignette.setDepth(960);
         vignette.setBlendMode(Phaser.BlendModes.MULTIPLY);
 
 
@@ -143,7 +143,7 @@ class HouseScene extends Phaser.Scene {
 
         // Living Room Area
         const livingZones = [
-            { x: 930, y: 230, w:70, h: 50 },    // Dot
+            { x: 930, y: 230, w: 70, h: 50 },    // Dot
             { x: 820, y: 240, w: 50, h: 40 },   // End table
             { x: 930, y: 220, w: 150, h: 70 },  // Sofa top
             { x: 1057, y: 335, w: 68, h: 115 }, // Sofa right
@@ -230,19 +230,19 @@ class HouseScene extends Phaser.Scene {
 
         // Add hover effects for all doors
         this.doorList.forEach(door => {
-        // Change to pointer (hand) when hovering over the door zone
-        door.trigger.on('pointerover', () => {
-        // Only show hand cursor if the door is closed
-        if (!door.isOpen) {
-            this.input.setDefaultCursor('pointer');
-            }
-        });
+            // Change to pointer (hand) when hovering over the door zone
+            door.trigger.on('pointerover', () => {
+                // Only show hand cursor if the door is closed
+                if (!door.isOpen) {
+                    this.input.setDefaultCursor('pointer');
+                }
+            });
 
-        // Change back to default cursor when leaving
-        door.trigger.on('pointerout', () => {
-            this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
+            // Change back to default cursor when leaving
+            door.trigger.on('pointerout', () => {
+                this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
+            });
         });
-    });
 
 
         // --- 4. CHARACTERS SETUP & SFX ---
@@ -252,7 +252,7 @@ class HouseScene extends Phaser.Scene {
         this.player.body.setSize(30, 35);
         this.player.body.setOffset(17, 44);
         this.player.setCollideWorldBounds(true);
-        this.player.setDepth(2); 
+        this.player.setDepth(2);
 
         // Rem's Animations
         const anims = [
@@ -280,33 +280,44 @@ class HouseScene extends Phaser.Scene {
         });
 
         // DOT
+        this.interactableList = [];
         this.dot = this.physics.add.sprite(930, 254, 'dot'); // Dot starts on the sofa in the living room
+        this.dot.setInteractive();
         this.dot.setScale(0.8);
         this.dot.setImmovable(true);
         this.dot.body.setAllowGravity(false);
         this.dot.setDepth(0);
 
+        // Add Dot to the list so the click listener can find her
+        this.interactableList.push({
+            sprite: this.dot,
+            isNear: false,
+            speaker: 'Dot', // This triggers the meow sound 
+            lines: ["*Purr...* (She looks at you expectantly.)"]
+        });
+
         // Dot's Animations
         if (!this.anims.exists('dot-idle')) {
-        this.anims.create({
-            key: 'dot-idle',
-            frames: this.anims.generateFrameNumbers('dot', { start: 0, end: 2 }),
-            frameRate: 3,
-            repeat: -1
-        });
-    }
+            this.anims.create({
+                key: 'dot-idle',
+                frames: this.anims.generateFrameNumbers('dot', { start: 0, end: 2 }),
+                frameRate: 3,
+                repeat: -1
+            });
+        }
 
         // Start the animation
-        this.dot.play('dot-idle');        
+        this.dot.play('dot-idle');
 
         // SFX Setup
         this.walkSound = this.sound.add('walk', { volume: 1.2, loop: true });
         this.clickSound = this.sound.add('click', { volume: 0.5 });
         this.cardSound = this.sound.add('card-flip', { volume: 0.5 });
+        this.meowSound = this.sound.add('dot-meow', { volume: 0.3 });
 
         // Physics Collider
         this.physics.add.collider(this.player, this.walls);
-        
+
 
         // --- 5. INPUT & CONTROLS ---
         this.wasd = this.input.keyboard.addKeys({
@@ -318,172 +329,194 @@ class HouseScene extends Phaser.Scene {
 
         // Central Click Listener
         this.input.on('pointerdown', (pointer) => {
+            const { worldX, worldY } = pointer;
             console.log(`Clicked at: ${pointer.worldX}, ${pointer.worldY}`);
-            
-        // --- A. THE FINAL DOOR & CREDITS LOGIC ---
-        // This handles the transition from clicking the door to the ending scene
-        if (this.storyPhase === 'FINAL_DOOR_WAIT') {
-        // Approximate coordinates for the main front door (bottom center)
-        // Adjust these numbers based on your actual door position
-        const doorX = 1000; 
-        const doorY = 950;
-        const dist = Phaser.Math.Distance.Between(pointer.worldX, pointer.worldY, doorX, doorY);
 
-        if (dist < 150) { // If clicking near the door
-        if (this.clickSound) this.clickSound.play();
-            
-        this.storyPhase = 'CREDITS_SEQUENCE';
-        this.finalLineIndex = 0;
-        this.finalLines = [
-            "The door opens. Light spills in - not the blinding kind, but the gentle kind that invites rather than demands.",
-            "Step forward. Not into the past, not into the future, but into the present, you’ve finally learned to hold."
-        ];
-            
-        // Show the first line manually
-        this.dialogBg.setVisible(true).setTexture('dialogue-box');
-        this.dialogText.setVisible(true).setText(this.finalLines[0]).setStyle({ fontStyle: 'italic' });
-        this.dialogArrow.setVisible(true);
-        return;
-        }
-    }
+            // --- A. THE FINAL DOOR & CREDITS LOGIC ---
+            // This handles the transition from clicking the door to the ending scene
+            if (this.storyPhase === 'FINAL_DOOR_WAIT') {
+                // Approximate coordinates for the main front door (bottom center)
+                // Adjust these numbers based on your actual door position
+                const doorX = 1000;
+                const doorY = 950;
+                const dist = Phaser.Math.Distance.Between(pointer.worldX, pointer.worldY, doorX, doorY);
 
-        // --- B. NEW: CLICK TO OPEN REGULAR DOORS ---
-        let doorClicked = false;
-        this.doorList.forEach(door => {
-            // If Rem is near and the door is currently closed
-            if (door.isNear && !door.isOpen) {
-                // Check if the click was inside the door's area
-                // (We check the wall bounds if the door has no image, like the bedroom)
-                const bounds = door.visual ? door.visual.getBounds() : door.wall.getBounds();
-                
-                if (Phaser.Geom.Rectangle.Contains(bounds, pointer.worldX, pointer.worldY)) {
-                    this.openDoor(door);
-                    doorClicked = true;
+                if (dist < 150) { // If clicking near the door
+                    if (this.clickSound) this.clickSound.play();
+
+                    this.storyPhase = 'CREDITS_SEQUENCE';
+                    this.finalLineIndex = 0;
+                    this.finalLines = [
+                        "The door opens. Light spills in - not the blinding kind, but the gentle kind that invites rather than demands.",
+                        "Step forward. Not into the past, not into the future, but into the present, you’ve finally learned to hold."
+                    ];
+
+                    // Show the first line manually
+                    this.dialogBg.setVisible(true).setTexture('dialogue-box');
+                    this.dialogText.setVisible(true).setText(this.finalLines[0]).setStyle({ fontStyle: 'italic' });
+                    this.dialogArrow.setVisible(true);
+                    return;
                 }
             }
-        });
 
-        // If we opened a door, stop here so we don't trigger other clicks
-        if (doorClicked) return;
+            // --- B. NEW: CLICK TO OPEN REGULAR DOORS ---
+            let doorClicked = false;
+            this.doorList.forEach(door => {
+                // If Rem is near and the door is currently closed
+                if (door.isNear && !door.isOpen) {
+                    // Check if the click was inside the door's area
+                    // (We check the wall bounds if the door has no image, like the bedroom)
+                    const bounds = door.visual ? door.visual.getBounds() : door.wall.getBounds();
 
-        // --- C. CLICK TO ADVANCE CREDITS SEQUENCE ---
-        if (this.storyPhase === 'CREDITS_SEQUENCE') {
-        if (this.clickSound) this.clickSound.play();
-            this.finalLineIndex++;
-        
-        if (this.finalLineIndex < this.finalLines.length) {
-            this.dialogText.setText(this.finalLines[this.finalLineIndex]);
-        } else {
+                    if (Phaser.Geom.Rectangle.Contains(bounds, pointer.worldX, pointer.worldY)) {
+                        this.openDoor(door);
+                        doorClicked = true;
+                    }
+                }
+            });
 
-            // Transition to EndingScene after the final line
-            const { width, height } = this.scale;
+            // If we opened a door, stop here so we don't trigger other clicks
+            if (doorClicked) return;
 
-            // Create the black curtain
-            const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
-            curtain.setOrigin(0, 0).setAlpha(0).setDepth(2000); // Higher depth than UI
+            // --- C. CLICK TO ADVANCE CREDITS SEQUENCE ---
+            if (this.storyPhase === 'CREDITS_SEQUENCE') {
+                if (this.clickSound) this.clickSound.play();
+                this.finalLineIndex++;
 
-            // Transition to EndingScene
-            this.tweens.add({
-                targets: curtain,
-                alpha: 1,
-                duration: 1500, // Slightly longer fade for a dramatic ending
-                    onComplete: () => {
-                // OK! NOW GO TO THE ENDING SCENE!
-                this.scene.start('EndingScene'); 
-            }
-        });
-    }
-        return;
-}
+                if (this.finalLineIndex < this.finalLines.length) {
+                    this.dialogText.setText(this.finalLines[this.finalLineIndex]);
+                } else {
 
+                    // Transition to EndingScene after the final line
+                    const { width, height } = this.scale;
 
-        // --- 6. LOGICS ---
-        // A. STORY PHASE LOGIC (Intro, Wakeup, Dot Discovery, Ending)
-        // New Phases
-        if (this.storyPhase !== 'FIND_CARDS' && 
-            this.storyPhase !== 'SEARCH_DOT' && 
-            this.storyPhase !== 'FINAL_DOOR_WAIT' && 
-            this.storyPhase !== 'CREDITS_SEQUENCE') {
-                
-            if (this.clickSound) this.clickSound.play();
-            this.lineIndex++;
-            let currentArray = [];
-            if (this.storyPhase === 'INTRO') currentArray = this.introLines;
-            else if (this.storyPhase === 'WAKEUP') currentArray = this.wakeupLines;
-            else if (this.storyPhase === 'DOT_TALK') currentArray = this.dotDiscoveryLines;
-            else if (this.storyPhase === 'ENDING') currentArray = this.endingLines;
-        
-            if (this.lineIndex < currentArray.length) {
-                this.showStoryDialogue();
-            } else {
-                this.transitionStoryPhase();
-            }
-            return; 
-        }
+                    // Create the black curtain
+                    const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
+                    curtain.setOrigin(0, 0).setAlpha(0).setDepth(2000); // Higher depth than UI
 
-        // B. QUEST & GAMEPLAY LOGIC (Only runs during 'FIND_CARDS')
-        let currentQuest = this.questData[this.questIndex];
-
-        // DIALOGUE ADVANCEMENT LOGIC
-        if (this.dialogBg.visible) {
-            // Play click sound when moving to the next line of quest text
-            if (this.clickSound) this.clickSound.play();
-
-            this.currentDialogueIndex++;
-            let lines = [];
-                
-            if (this.questState === 'PRE_SEARCH') lines = currentQuest.preLine;
-            else if (this.questState === 'OBJECT') lines = currentQuest.objectLines;
-            else if (this.questState === 'CARD') lines = currentQuest.narratorLine; 
-            else if (this.questState === 'POST_REACTION') lines = currentQuest.postLine;
-            else if (this.questState === 'ANNOUNCEMENT') {
-                const cardName = currentQuest.name.split(' - ')[1];
-                lines = [`You collected ${cardName}.`];
-            }
-
-            if (this.currentDialogueIndex < lines.length) {
-                this.dialogText.setText(lines[this.currentDialogueIndex]);
-
-            // Sound effect when the card is revealed
-            if (this.questState === 'CARD' && this.currentDialogueIndex === 0) {
-                if (this.cardSound) this.cardSound.play();
-            }
-
-            this.dialogArrow.setVisible(true);
-            if (this.arrowTween && this.arrowTween.isPaused()) this.arrowTween.resume();
-            return;
-            } else {
-                this.handleQuestTransition();
+                    // Transition to EndingScene
+                    this.tweens.add({
+                        targets: curtain,
+                        alpha: 1,
+                        duration: 1500, // Slightly longer fade for a dramatic ending
+                        onComplete: () => {
+                            // OK! NOW GO TO THE ENDING SCENE!
+                            this.scene.start('EndingScene');
+                        }
+                    });
+                }
                 return;
             }
-        }
 
-        // D. INTERACTABLE OBJECT LOGIC (ONLY IN PRE_SEARCH PHASE)
-        if (this.questState === 'PRE_SEARCH') {
-            this.interactableList.forEach((item, index) => {
-            if (item.isNear && index === this.questIndex) {
+            // --- CLICKING DOT ---
+            const dotBounds = this.dot.getBounds();
+            const isDotNear = Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.dot.getBounds());
 
-             // Play click sound for the initial interaction
+            if (Phaser.Geom.Rectangle.Contains(dotBounds, worldX, worldY)) {
+                if (isDotNear) {
+                    // Play the meow!
+                    if (this.meowSound) this.meowSound.play();
+
+                    // Show a random cute line
+                    const randomLine = ["Meow!", "*Purr...*", "Mew?"][Math.floor(Math.random() * 3)];
+                    this.dialogBg.setVisible(true).setTexture('dialogue-dot');
+                    this.dialogText.setVisible(true).setText(randomLine);
+                    this.dialogArrow.setVisible(true);
+                } else {
+                    // Hint that Rem is too far away
+                    console.log("Too far to pet the cat!");
+                }
+                return;
+            }
+
+
+            // --- 6. LOGICS ---
+            // A. STORY PHASE LOGIC (Intro, Wakeup, Dot Discovery, Ending)
+            // New Phases
+            if (this.storyPhase !== 'FIND_CARDS' &&
+                this.storyPhase !== 'SEARCH_DOT' &&
+                this.storyPhase !== 'FINAL_DOOR_WAIT' &&
+                this.storyPhase !== 'CREDITS_SEQUENCE') {
+
                 if (this.clickSound) this.clickSound.play();
-                this.questState = 'OBJECT';
-                this.activeInteractable = item;
-                this.currentDialogueIndex = 0;
+                this.lineIndex++;
+                let currentArray = [];
+                if (this.storyPhase === 'INTRO') currentArray = this.introLines;
+                else if (this.storyPhase === 'WAKEUP') currentArray = this.wakeupLines;
+                else if (this.storyPhase === 'DOT_TALK') currentArray = this.dotDiscoveryLines;
+                else if (this.storyPhase === 'ENDING') currentArray = this.endingLines;
 
-                this.dialogText.setText(currentQuest.objectLines[0]);
-                        
-            // Set texture based on speaker
-                if (item.speaker === 'Rem') this.dialogBg.setTexture('dialogue-rem');
-                else if (item.speaker === 'Dot') this.dialogBg.setTexture('dialogue-dot');
-                else this.dialogBg.setTexture('dialogue-box');
+                if (this.lineIndex < currentArray.length) {
+                    this.showStoryDialogue();
+                } else {
+                    this.transitionStoryPhase();
+                }
+                return;
+            }
 
-                this.dialogBg.setVisible(true);
-                this.dialogText.setVisible(true);
-                this.dialogArrow.setVisible(true);
-                if (this.arrowTween) this.arrowTween.resume();
-                }    
-            });
-        }
-    });
+            // B. QUEST & GAMEPLAY LOGIC (Only runs during 'FIND_CARDS')
+            let currentQuest = this.questData[this.questIndex];
+
+            // DIALOGUE ADVANCEMENT LOGIC
+            if (this.dialogBg.visible) {
+                // Play click sound when moving to the next line of quest text
+                if (this.clickSound) this.clickSound.play();
+
+                this.currentDialogueIndex++;
+                let lines = [];
+
+                if (this.questState === 'PRE_SEARCH') lines = currentQuest.preLine;
+                else if (this.questState === 'OBJECT') lines = currentQuest.objectLines;
+                else if (this.questState === 'CARD') lines = currentQuest.narratorLine;
+                else if (this.questState === 'POST_REACTION') lines = currentQuest.postLine;
+                else if (this.questState === 'ANNOUNCEMENT') {
+                    const cardName = currentQuest.name.split(' - ')[1];
+                    lines = [`You collected ${cardName}.`];
+                }
+
+                if (this.currentDialogueIndex < lines.length) {
+                    this.dialogText.setText(lines[this.currentDialogueIndex]);
+
+                    // Sound effect when the card is revealed
+                    if (this.questState === 'CARD' && this.currentDialogueIndex === 0) {
+                        if (this.cardSound) this.cardSound.play();
+                    }
+
+                    this.dialogArrow.setVisible(true);
+                    if (this.arrowTween && this.arrowTween.isPaused()) this.arrowTween.resume();
+                    return;
+                } else {
+                    this.handleQuestTransition();
+                    return;
+                }
+            }
+
+            // D. INTERACTABLE OBJECT LOGIC (ONLY IN PRE_SEARCH PHASE)
+            if (this.questState === 'PRE_SEARCH') {
+                this.interactableList.forEach((item, index) => {
+                    if (item.isNear && index === this.questIndex) {
+
+                        // Play click sound for the initial interaction
+                        if (this.clickSound) this.clickSound.play();
+                        this.questState = 'OBJECT';
+                        this.activeInteractable = item;
+                        this.currentDialogueIndex = 0;
+
+                        this.dialogText.setText(currentQuest.objectLines[0]);
+
+                        // Set texture based on speaker
+                        if (item.speaker === 'Rem') this.dialogBg.setTexture('dialogue-rem');
+                        else if (item.speaker === 'Dot') this.dialogBg.setTexture('dialogue-dot');
+                        else this.dialogBg.setTexture('dialogue-box');
+
+                        this.dialogBg.setVisible(true);
+                        this.dialogText.setVisible(true);
+                        this.dialogArrow.setVisible(true);
+                        if (this.arrowTween) this.arrowTween.resume();
+                    }
+                });
+            }
+        });
 
 
         // --- 7. CAMERAS ---
@@ -495,25 +528,25 @@ class HouseScene extends Phaser.Scene {
 
         // This is the UI Camera that stays still
         const uiCam = this.cameras.add(0, 0, this.scale.width, this.scale.height);
-        uiCam.renderGL = false; 
+        uiCam.renderGL = false;
 
         const worldItems = [
-            layout, 
+            layout,
             this.bathDoor,
             this.laundryDoor,
             this.storageDoor,
             ceiling,
-            this.player, 
-            this.dot, 
+            this.player,
+            this.dot,
             beam1,
             beam2,
             beam3,
             vignette,
             ...this.walls.getChildren()
         ];
-        
+
         uiCam.ignore(worldItems);
-        
+
         // Ensure the main camera ignores UI 
         this.uiElements = [];
 
@@ -523,14 +556,14 @@ class HouseScene extends Phaser.Scene {
 
         // Fullscreen Button (from Arlin's suggestion)
         const fsButton = this.add.text(1720, 20, 'Fullscreen', {
-            fontSize: '20px', 
-            color: '#ffffff', 
+            fontSize: '20px',
+            color: '#ffffff',
             backgroundColor: '#333'
         })
-        .setPadding(10)
-        .setInteractive({ useHandCursor: true })
-        .setDepth(100)
-        .setScrollFactor(0);
+            .setPadding(10)
+            .setInteractive({ useHandCursor: true })
+            .setDepth(100)
+            .setScrollFactor(0);
 
         this.cameras.main.ignore(fsButton);
         uiCam.ignore([layout, this.player, ...this.walls.getChildren()]);
@@ -545,20 +578,20 @@ class HouseScene extends Phaser.Scene {
         // INSTRUCTION BOX SETUP 
         // Add the instruction text
         this.instructionText = this.add.text(1920 / 2, 40, 'Click any object to interact', {
-            fontSize: '20px', 
-            color: '#ffffff', 
+            fontSize: '20px',
+            color: '#ffffff',
         })
-        .setPadding(10)
-        .setOrigin(0.5)
-        .setScrollFactor(0)
-        .setDepth(1001);
+            .setPadding(10)
+            .setOrigin(0.5)
+            .setScrollFactor(0)
+            .setDepth(1001);
 
-// Ensure the main camera ignores these UI elements
-this.cameras.main.ignore([this.instructionText]);
+        // Ensure the main camera ignores these UI elements
+        this.cameras.main.ignore([this.instructionText]);
 
 
         // --- 8. PROPER UI SETUP (Must happen BEFORE showStoryDialogue) ---
-        
+
         // Default dialogue box that can be changed to Rem or Dot versions when talking
         this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
             .setScrollFactor(0)
@@ -568,26 +601,26 @@ this.cameras.main.ignore([this.instructionText]);
 
         // Dialogue text
         this.dialogText = this.add.text(520, 810, '', {
-            fontSize: '30px', 
-            color: '#2F3A56', 
-            align: 'left', 
-            lineSpacing: 12, 
-            wordWrap: { 
+            fontSize: '30px',
+            color: '#2F3A56',
+            align: 'left',
+            lineSpacing: 12,
+            wordWrap: {
                 width: 950,
                 useAdvancedWrap: true // This helps align the right edge more precisely 
             }
         })
-        .setOrigin(0.0)
-        .setScrollFactor(0)
-        .setDepth(201)
-        .setVisible(false);
+            .setOrigin(0.0)
+            .setScrollFactor(0)
+            .setDepth(201)
+            .setVisible(false);
 
         // The animated arrow to guide the player click to the next dialogue line 
-        this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow')   
-        .setScrollFactor(0)
-        .setDepth(202)
-        .setScale(1.2)
-        .setVisible(false);
+        this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow')
+            .setScrollFactor(0)
+            .setDepth(202)
+            .setScale(1.2)
+            .setVisible(false);
 
         // Animation for the arrow using tweens
         this.arrowTween = this.tweens.add({
@@ -605,21 +638,21 @@ this.cameras.main.ignore([this.instructionText]);
         this.cameras.main.ignore([this.dialogBg, this.dialogText, this.dialogArrow, this.tarotCard]);
 
         // HUD Text
-        this.hudBg = this.add.image(30, 40, `card-collected-hud`) 
+        this.hudBg = this.add.image(30, 40, `card-collected-hud`)
             .setOrigin(0, 0)
-            .setScale(1.2) 
+            .setScale(1.2)
             .setScrollFactor(0)
-            .setDepth(199); 
+            .setDepth(199);
         // 2. Add the Text on top of the image
         // We remove the backgroundColor and padding since the PNG handles the visuals now
         this.cardCounterText = this.add.text(116, 65, `0/12`, {
-            fontSize: '36px', 
-            fill: '#ffffff', 
-            fontFamily: 'Georgia, serif', 
+            fontSize: '36px',
+            fill: '#ffffff',
+            fontFamily: 'Georgia, serif',
             fontStyle: 'bold'
         })
-        .setScrollFactor(0)
-        .setDepth(200);
+            .setScrollFactor(0)
+            .setDepth(200);
 
         this.cameras.main.ignore(this.cardCounterText);
 
@@ -634,7 +667,7 @@ this.cameras.main.ignore([this.instructionText]);
         // Place physical interactables based on questData
         this.interactableList = [];
         this.questData.forEach((data, index) => {
-            let x = 0, y = 0, w = 50, h = 50; 
+            let x = 0, y = 0, w = 50, h = 50;
             if (index === 0) { x = 830; y = 735; w = 50; h = 75; }      // 0: Scarf (Shoe Cabinet)
             else if (index === 1) { x = 1367; y = 422; w = 95; h = 40; }  // 1: Keyboard (Desk)
             else if (index === 2) { x = 1165; y = 225; w = 130; h = 60; } // 2: Bookshelf
@@ -647,13 +680,13 @@ this.cameras.main.ignore([this.instructionText]);
             else if (index === 9) { x = 613; y = 700; w = 26; h = 30; }  // 9: Plant Pot (Washroom)
             else if (index === 10) { x = 1210; y = 790; w = 40; h = 10; }// 10: Cardboard Box (Storage Room)
             else if (index === 11) { x = 900; y = 350; w = 30; h = 10; } // 11: Camera (On Table)
-            
+
             this.addInteractable(x, y, w, h, data.objectLines, 'Rem');
         });
 
-        
+
         // START THE STORY
-        this.storyPhase = 'WAKEUP'; 
+        this.storyPhase = 'WAKEUP';
         this.lineIndex = 0;
         this.questIndex = 0;
         this.questState = 'PRE_SEARCH';
@@ -670,7 +703,7 @@ this.cameras.main.ignore([this.instructionText]);
         // --- 1. STORY TRIGGERS ---
         if (this.storyPhase === 'SEARCH_DOT') {
             const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.dot.x, this.dot.y);
-            
+
             if (dist < 100) {
                 this.storyPhase = 'DOT_TALK';
                 this.showStoryDialogue();
@@ -681,12 +714,12 @@ this.cameras.main.ignore([this.instructionText]);
         if (this.dialogBg.visible) {
             this.player.setVelocity(0, 0);
             if (this.anims.exists('idle')) this.player.anims.play('idle', true);
-            
+
             // STOP the walking sound if it's playing while dialogue is open
             if (this.walkSound && this.walkSound.isPlaying) {
                 this.walkSound.stop();
             }
-            return; 
+            return;
         }
 
         // --- 3. PROXIMITY CHECKS ---
@@ -744,41 +777,41 @@ this.cameras.main.ignore([this.instructionText]);
 
     // --- 0. SUNBEAM FUNCTION FOR LIGHTING EFFECT ---
     addSunBeam(x, y) {
-    // Define the triangle shape: 
-    // Narrow at the top (0,0 and 40,0) 
-    // Wide at the bottom (-100, 600 and 140, 600)
-    const points = [
-        40, 0,    // Top Right
-        0, 0,     // Top Left
-        -70, 200, // Bottom Left (Spread out)
-        90, 200   // Bottom Right (Spread out)
-    ];
+        // Define the triangle shape: 
+        // Narrow at the top (0,0 and 40,0) 
+        // Wide at the bottom (-100, 600 and 140, 600)
+        const points = [
+            40, 0,    // Top Right
+            0, 0,     // Top Left
+            -70, 200, // Bottom Left (Spread out)
+            90, 200   // Bottom Right (Spread out)
+        ];
 
-    // Create the polygon instead of a rectangle
-    const beam = this.add.polygon(x, y, points, 0xfffae1, 0.05);
-    
-    beam.setOrigin(0, 0); // Sets the "pivot" to the top-left of the window
-    beam.setAngle(10);    // Slight tilt to match the morning sun angle
-    beam.setBlendMode(Phaser.BlendModes.ADD);
-    beam.setDepth(850);
-    beam.setScrollFactor(1);
+        // Create the polygon instead of a rectangle
+        const beam = this.add.polygon(x, y, points, 0xfffae1, 0.05);
 
-    // Soften the edges so it doesn't look like a sharp paper cutout
-    if (this.renderer.type !== Phaser.CANVAS) {
-        beam.postFX.addBloom(0xffffff, 1, 1, 2, 2);
-    }
+        beam.setOrigin(0, 0); // Sets the "pivot" to the top-left of the window
+        beam.setAngle(10);    // Slight tilt to match the morning sun angle
+        beam.setBlendMode(Phaser.BlendModes.ADD);
+        beam.setDepth(850);
+        beam.setScrollFactor(1);
 
-    // Gentle breathing animation
-    this.tweens.add({
-        targets: beam,
-        alpha: 0.2,
-        duration: 10000,
-        yoyo: true,
-        repeat: -1,
-        ease: 'Sine.easeInOut'
-    });
+        // Soften the edges so it doesn't look like a sharp paper cutout
+        if (this.renderer.type !== Phaser.CANVAS) {
+            beam.postFX.addBloom(0xffffff, 1, 1, 2, 2);
+        }
 
-    return beam;
+        // Gentle breathing animation
+        this.tweens.add({
+            targets: beam,
+            alpha: 0.2,
+            duration: 10000,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
+
+        return beam;
     }
 
     // --- 1. ADD DOOR WITH TRIGGER ZONE ---
@@ -790,13 +823,13 @@ this.cameras.main.ignore([this.instructionText]);
 
         let trigger = this.add.zone(x, y, w + 10, h + 10).setInteractive();
         this.physics.add.existing(trigger, true);
-    
-        this.doorList.push({ 
+
+        this.doorList.push({
             wall,
             visual: doorImage,
             trigger,
             isOpen: false,
-            isNear: false  
+            isNear: false
         });
     }
 
@@ -804,9 +837,9 @@ this.cameras.main.ignore([this.instructionText]);
     openDoor(door) {
         if (door.wall && door.wall.active && !door.isOpen) {
             door.isOpen = true;
-    
+
             this.sound.play('door-opening', { volume: 0.1 });
-    
+
             // Fade OUT (disappear)
             this.tweens.add({
                 targets: [door.visual],
@@ -816,7 +849,7 @@ this.cameras.main.ignore([this.instructionText]);
                     door.wall.body.enable = false; // disable AFTER fade
                 }
             });
-    
+
             this.time.delayedCall(3000, () => {
                 this.closeDoor(door);
             });
@@ -827,19 +860,19 @@ this.cameras.main.ignore([this.instructionText]);
     closeDoor(door) {
         if (door.wall) {
             door.isOpen = false;
-    
+
             this.sound.play('door-closing', { volume: 0.1 });
-    
+
             // Enable collision first
             door.wall.body.enable = true;
-    
+
             // Fade IN (reappear)
             this.tweens.add({
                 targets: [door.visual],
                 alpha: 1, // re-appear
                 duration: 200
             });
-    
+
             this.walls.refresh();
         }
     }
@@ -856,11 +889,11 @@ this.cameras.main.ignore([this.instructionText]);
         this.physics.add.existing(trigger, true);
 
 
-        this.interactableList.push({ 
-            trigger: trigger, 
-            message: message, 
-            speaker: speaker || 'Narrator', 
-            isNear: false 
+        this.interactableList.push({
+            trigger: trigger,
+            message: message,
+            speaker: speaker || 'Narrator',
+            isNear: false
         });
     }
 
@@ -875,19 +908,19 @@ this.cameras.main.ignore([this.instructionText]);
             this.dialogBg.setVisible(false);
             this.dialogText.setVisible(false);
             this.dialogArrow.setVisible(false);
-        } 
+        }
         // When clicking the object, show the tarot card and the narrator line
         else if (this.questState === 'OBJECT') {
             this.questState = 'CARD';
 
-        // Card flipping sound effect plays when clicking to reveal the card
-        if (this.cardSound) this.cardSound.play();
+            // Card flipping sound effect plays when clicking to reveal the card
+            if (this.cardSound) this.cardSound.play();
 
             this.tarotCard.setTexture(currentQuest.tarotKey).setVisible(true);
-            this.dialogBg.setTexture('dialogue-box'); 
+            this.dialogBg.setTexture('dialogue-box');
             this.dialogText.setText(currentQuest.narratorLine[0]).setStyle({ fontStyle: 'italic' });
             this.dialogArrow.setVisible(true);
-        } 
+        }
         // After reacting to the card, show the post-reaction line
         else if (this.questState === 'CARD') {
             this.questState = 'POST_REACTION';
@@ -899,10 +932,10 @@ this.cameras.main.ignore([this.instructionText]);
         // After the post-reaction, show the announcement of the collected card and update to HUD
         else if (this.questState === 'POST_REACTION') {
             this.questState = 'ANNOUNCEMENT';
-            this.dialogBg.setTexture('dialogue-box'); 
+            this.dialogBg.setTexture('dialogue-box');
             const cardName = currentQuest.name.split(' - ')[1];
             this.dialogText.setText(`You collected ${cardName}.`).setStyle({ fontStyle: 'italic' });
-            
+
             this.cardCounterText.setText(`${this.questIndex + 1}/12`);
             this.dialogArrow.setVisible(true);
         }
@@ -913,7 +946,7 @@ this.cameras.main.ignore([this.instructionText]);
             this.dialogArrow.setVisible(false);
 
             // Reset the current interactable object so it won't trigger again
-            this.questIndex++; 
+            this.questIndex++;
 
             // Check if there are more cards to find, this is a loop that goes back to the PRE_SEARCH state for the next card
             if (this.questIndex < this.questData.length) {
@@ -949,11 +982,11 @@ this.cameras.main.ignore([this.instructionText]);
         // Show the dialogue box and text, set the content based on the current line
         this.dialogBg.setVisible(true);
         this.dialogText.setVisible(true).setText(currentLine.text);
-        
+
         // Show the arrow so the player knows to click
         this.dialogArrow.setVisible(true);
         if (this.arrowTween && this.arrowTween.isPaused()) this.arrowTween.resume();
-        
+
         // Switch textures based on speaker
         if (currentLine.speaker === 'narrator') {
             this.dialogBg.setTexture('dialogue-box');
@@ -964,6 +997,8 @@ this.cameras.main.ignore([this.instructionText]);
         } else if (currentLine.speaker === 'dot') {
             this.dialogBg.setTexture('dialogue-dot');
             this.dialogText.setStyle({ fontStyle: 'normal' });
+            // Play the meow sound whenever Dot starts a new line
+            if (this.meowSound) this.meowSound.play();
         }
     }
 
@@ -978,37 +1013,37 @@ this.cameras.main.ignore([this.instructionText]);
             this.dialogBg.setVisible(false);
             this.dialogText.setVisible(false);
             this.dialogArrow.setVisible(false);
-        } 
-        
+        }
+
         // B. DOT_TALK -> FIND_CARDS
         else if (this.storyPhase === 'DOT_TALK') {
             this.storyPhase = 'FIND_CARDS';
             this.questIndex = 0;
             this.questState = 'PRE_SEARCH';
             this.currentDialogueIndex = 0; // Reset this for the new quest text
-    
+
             // Grab the first hint from your questData
             let currentQuest = this.questData[this.questIndex];
-            
+
             // Show the hint to look for the next card
             this.dialogBg.setVisible(true).setTexture('dialogue-rem');
             this.dialogText.setVisible(true).setText(currentQuest.preLine[0]);
             this.dialogText.setStyle({ fontStyle: 'normal' }); // Hints are usually italic as narrator, but I want to keep them in Rem's style
             this.dialogArrow.setVisible(true);
-            
+
             if (this.arrowTween) this.arrowTween.resume();
         }
-    
+
         // C. ENDING -> FINAL_DOOR_WAIT (The new logic)
         // This happens after Rem says "Alright, Dot. I'm ready..."
         else if (this.storyPhase === 'ENDING') {
             this.dialogBg.setVisible(false);
             this.dialogText.setVisible(false);
             this.dialogArrow.setVisible(false);
-            
+
             // Change state so the click listener knows to look for the door click
             // BOOM! CLICK THE DOOR AND REM WILL FINISH THE GAME! GOOD JOB REM! YAY!!!!
-            this.storyPhase = 'FINAL_DOOR_WAIT'; 
+            this.storyPhase = 'FINAL_DOOR_WAIT';
         }
     }
 }
