@@ -21,11 +21,17 @@ class HouseScene extends Phaser.Scene {
         layout.setDepth(0);
         layout.setDisplaySize(width, height);
 
+        // Load the doors
+        this.bathDoor = this.add.image(540, 635, 'door').setDepth(2); 
+        this.laundryDoor = this.add.image(727, 635, 'door').setDepth(2);
+        this.storageDoor = this.add.image(1178, 635, 'door').setDepth(2);
+
         // Load the ceiling layout
         const ceiling = this.add.image(0, 0, 'layout-ceiling')
         .setOrigin(0, 0);
-        ceiling.setDepth(2);
+        ceiling.setDepth(3);
         ceiling.setDisplaySize(width, height); 
+
 
         // Transition from IntroScene
         // Create a curtain for the transition
@@ -762,7 +768,7 @@ class HouseScene extends Phaser.Scene {
             this.walls.refresh();
         }
     }
-
+    
 
     /// --- INTERACTABLE LOGIC ---
 
