@@ -183,9 +183,9 @@ class HouseScene extends Phaser.Scene {
 
         // Storage Area
         const storageZones = [
-            { x: 1132, y: 760, w: 20, h: 160 }, // Laundry storage
+            { x: 1132, y: 760, w: 25, h: 160 }, // Laundry storage
             { x: 1223, y: 750, w: 40, h: 10 },  // Box
-            { x: 1210, y: 790, w: 40, h: 10 },  // Box
+            { x: 1220, y: 790, w: 40, h: 10 },  // Box
         ];
         storageZones.forEach(z => {
             let zone = this.add.zone(z.x, z.y, z.w, z.h);
@@ -249,8 +249,8 @@ class HouseScene extends Phaser.Scene {
         // REM
         this.player = this.physics.add.sprite(1470, 300, 'player'); // Rem starts in the bedroom
         this.player.setScale(1.3);
-        this.player.body.setSize(30, 35);
-        this.player.body.setOffset(17, 44);
+        this.player.body.setSize(39, 35);
+        this.player.body.setOffset(11, 44);
         this.player.setCollideWorldBounds(true);
         this.player.setDepth(2);
 
