@@ -58,6 +58,9 @@ class AssetLoader extends Phaser.Scene {
         // Load card collected HUD
         this.load.image('card-collected-hud', 'assets/ui/hud/card-collected.png');
 
+        // Load help icon UI
+        this.load.image('help-icon', 'assets/ui/icons/help-icon.png');
+
         // Tarot cards
         // Only major arcana cards are used
         for (let i = 0; i <= 11; i++) {
