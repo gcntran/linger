@@ -588,7 +588,7 @@ class HouseScene extends Phaser.Scene {
 
         // INSTRUCTION BOX SETUP 
         // 1. Instruction Text (Hidden by default)
-        this.instructionText = this.add.text(1920 / 2, 40, 'WASD to move. Click any object to interact. And if you get lost, talk to Dot.', {
+        this.instructionText = this.add.text(1920 / 2, 70, 'WASD to move. Click any object to interact. And if you get lost, talk to Dot.', {
             fontSize: '20px',
             fill: '#ffffff',
             backgroundColor: 'rgba(0,0,0,0.5)' // Added a background for better readability
@@ -601,11 +601,11 @@ class HouseScene extends Phaser.Scene {
 
         // 2. Help Icon (Hidden by default)
         // Replace 'help-icon' with whatever key used in preload
-        this.helpButton = this.add.image(1870, 50, 'help-icon')
+        this.helpButton = this.add.image(1850, 70, 'help-icon')
             .setInteractive({ useHandCursor: true })
             .setScrollFactor(0)
             .setDepth(1001)
-            .setScale(1.7)
+            .setScale(2)
             .setVisible(false); // Start hidden
 
         // 3. Toggle Logic
@@ -665,14 +665,14 @@ class HouseScene extends Phaser.Scene {
         this.cameras.main.ignore([this.dialogBg, this.dialogText, this.dialogArrow, this.tarotCard]);
 
         // HUD Text
-        this.hudBg = this.add.image(30, 40, `card-collected-hud`)
+        this.hudBg = this.add.image(30, 20, `card-collected-hud`)
             .setOrigin(0, 0)
             .setScale(1.2)
             .setScrollFactor(0)
             .setDepth(199);
         // 2. Add the Text on top of the image
         // We remove the backgroundColor and padding since the PNG handles the visuals now
-        this.cardCounterText = this.add.text(116, 65, `0/12`, {
+        this.cardCounterText = this.add.text(116, 45, `0/12`, {
             fontSize: '36px',
             fill: '#ffffff',
             fontFamily: 'Georgia, serif',
