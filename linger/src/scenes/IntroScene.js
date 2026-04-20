@@ -38,10 +38,10 @@ class IntroScene extends Phaser.Scene {
         });
 
         // Add the spritesheet and play the animation
-        const introBg = this.add.sprite(width / 2, height / 2, 'intro-bg');
-        introBg.play('intro-flow');
-        introBg.setDisplaySize(width, height);
-        introBg.setDepth(0);
+        const bg = this.add.sprite(width / 2, height / 2, 'intro-bg');
+        bg.play('intro-flow');
+        bg.setDisplaySize(width, height);
+        bg.setDepth(0);
 
         // Dark overlay, dimmer background
         const overlay = this.add.rectangle(0, 0, width, height, 0x000000);
@@ -51,7 +51,7 @@ class IntroScene extends Phaser.Scene {
 
         // Fade in transition from TitleScene
         this.tweens.add({
-            targets: introBg,
+            targets: bg,
             alpha: 1,
             duration: 1000
         });
@@ -64,13 +64,13 @@ class IntroScene extends Phaser.Scene {
         //this.dialogBg = this.add.image(1250, 850, 'dialogue-box')
         //.setScale(1.7)
 
-        this.dialogText = this.add.text(800, 1080 / 2, '', {
+        this.dialogText = this.add.text(780, 1080 / 2, '', {
             fontSize: '34px',
             lineSpacing: 10,
             color: '#ffffff',
             align: 'start',
             wordWrap: {
-                width: 910,
+                width: 1000,
                 useAdvancedWrap: true // This helps align the right edge more precisely 
             },
             fontStyle: 'italic'

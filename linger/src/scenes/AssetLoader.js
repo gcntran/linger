@@ -21,20 +21,19 @@ class AssetLoader extends Phaser.Scene {
         this.load.image('go-to-title-button-active', 'assets/ui/buttons/go-to-title-button-active.png');
 
         // Load the background gif for title scene
-        // src: DecomposedMaw
-        this.load.spritesheet('title-bg', 'assets/environment/title-bg.png', {
+        this.load.spritesheet('title-bg', 'assets/environment/title-bg.png', { // src: DecomposedMaw
             frameWidth: 800, 
             frameHeight: 535
         });
 
         // Load the background gif for intro screen
-        this.load.spritesheet('intro-bg', 'assets/environment/intro-bg.png', {
+        this.load.spritesheet('intro-bg', 'assets/environment/intro-bg.png', { // src: DecomposedMaw
             frameWidth: 800, 
             frameHeight: 535
         });
 
-        // Load the ending image
-        this.load.image('intro-bg', 'assets/environment/intro-bg.png');
+        // Load the ending background
+        this.load.image('ending-bg', 'assets/environment/ending-bg.png'); // src: DecomposedMaw
 
         // Load the house layout
         this.load.image('layout-house', 'assets/environment/layout-house.png');

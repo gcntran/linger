@@ -8,27 +8,33 @@ class EndingScene extends Phaser.Scene {
     create() {
         const { width, height } = this.scale;
 
-        // Fullscreen button
-        const fsButton = this.add.text(1720, 20, 'Fullscreen', {
-            fontSize: '20px', 
-            color: '#cccccc', 
-        })
-        .setPadding(10)
-        .setInteractive({ useHandCursor: true })
-        .setDepth(2000) // Super high depth so it sits above fade curtains
-        .setScrollFactor(0);
+        // // Fullscreen button
+        // const fsButton = this.add.text(1720, 20, 'Fullscreen', {
+        //     fontSize: '20px', 
+        //     color: '#cccccc', 
+        // })
+        // .setPadding(10)
+        // .setInteractive({ useHandCursor: true })
+        // .setDepth(2000) // Super high depth so it sits above fade curtains
+        // .setScrollFactor(0);
 
-        fsButton.on('pointerup', () => {
-            if (this.scale.isFullscreen) {
-                this.scale.stopFullscreen();
-            } else {
-                this.scale.startFullscreen();
-            }
-        });
+        // fsButton.on('pointerup', () => {
+        //     if (this.scale.isFullscreen) {
+        //         this.scale.stopFullscreen();
+        //     } else {
+        //         this.scale.startFullscreen();
+        //     }
+        // });
 
         // 1. BACKGROUND
-        const bg = this.add.sprite(width / 2, height / 2, 'intro-bg');
+        const bg = this.add.sprite(width / 2, height / 2, 'ending-bg');
         bg.setDisplaySize(width, height);
+
+        // Dark overlay, dimmer background
+        const overlay = this.add.rectangle(0, 0, width, height, 0x000000);
+        overlay.setOrigin(0, 0);
+        overlay.setAlpha(0.3);
+        overlay.setDepth(1);
 
         // Transition from the HouseScene
         const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
@@ -41,8 +47,8 @@ class EndingScene extends Phaser.Scene {
             duration: 1500,
             onComplete: () => {
                 curtain.destroy();
-        }
-    });
+            }
+        });
 
         // 2. TITLE TEXT
         const title = this.add.text(width / 2, height * 0.3, 'LINGER', {
@@ -50,27 +56,34 @@ class EndingScene extends Phaser.Scene {
             color: '#ffffff',
             fontFamily: 'Georgia, serif',
             fontStyle: 'normal'
-        }).setOrigin(0.5).setAlpha(0);
+        })
+        .setOrigin(0.5)
+        .setAlpha(0)
+        .setDepth(2);
 
         // 3. CREDITS TEXT
-        const credits = this.add.text(width / 2, height * 0.5, 
+        const credits = this.add.text(width / 2, height * 0.5,
             'A Project by Gia Tran\n\n' +
             'Built with Phaser and Aseprite\n\n' +
-            'Thank you for playing!', 
+            'Thank you for playing!',
             {
                 fontSize: '30px',
                 color: '#cccccc',
                 align: 'center',
                 lineSpacing: 10
             }
-        ).setOrigin(0.5).setAlpha(0);
+        )
+        .setOrigin(0.5)
+        .setAlpha(0)
+        .setDepth(2);
 
         // 4. BACK TO MENU BUTTON
         // Start with the default texture
-        const menuBtn = this.add.image(width / 2, height * 0.8, 'go-to-title-button') 
+        const menuBtn = this.add.image(width / 2, height * 0.8, 'go-to-title-button')
             .setScale(0.8)
             .setInteractive({ useHandCursor: true })
-            .setAlpha(0);
+            .setAlpha(0)
+            .setDepth(2);
 
         // 5. ENTRANCE ANIMATIONS
         this.tweens.add({
@@ -97,7 +110,7 @@ class EndingScene extends Phaser.Scene {
         });
 
         // 6. BUTTON STATES & INTERACTION
-        
+
         // Hover State
         menuBtn.on('pointerover', () => {
             menuBtn.setTexture('go-to-title-button-hovered');
@@ -115,7 +128,7 @@ class EndingScene extends Phaser.Scene {
             // Play the clicking sound effect
             this.sound.play('click', { volume: 0.5 });
             menuBtn.setTexture('go-to-title-button-active');
-            
+
             // Give the player a split second to see the 'active' state before switching scenes
             this.time.delayedCall(150, () => {
                 this.sound.stopAll();
