@@ -1,4 +1,4 @@
-# linger
+# Linger
 A web-based cozy game developed with Phaser 3.
 Genre: 2d, pixel art, exploration, narrative, slice-of-life 
 
