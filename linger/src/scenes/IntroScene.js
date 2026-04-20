@@ -29,43 +29,61 @@ class IntroScene extends Phaser.Scene {
         // });
 
         // 0. BACKGROUND & LAYOUT
-        const introBG = this.add.image(width / 2, height / 2, 'intro-bg');
-        introBG.setDisplaySize(width, height);
-        introBG.setAlpha(0);
+        // Add the animated background
+        this.anims.create({
+            key: 'intro-flow',
+            frames: this.anims.generateFrameNumbers('intro-bg', { start: 0, end: 16 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
+        // Add the spritesheet and play the animation
+        const introBg = this.add.sprite(width / 2, height / 2, 'intro-bg');
+        introBg.play('intro-flow');
+        introBg.setDisplaySize(width, height);
+        introBg.setDepth(0);
+
+        // Dark overlay, dimmer background
+        const overlay = this.add.rectangle(0, 0, width, height, 0x000000);
+        overlay.setOrigin(0, 0);
+        overlay.setAlpha(0.3); 
+        overlay.setDepth(1);  
 
         // Fade in transition from TitleScene
         this.tweens.add({
-            targets: introBG,
+            targets: introBg,
             alpha: 1,
             duration: 1000
         });
-    
+
         // 1. DATA SETUP
         this.introLines = storyData.intro;
         this.lineIndex = 0;
 
-        // Dialogue Box (using the same assets as your HouseScene)
-        this.dialogBg = this.add.image(1920 / 2, 850, 'dialogue-box')
-        .setScale(1.7)
+        // Dialogue Box (using the same assets as the HouseScene)
+        //this.dialogBg = this.add.image(1250, 850, 'dialogue-box')
+        //.setScale(1.7)
 
-        
-        this.dialogText = this.add.text(520, 800, '', {
-            fontSize: '30px', 
-            color: '#2F3A56', 
-            align: 'start', 
-            wordWrap: { 
+        this.dialogText = this.add.text(800, 1080 / 2, '', {
+            fontSize: '34px',
+            lineSpacing: 10,
+            color: '#ffffff',
+            align: 'start',
+            wordWrap: {
                 width: 910,
                 useAdvancedWrap: true // This helps align the right edge more precisely 
-            }, 
+            },
             fontStyle: 'italic'
-        }).setOrigin(0.0);
+        })
+        .setOrigin(0.0)
+        .setDepth(2); 
 
         // Animated Arrow
-        this.dialogArrow = this.add.image(1920 / 2 + 500, 950, 'dialogue-arrow').setScale(1.2);
-        this.tweens.add({
-            targets: this.dialogArrow,
-            y: '+=10', duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
-        });
+        //this.dialogArrow = this.add.image(1250 + 500, 950, 'dialogue-arrow').setScale(1.2);
+        //this.tweens.add({
+        //targets: this.dialogArrow,
+        //y: '+=10', duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut'
+        //});
 
         // 3. INITIAL TEXT
         this.updateText();
@@ -77,23 +95,23 @@ class IntroScene extends Phaser.Scene {
                 this.updateText();
                 this.sound.play('click', { volume: 0.5 });
             } else {
-            const { width, height } = this.scale;
+                const { width, height } = this.scale;
 
-            // Transition to HouseScene
-            // Create a curtain for the transition
-            const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
-            curtain.setOrigin(0, 0).setAlpha(0).setDepth(1000);
+                // Transition to HouseScene
+                // Create a curtain for the transition
+                const curtain = this.add.rectangle(0, 0, width, height, 0x000000);
+                curtain.setOrigin(0, 0).setAlpha(0).setDepth(1000);
 
-            // Play the fade-out tween
-            this.tweens.add({
-                targets: curtain,
-                alpha: 1,
-                duration: 1000, // 1s
-                onComplete: () => {
-                // 3. Move to the house only after the fade is done
-                this.scene.start('HouseScene');
-            }
-        });
+                // Play the fade-out tween
+                this.tweens.add({
+                    targets: curtain,
+                    alpha: 1,
+                    duration: 1000, // 1s
+                    onComplete: () => {
+                        // 3. Move to the house only after the fade is done
+                        this.scene.start('HouseScene');
+                    }
+                });
             }
         });
     }
