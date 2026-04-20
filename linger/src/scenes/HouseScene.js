@@ -13,7 +13,6 @@ class HouseScene extends Phaser.Scene {
         // Set Cursor
         this.input.setDefaultCursor('url(assets/ui/cursors/cursor-default.png), pointer');
 
-
         // --- 1. BACKGROUND & LAYOUT ---
         // Load the house layout
         const layout = this.add.image(0, 0, 'layout-house')
@@ -414,13 +413,13 @@ class HouseScene extends Phaser.Scene {
 
             if (Phaser.Geom.Rectangle.Contains(dotBounds, worldX, worldY)) {
                 if (isDotNear) {
-                if (this.meowSound) this.meowSound.play();
+                    if (this.meowSound) this.meowSound.play();
 
                     // Logic for giving hints during the card hunt
                     if (this.storyPhase === 'FIND_CARDS') {
                         const currentQuest = this.questData[this.questIndex];
                         const currentHint = currentQuest.preLine[0];
-                
+
                         this.dialogBg.setVisible(true).setTexture('dialogue-dot');
                         this.dialogText.setVisible(true)
                             .setText(`${currentHint}`)
@@ -565,40 +564,55 @@ class HouseScene extends Phaser.Scene {
             uiCam.ignore(this.physics.world.debugGraphic);
         }
 
-        // Fullscreen Button (from Arlin's suggestion)
-        const fsButton = this.add.text(1720, 20, 'Fullscreen', {
-            fontSize: '20px',
-            color: '#ffffff',
-        })
-            .setPadding(10)
-            .setInteractive({ useHandCursor: true })
-            .setDepth(100)
-            .setScrollFactor(0);
+        // // Fullscreen Button (from Arlin's suggestion)
+        // const fsButton = this.add.text(1700, 20, 'Fullscreen', {
+        //     fontSize: '20px',
+        //     color: '#ffffff',
+        // })
+        //     .setPadding(10)
+        //     .setInteractive({ useHandCursor: true })
+        //     .setDepth(100)
+        //     .setScrollFactor(0);
 
-        this.cameras.main.ignore(fsButton);
-        uiCam.ignore([layout, this.player, ...this.walls.getChildren()]);
+        // this.cameras.main.ignore(fsButton);
+        // uiCam.ignore([layout, this.player, ...this.walls.getChildren()]);
 
-        this.doorList.forEach(door => { uiCam.ignore(door.trigger); });
+        // this.doorList.forEach(door => { uiCam.ignore(door.trigger); });
 
-        fsButton.on('pointerup', () => {
-            if (this.scale.isFullscreen) this.scale.stopFullscreen();
-            else this.scale.startFullscreen();
-        });
+        // fsButton.on('pointerup', () => {
+        //     if (this.scale.isFullscreen) this.scale.stopFullscreen();
+        //     else this.scale.startFullscreen();
+        // });
 
         // INSTRUCTION BOX SETUP 
-        // Add the instruction text
-        this.instructionText = this.add.text(1920 / 2, 40, 'WASD to move | Click any object to interact | Enjoy the game!', {
+        // 1. Instruction Text (Hidden by default)
+        this.instructionText = this.add.text(1920 / 2, 40, 'WASD to move | Click any object to interact | Find the 12 cards!', {
             fontSize: '20px',
-            color: '#ffffff',
+            fill: '#ffffff',
+            backgroundColor: 'rgba(0,0,0,0.5)' // Added a background for better readability
         })
             .setPadding(10)
             .setOrigin(0.5)
             .setScrollFactor(0)
-            .setDepth(1001);
+            .setDepth(1001)
+            .setVisible(false); // Start hidden
 
-        // Ensure the main camera ignores these UI elements
-        this.cameras.main.ignore([this.instructionText]);
+        // 2. Help Icon (Hidden by default)
+        // Replace 'help-icon' with whatever key used in preload
+        this.helpButton = this.add.image(1870, 50, 'help-icon')
+            .setInteractive({ useHandCursor: true })
+            .setScrollFactor(0)
+            .setDepth(1001)
+            .setVisible(false); // Start hidden
 
+        // 3. Toggle Logic
+        this.helpButton.on('pointerdown', () => {
+            const isVisible = this.instructionText.visible;
+            this.instructionText.setVisible(!isVisible);
+        });
+
+        // Ensure UI Camera sees these, Main Camera ignores them
+        this.cameras.main.ignore([this.instructionText, this.helpButton]);
 
         // --- 8. PROPER UI SETUP (Must happen BEFORE showStoryDialogue) ---
 
@@ -1020,6 +1034,18 @@ class HouseScene extends Phaser.Scene {
         // This happens after Rem finishes the waking up monologue
         if (this.storyPhase === 'WAKEUP') {
             this.storyPhase = 'SEARCH_DOT'; // Now the player can walk to find Dot
+
+            // Help UI trigger
+            this.instructionText.setVisible(true); // Show instructions
+            this.helpButton.setVisible(true);      // Show the icon
+
+            // Auto-hide the text after 5 seconds (Optional, but great for UX!)
+            this.time.delayedCall(5000, () => {
+                this.instructionText.setVisible(false);
+            });
+
+            
+            // Hide the dialogue 
             this.dialogBg.setVisible(false);
             this.dialogText.setVisible(false);
             this.dialogArrow.setVisible(false);

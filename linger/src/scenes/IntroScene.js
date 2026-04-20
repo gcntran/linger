@@ -10,23 +10,23 @@ class IntroScene extends Phaser.Scene {
         const { width, height } = this.scale;
         console.log("IntroScene loaded");
 
-        // Fullscreen button
-        const fsButton = this.add.text(1720, 20, 'Fullscreen', {
-            fontSize: '20px', 
-            color: '#cccccc', 
-        })
-        .setPadding(10)
-        .setInteractive({ useHandCursor: true })
-        .setDepth(2000) // Super high depth so it sits above fade curtains
-        .setScrollFactor(0);
+        // // Fullscreen button
+        // const fsButton = this.add.text(1720, 20, 'Fullscreen', {
+        //     fontSize: '20px', 
+        //     color: '#cccccc', 
+        // })
+        // .setPadding(10)
+        // .setInteractive({ useHandCursor: true })
+        // .setDepth(2000) // Super high depth so it sits above fade curtains
+        // .setScrollFactor(0);
 
-        fsButton.on('pointerup', () => {
-            if (this.scale.isFullscreen) {
-                this.scale.stopFullscreen();
-            } else {
-                this.scale.startFullscreen();
-            }
-        });
+        // fsButton.on('pointerup', () => {
+        //     if (this.scale.isFullscreen) {
+        //         this.scale.stopFullscreen();
+        //     } else {
+        //         this.scale.startFullscreen();
+        //     }
+        // });
 
         // 0. BACKGROUND & LAYOUT
         const introBG = this.add.image(width / 2, height / 2, 'intro-bg');
