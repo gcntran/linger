@@ -58,6 +58,9 @@ class AssetLoader extends Phaser.Scene {
         // Load card collected HUD
         this.load.image('card-collected-hud', 'assets/ui/hud/card-collected.png');
 
+        // Load how to play UI
+        this.load.image('how-to-play', 'assets/ui/hud/how-to-play.png');
+
         // Load help icon UI
         this.load.image('help-icon', 'assets/ui/icons/help-icon.png');
 
