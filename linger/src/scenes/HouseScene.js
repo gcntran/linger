@@ -407,25 +407,37 @@ class HouseScene extends Phaser.Scene {
                 return;
             }
 
-            // --- CLICKING DOT ---
+            // --- D. CLICKING DOT ---
+            // Check this first so petting Dot works even if Rem near a door
             const dotBounds = this.dot.getBounds();
-            const isDotNear = Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.dot.getBounds());
+            const isDotNear = Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), dotBounds);
 
             if (Phaser.Geom.Rectangle.Contains(dotBounds, worldX, worldY)) {
                 if (isDotNear) {
-                    // Play the meow!
-                    if (this.meowSound) this.meowSound.play();
+                if (this.meowSound) this.meowSound.play();
 
-                    // Show a random cute line
-                    const randomLine = ["Meow!", "*Purr...*", "Mew?"][Math.floor(Math.random() * 3)];
-                    this.dialogBg.setVisible(true).setTexture('dialogue-dot');
-                    this.dialogText.setVisible(true).setText(randomLine);
-                    this.dialogArrow.setVisible(true);
+                    // Logic for giving hints during the card hunt
+                    if (this.storyPhase === 'FIND_CARDS') {
+                        const currentQuest = this.questData[this.questIndex];
+                        const currentHint = currentQuest.preLine[0];
+                
+                        this.dialogBg.setVisible(true).setTexture('dialogue-dot');
+                        this.dialogText.setVisible(true)
+                            .setText(`${currentHint}`)
+                            .setStyle({ fontStyle: 'normal', fontSize: '30px' });
+                        this.dialogArrow.setVisible(true);
+                    } else {
+                        // Default lines for when not in a quest
+                        const randomLine = ["Meow!", "*Purr...*", "Mew?"][Math.floor(Math.random() * 3)];
+                        this.dialogBg.setVisible(true).setTexture('dialogue-dot');
+                        this.dialogText.setVisible(true).setText(randomLine).setStyle({ fontStyle: 'normal' });
+                        this.dialogArrow.setVisible(true);
+                    }
                 } else {
-                    // Hint that Rem is too far away
-                    console.log("Too far to pet the cat!");
+                    // Optional: visual feedback that Rem is too far
+                    console.log("Too far to pet!");
                 }
-                return;
+                return; // Stop the function here so we don't trigger other clicks
             }
 
 
