@@ -21,9 +21,10 @@ class HouseScene extends Phaser.Scene {
         layout.setDisplaySize(width, height);
 
         // Load the doors
-        this.bathDoor = this.add.image(540, 665, 'door').setDepth(1);
-        this.laundryDoor = this.add.image(727, 665, 'door').setDepth(1);
+        this.bathDoor = this.add.image(541, 665, 'door').setDepth(1);
+        this.laundryDoor = this.add.image(726, 664, 'door').setDepth(1);
         this.storageDoor = this.add.image(1178, 665, 'door').setDepth(1);
+        this.bedroomDoor = this.add.image(1251, 355, 'door-bedroom').setDepth(1);
 
         // Load the ceiling layout
         const ceiling = this.add.image(0, 0, 'layout-ceiling')
@@ -223,7 +224,7 @@ class HouseScene extends Phaser.Scene {
         this.doorList = [];
         this.addDoor(540, 635, 80, 150, this.bathDoor);
         this.addDoor(727, 635, 80, 150, this.laundryDoor);
-        this.addDoor(1252, 355, 20, 110, null); // Null because the bedroom has no image
+        this.addDoor(1250, 355, 20, 110, this.bedroomDoor);
         this.addDoor(950, 910, 120, 30, null); // Null because the main door has no image
         this.addDoor(1178, 635, 80, 150, this.storageDoor);
 
@@ -545,6 +546,7 @@ class HouseScene extends Phaser.Scene {
             this.bathDoor,
             this.laundryDoor,
             this.storageDoor,
+            this.bedroomDoor,
             ceiling,
             this.player,
             this.dot,
@@ -586,7 +588,7 @@ class HouseScene extends Phaser.Scene {
 
         // INSTRUCTION BOX SETUP 
         // 1. Instruction Text (Hidden by default)
-        this.instructionText = this.add.text(1920 / 2, 40, 'WASD to move | Click any object to interact | Find the 12 cards!', {
+        this.instructionText = this.add.text(1920 / 2, 40, 'WASD to move. Click any object to interact. And if you get lost, talk to Dot.', {
             fontSize: '20px',
             fill: '#ffffff',
             backgroundColor: 'rgba(0,0,0,0.5)' // Added a background for better readability
@@ -603,6 +605,7 @@ class HouseScene extends Phaser.Scene {
             .setInteractive({ useHandCursor: true })
             .setScrollFactor(0)
             .setDepth(1001)
+            .setScale(1.7)
             .setVisible(false); // Start hidden
 
         // 3. Toggle Logic
@@ -1039,7 +1042,7 @@ class HouseScene extends Phaser.Scene {
             this.instructionText.setVisible(true); // Show instructions
             this.helpButton.setVisible(true);      // Show the icon
 
-            // Auto-hide the text after 5 seconds (Optional, but great for UX!)
+            // Auto-hide the text after 5 seconds (great for UX!)
             this.time.delayedCall(5000, () => {
                 this.instructionText.setVisible(false);
             });

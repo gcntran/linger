@@ -42,6 +42,7 @@ class AssetLoader extends Phaser.Scene {
 
         // Load the door
         this.load.image('door', 'assets/environment/door.png');
+        this.load.image('door-bedroom', 'assets/environment/door-bedroom.png');
 
         // Load the spritesheet for Rem's animation
         this.load.spritesheet('player', 'assets/characters/rem.png', { 
